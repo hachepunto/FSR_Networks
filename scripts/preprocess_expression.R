@@ -1,305 +1,286 @@
 library(SummarizedExperiment)
-library(sva)
+library(yaml)
+library(matrixStats)
+
+source("scripts/lib_common.R")
 
 # ============================================================
-# PATHS
+# CONFIGURACIÓN Y RUTAS
 # ============================================================
 
-tcga_proc_dir <- "data/processed/tcga"
-metabric_proc_dir <- "data/processed/metabric"
-aracne_input_dir <- "networks/input"
+config <- yaml::read_yaml("config/config.yaml")
 
-tcga_rnaseq_file <- file.path(tcga_proc_dir, "tcga_brca_rnaseq_se.rds")
-mtbrc_clinical_file <- file.path(metabric_proc_dir, "mtbrc_clinical_mrna.rds")
-mtbrc_expression_file <- file.path(metabric_proc_dir, "mtbrc_expr.rds")
+data_root <- config$paths$data_root
+work_root <- config$paths$work_root
+results_dir <- config$paths$results_dir
 
-subtype <- snakemake@wildcards[["subtype"]]
+proc_dir <- file.path(data_root, "processed")
+preproc_dir <- file.path(work_root, "preprocessed")
+network_input_dir <- file.path(work_root, "networks", "input")
 
-tcga_expr_file <- file.path(tcga_proc_dir, paste0("tcga_", subtype, "_expr.rds"))
-tcga_normal_expr_file <- file.path(tcga_proc_dir, paste0("tcga_", subtype, "_normal_expr.rds"))
-mtbrc_expr_file <- file.path(metabric_proc_dir, paste0("mtbrc_", subtype, "_expr.rds"))
-mtbrc_normal_expr_file <- file.path(metabric_proc_dir, paste0("mtbrc_", subtype, "_normal_expr.rds"))
-tcga_aracne_file <- file.path(aracne_input_dir, paste0("tcga_", subtype, "_matrix.txt"))
-mtbrc_aracne_file <- file.path(aracne_input_dir, paste0("mtbrc_", subtype, "_matrix.txt"))
+assignments_file <- file.path(results_dir, "subtype_assignments_by_sample.tsv")
+manifest_file <- file.path(results_dir, "preprocess_manifest.tsv")
 
-# Crear directorios de salida si no existen
-dir.create(aracne_input_dir, recursive = TRUE, showWarnings = FALSE)
 # ============================================================
-# PRE-PROCESAMIENTO PARA ARACNE-AP
-# TCGA-BRCA + METABRIC
+# PREPROCESAMIENTO POR analysis_id (cáncer × subtipo)
 #
-# Genera matrices de expresión por subtipo molecular
-# para construcción de redes regulatorias con ARACNe-AP
+# Para cada proyecto (una vez):
+#   - se construye la matriz TPM de genes protein_coding con símbolo
+#     HGNC (mismo criterio que la versión BRCA-only original);
+#   - se seleccionan los controles Solid Tissue Normal, una muestra
+#     por paciente — se preparan una sola vez y se comparten entre
+#     todos los subtipos de ese proyecto.
 #
-# Subtipos:
-#   Basal
-#   Luminal A
-#   Luminal B
-#   HER2
+# Para cada analysis_id = <CANCER>_<standardized_label> (uno por
+# subtipo con included=TRUE en config$subtypes):
+#   - se seleccionan las muestras tumorales de ese subtipo (según
+#     results/subtype_assignments_by_sample.tsv, ya congelado por
+#     classify_subtypes.R — este script NO vuelve a clasificar nada);
+#   - log2(TPM + 1);
+#   - se eliminan genes con NA, sin varianza o sin expresión
+#     suficiente (log2TPM > 1 en ≥20% de las muestras tumorales);
+#   - tumor y control quedan con los mismos genes y el mismo orden;
+#   - se guarda la matriz tumoral, la de control y la entrada ARACNe;
+#   - se registra en el manifiesto cuántas muestras/genes se
+#     incluyeron y excluyeron, y n_red final.
 # ============================================================
 
 # ============================================================
 # ENTRADAS
 #
-# TCGA:
-#   data/processed/tcga/tcga_brca_rnaseq_se.rds
-#
-# METABRIC:
-#   data/processed/metabric/mtbrc_clinical_mrna.rds
-#   data/processed/metabric/mtbrc_expr.rds
+#   config/config.yaml
+#   results/subtype_assignments_by_sample.tsv
+#   <data_root>/processed/<PROJECT>/<tumor>_rnaseq_se.rds
 # ============================================================
 
 # ============================================================
 # SALIDAS
 #
-# matrices ARACNe:
-#   networks/input/tcga_<subtype>_matrix.txt
-#   networks/input/mtbrc_<subtype>_matrix.txt
-#
-# matrices expresión:
-#   data/processed/tcga/tcga_<subtype>_expr.rds
-#   data/processed/metabric/mtbrc_<subtype>_expr.rds
-#
-# controles normales:
-#   data/processed/tcga/tcga_<subtype>_normal_expr.rds
-#   data/processed/metabric/mtbrc_<subtype>_normal_expr.rds
+#   <work_root>/preprocessed/<CANCER>/control_expr.rds
+#   <work_root>/preprocessed/<CANCER>/<analysis_id>_tumor_expr.rds
+#   <work_root>/preprocessed/<CANCER>/<analysis_id>_normal_expr.rds
+#   <work_root>/networks/input/<analysis_id>_matrix.txt
+#   results/preprocess_manifest.tsv
 # ============================================================
 
-# ============================================================
-# SECCIÓN 1: TCGA-BRCA
-# ============================================================
+dir.create(preproc_dir, recursive = TRUE, showWarnings = FALSE)
+dir.create(network_input_dir, recursive = TRUE, showWarnings = FALSE)
 
-# ── 1.1  Cargar SE y metadatos ──────────────────────────────
+# A diferencia de download_data.R (que se puede reanudar y por eso
+# acumula su manifiesto entre corridas), este script siempre reprocesa
+# todos los proyectos configurados desde cero en cada ejecución — el
+# manifiesto debe reiniciarse aquí o cada corrida duplicaría sus filas.
+if (file.exists(manifest_file)) file.remove(manifest_file)
 
-se <- readRDS(
-    tcga_rnaseq_file
-)
+assignments <- read.delim(assignments_file, stringsAsFactors = FALSE, na.strings = "NA")
 
-cd <- as.data.frame(colData(se))
-rd <- as.data.frame(rowData(se))
+# ── Utilidades comunes ──────────────────────────────────────
+# dedup_one_per_patient() se carga de scripts/lib_common.R — es la
+# MISMA regla que usa classify_subtypes.R para elegir muestra por
+# paciente; no debe reimplementarse por separado aquí.
 
-# ── 1.2  Mapa Ensembl ID → símbolo HGNC (solo protein_coding) ─
+# Mapa Ensembl ID -> símbolo HGNC, restringido a protein_coding,
+# colapsando símbolos duplicados por mediana (igual que la versión
+# BRCA-only original).
+build_symbol_tpm <- function(se) {
+  rd <- as.data.frame(rowData(se))
+  pc_idx <- rd$gene_type == "protein_coding"
 
-pc_idx <- rd$gene_type == "protein_coding"
-message("Genes protein_coding: ", sum(pc_idx))
+  se_pc <- se[pc_idx, ]
+  rd_pc <- rd[pc_idx, ]
 
-# Ensembl IDs duplicados al mismo símbolo: conservar el de mayor expresión media
-se_pc <- se[pc_idx, ]
-rd_pc <- rd[pc_idx, ]
+  tpm <- assay(se_pc, "tpm_unstrand")
+  rownames(tpm) <- rd_pc$gene_name
+  colnames(tpm) <- se_pc$sample_submitter_id
 
-tpm_all <- assay(se_pc, "tpm_unstrand")
-rownames(tpm_all) <- rd_pc$gene_name
+  invalid_genes <- is.na(rownames(tpm)) | trimws(rownames(tpm)) == ""
+  tpm <- tpm[!invalid_genes, , drop = FALSE]
 
-invalid_genes <- is.na(rownames(tpm_all)) | trimws(rownames(tpm_all)) == ""
+  dup_syms <- rownames(tpm)[duplicated(rownames(tpm))]
 
-tpm_all <- tpm_all[!invalid_genes, , drop = FALSE]
+  tpm_dedup <- collapse_duplicate_rownames_median(tpm)
 
-message("Genes sin símbolo HGNC eliminados de TCGA: ", sum(invalid_genes))
-
-dup_syms <- rownames(tpm_all)[duplicated(rownames(tpm_all))]
-message("Símbolos duplicados (protein_coding): ", length(unique(dup_syms)))
-
-df_tpm <- as.data.frame(tpm_all)
-df_tpm$.sym <- rownames(tpm_all)
-tpm_dedup <- do.call(rbind,
-  lapply(
-    split(df_tpm[, colnames(df_tpm) != ".sym"], df_tpm$.sym),
-    function(chunk) apply(chunk, 2, median, na.rm = TRUE)
+  list(
+    tpm = tpm_dedup,
+    n_genes_protein_coding = sum(pc_idx),
+    n_genes_no_symbol = sum(invalid_genes),
+    n_symbols_duplicated = length(unique(dup_syms))
   )
-)
-message("Genes únicos tras colapso: ", nrow(tpm_dedup))
-
-# ── 1.3  Asignar barcodes TCGA como colnames ────────────────
-
-# Usar los primeros 16 caracteres del barcode (incluye tipo de muestra)
-colnames(tpm_dedup) <- substr(cd$barcode, 1, 16)
-
-# ── 1.4  Filtrar muestras por subtipo ───────────────────────
-
-tcga_subtype_map <- c(Basal = "Basal", LumA = "LumA", LumB = "LumB", HER2 = "Her2")
-
-if (!subtype %in% names(tcga_subtype_map)) {
-    stop("Subtype not supported: ", subtype)
 }
-
-tcga_subtype <- tcga_subtype_map[[subtype]]
-
-subtype_bc <- unique(substr(cd$barcode[
-    cd$paper_BRCA_Subtype_PAM50 %in% tcga_subtype &
-    cd$shortLetterCode %in% "TP"
-], 1, 16))
-
-normal_bc <- unique(substr(cd$barcode[
-    cd$shortLetterCode %in% "NT"
-], 1, 16))
-
-if (length(subtype_bc) == 0) {
-    stop("No TCGA tumor samples found for subtype: ", subtype)
-}
-
-if (length(normal_bc) == 0) {
-    stop("No TCGA normal samples found")
-}
-
-cat("Muestras ", subtype, " TCGA:", length(subtype_bc), "\n")
-cat("Muestras Normal TCGA:", length(normal_bc), "\n")
-# ── 1.5  log2(TPM + 1) ───────────────────────────────────────────────────────
-
-tcga_subtype_expr <- log2(tpm_dedup[, subtype_bc, drop = FALSE] + 1)
-tcga_normal <- log2(tpm_dedup[, normal_bc, drop = FALSE] + 1)
-
-# ── 1.6  Eliminar genes con NA ───────────────────────────────────────────────
-
-complete_genes <- rowSums(is.na(tcga_subtype_expr)) == 0 & rowSums(is.na(tcga_normal)) == 0
-
-tcga_subtype_expr <- tcga_subtype_expr[complete_genes, , drop = FALSE]
-tcga_normal <- tcga_normal[complete_genes, , drop = FALSE]
-
-message("Genes con NA eliminados de TCGA: ", sum(!complete_genes))
-
-# ── 1.7  Filtro de expresión: ≥20 % del subtipo con log2TPM > 1 ──────────────
-
-expressed <- rowSums(tcga_subtype_expr > 1) >= ceiling(0.2 * ncol(tcga_subtype_expr))
-
-tcga_subtype_expr <- tcga_subtype_expr[expressed, , drop = FALSE]
-tcga_normal <- tcga_normal[rownames(tcga_subtype_expr), , drop = FALSE]
-
-if (nrow(tcga_subtype_expr) == 0) {
-    stop("No genes passed the TCGA expression filter for subtype: ", subtype)
-}
-
-message("Genes tras filtro expresión TCGA: ", nrow(tcga_subtype_expr))
-
-# ── 1.8  Guardar ────────────────────────────────────────────
-
-saveRDS(tcga_subtype_expr, tcga_expr_file)
-saveRDS(tcga_normal, tcga_normal_expr_file)
-
-message(tcga_expr_file, " — ", nrow(tcga_subtype_expr), " genes × ", ncol(tcga_subtype_expr), " muestras")
-message(tcga_normal_expr_file, " — ", nrow(tcga_normal), " genes × ", ncol(tcga_normal), " muestras")
-
-# ── 1.9  Escribir matriz ARACNe-AP ──────────────────────────
-# Formato: primera fila = "gene" \t sample1 \t sample2 ...
 
 write_aracne_matrix <- function(mat, path) {
-    df <- data.frame(gene = rownames(mat), mat, check.names = FALSE)
-    write.table(df, path, sep = "\t", quote = FALSE, row.names = FALSE)
-    message(path, " escrito — ", nrow(mat), " genes × ", ncol(mat), " muestras")
+  df <- data.frame(gene = rownames(mat), mat, check.names = FALSE)
+  write.table(df, path, sep = "\t", quote = FALSE, row.names = FALSE)
 }
 
-write_aracne_matrix(tcga_subtype_expr, tcga_aracne_file)
+failed_manifest_row <- function(cancer, project, analysis_id, original_value, reason) {
+  data.frame(
+    cancer = cancer, project = project, analysis_id = analysis_id,
+    subtype_original_value = original_value,
+    n_tumor_samples = 0L, n_control_samples = NA_integer_,
+    n_genes_protein_coding = NA_integer_, n_genes_removed_no_symbol = NA_integer_,
+    n_symbols_collapsed_duplicated = NA_integer_, n_genes_removed_na = NA_integer_,
+    n_genes_removed_zero_variance = NA_integer_, n_genes_removed_low_expression = NA_integer_,
+    n_genes_final = 0L, network_method = paste0("FAILED_", reason),
+    stringsAsFactors = FALSE
+  )
+}
 
 # ============================================================
-# SECCIÓN 2: METABRIC
+# EJECUCIÓN POR PROYECTO
 # ============================================================
 
-# ── 2.1  Cargar datos ───────────────────────────────────────
+for (project in config$projects) {
 
-cl <- readRDS(mtbrc_clinical_file)
-expr <- readRDS(mtbrc_expression_file)
+  tumor <- tumor_from_project(project)
+  cancer <- cancer_from_project(project)
+  spec <- config$subtypes[[cancer]]
 
-mtbrc_subtype <- subtype
+  if (is.null(spec)) {
+    message(project, ": sin especificación de subtipos en config.yaml. Se omite.")
+    next
+  }
 
-if (!mtbrc_subtype %in% unique(cl$CLAUDIN_SUBTYPE)) {
-    stop("No METABRIC samples found for subtype: ", subtype)
+  message("\n== ", project, " ==")
+
+  se <- readRDS(file.path(proc_dir, project, paste0(tumor, "_rnaseq_se.rds")))
+
+  cancer_dir <- file.path(preproc_dir, cancer)
+  dir.create(cancer_dir, recursive = TRUE, showWarnings = FALSE)
+
+  tumor_se  <- dedup_one_per_patient(se[, se$sample_type == "Primary Tumor"])
+  normal_se <- dedup_one_per_patient(se[, se$sample_type == "Solid Tissue Normal"])
+
+  if (ncol(normal_se) == 0) {
+    warning(project, ": sin muestras de control Solid Tissue Normal. Se omite el proyecto completo.",
+            call. = FALSE)
+    for (original_value in names(spec$labels)) {
+      analysis_id <- paste0(cancer, "_", spec$labels[[original_value]]$standardized_label)
+      append_manifest_row(
+        failed_manifest_row(cancer, project, analysis_id, original_value, "no_control_samples"),
+        manifest_file
+      )
+    }
+    next
+  }
+
+  # Se construye la matriz de símbolos protein_coding UNA sola vez para
+  # tumor+control combinados (misma rowData en ambos, ya que vienen del
+  # mismo objeto se) y se separa después — evita repetir el colapso de
+  # símbolos duplicados (el paso más lento) dos veces por proyecto.
+  combined_se <- cbind(tumor_se, normal_se)
+  combined_built <- build_symbol_tpm(combined_se)
+  combined_log2 <- log2(combined_built$tpm + 1)
+
+  normal_log2 <- combined_log2[, normal_se$sample_submitter_id, drop = FALSE]
+  tumor_log2_all <- combined_log2[, tumor_se$sample_submitter_id, drop = FALSE]
+
+  control_file <- file.path(cancer_dir, "control_expr.rds")
+  saveRDS(normal_log2, control_file)
+  message(project, ": control STN preparado — ", nrow(normal_log2), " genes × ",
+          ncol(normal_log2), " muestras (", control_file, ")")
+
+  project_assignments <- assignments[assignments$project == project & !is.na(assignments$subtype_label), ]
+
+  for (original_value in names(spec$labels)) {
+
+    label_spec <- spec$labels[[original_value]]
+    standardized_label <- label_spec$standardized_label
+    analysis_id <- paste0(cancer, "_", standardized_label)
+
+    sample_ids <- project_assignments$sample_submitter_id[
+      project_assignments$subtype_label == original_value
+    ]
+    sample_ids <- intersect(sample_ids, colnames(tumor_log2_all))
+
+    # Se requieren al menos 2 muestras: con 1 sola, sd() no está definida y
+    # matrixStats::rowSds() más abajo devolvería NA para todos los genes,
+    # lo que insertaría una fila de NA en vez de filtrarla (indexar una
+    # matriz con NA en un vector lógico agrega una fila NA, no la quita).
+    if (length(sample_ids) < 2) {
+      warning(analysis_id, ": ", length(sample_ids), " muestra(s) tumoral(es) asignada(s) — ",
+              "insuficiente para calcular varianza. Se omite.", call. = FALSE)
+      append_manifest_row(
+        failed_manifest_row(cancer, project, analysis_id, original_value, "insufficient_tumor_samples"),
+        manifest_file
+      )
+      next
+    }
+
+    tumor_expr <- tumor_log2_all[, sample_ids, drop = FALSE]
+    normal_expr <- normal_log2
+
+    # -- Genes con NA en tumor o control --
+    complete_genes <- rowSums(is.na(tumor_expr)) == 0 & rowSums(is.na(normal_expr)) == 0
+    n_na_removed <- sum(!complete_genes)
+    tumor_expr <- tumor_expr[complete_genes, , drop = FALSE]
+    normal_expr <- normal_expr[rownames(tumor_expr), , drop = FALSE]
+
+    # -- Genes sin varianza en el tumor --
+    zero_var <- matrixStats::rowSds(tumor_expr) == 0
+    n_zero_var_removed <- sum(zero_var, na.rm = TRUE)
+    tumor_expr <- tumor_expr[!zero_var, , drop = FALSE]
+    normal_expr <- normal_expr[rownames(tumor_expr), , drop = FALSE]
+
+    # -- Filtro de expresión: log2TPM > 1 en >= 20% de las muestras tumorales --
+    expressed <- rowSums(tumor_expr > 1) >= ceiling(0.2 * ncol(tumor_expr))
+    n_low_expr_removed <- sum(!expressed)
+    tumor_expr <- tumor_expr[expressed, , drop = FALSE]
+    normal_expr <- normal_expr[rownames(tumor_expr), , drop = FALSE]
+
+    if (nrow(tumor_expr) == 0) {
+      warning(analysis_id, ": ningún gen pasó los filtros. Se omite.", call. = FALSE)
+      append_manifest_row(
+        failed_manifest_row(cancer, project, analysis_id, original_value, "no_genes_passed_filters"),
+        manifest_file
+      )
+      next
+    }
+
+    tumor_file  <- file.path(cancer_dir, paste0(analysis_id, "_tumor_expr.rds"))
+    normal_file <- file.path(cancer_dir, paste0(analysis_id, "_normal_expr.rds"))
+    aracne_file <- file.path(network_input_dir, paste0(analysis_id, "_matrix.txt"))
+
+    saveRDS(tumor_expr, tumor_file)
+    saveRDS(normal_expr, normal_file)
+    write_aracne_matrix(tumor_expr, aracne_file)
+
+    n_red_final <- ncol(tumor_expr)
+    network_method <- network_method_for_n(n_red_final)
+
+    if (n_red_final != label_spec$n_red) {
+      warning(
+        analysis_id, ": n_red final (", n_red_final,
+        ") difiere del calculado en classify_subtypes.R (", label_spec$n_red, "). ",
+        "Si esto además cruza el umbral ARACNE3_MIN_N=", ARACNE3_MIN_N,
+        ", network_method en el manifiesto (", network_method,
+        ") puede quedar en desacuerdo con config.yaml (", label_spec$network_method,
+        ") — revisar y actualizar config.yaml a mano si corresponde.",
+        call. = FALSE
+      )
+    }
+
+    append_manifest_row(data.frame(
+      cancer = cancer,
+      project = project,
+      analysis_id = analysis_id,
+      subtype_original_value = original_value,
+      n_tumor_samples = n_red_final,
+      n_control_samples = ncol(normal_expr),
+      n_genes_protein_coding = combined_built$n_genes_protein_coding,
+      n_genes_removed_no_symbol = combined_built$n_genes_no_symbol,
+      n_symbols_collapsed_duplicated = combined_built$n_symbols_duplicated,
+      n_genes_removed_na = n_na_removed,
+      n_genes_removed_zero_variance = n_zero_var_removed,
+      n_genes_removed_low_expression = n_low_expr_removed,
+      n_genes_final = nrow(tumor_expr),
+      network_method = network_method,
+      stringsAsFactors = FALSE
+    ), manifest_file)
+
+    message(analysis_id, ": ", nrow(tumor_expr), " genes x ", n_red_final,
+            " tumor / ", ncol(normal_expr), " control -> ", network_method)
+  }
 }
 
-subtype_ids <- unique(cl$SAMPLE_ID[
-    cl$CLAUDIN_SUBTYPE == mtbrc_subtype
-])
-
-normal_ids <- unique(cl$SAMPLE_ID[
-    cl$CLAUDIN_SUBTYPE == "Normal"
-])
-
-if (length(subtype_ids) == 0) {
-    stop("No METABRIC tumor samples found for subtype: ", subtype)
-}
-
-if (length(normal_ids) == 0) {
-    stop("No METABRIC normal samples found")
-}
-
-cat("Muestras ", subtype, " METABRIC:", length(subtype_ids), "\n")
-cat("Muestras Normal METABRIC:", length(normal_ids), "\n")
-
-# ── 2.2  Subconjunto de muestras ────────────────────────────
-
-mtbrc_subtype_expr <- expr[, colnames(expr) %in% subtype_ids, drop = FALSE]
-mtbrc_normal <- expr[, colnames(expr) %in% normal_ids, drop = FALSE]
-
-# ── 2.3  Eliminar genes con NA ──────────────────────────────
-
-complete_genes <- rowSums(is.na(mtbrc_subtype_expr)) == 0 & rowSums(is.na(mtbrc_normal)) == 0
-
-mtbrc_subtype_expr <- mtbrc_subtype_expr[complete_genes, , drop = FALSE]
-mtbrc_normal <- mtbrc_normal[complete_genes, , drop = FALSE]
-
-message("Genes con NA eliminados de METABRIC: ", sum(!complete_genes))
-
-# ── 2.4  Filtro de expresión: señal log2 > 6 en ≥20 % del subtipo ───────────
-
-expressed <- rowSums(mtbrc_subtype_expr > 6) >= ceiling(0.2 * ncol(mtbrc_subtype_expr))
-
-mtbrc_subtype_expr <- mtbrc_subtype_expr[expressed, , drop = FALSE]
-mtbrc_normal <- mtbrc_normal[rownames(mtbrc_subtype_expr), , drop = FALSE]
-
-if (nrow(mtbrc_subtype_expr) == 0) {
-    stop("No genes passed the METABRIC expression filter for subtype: ", subtype)
-}
-
-message("Genes tras filtro expresión METABRIC: ", nrow(mtbrc_subtype_expr))
-
-# ── 2.5  ComBat: corrección de efecto de cohorte ─────────────
-# METABRIC tiene 5 cohortes. ComBat preserva la señal biológica
-# del subtipo versus Normal mientras elimina el efecto de batch.
-
-combined <- cbind(mtbrc_subtype_expr, mtbrc_normal)
-
-group_labels <- c(
-    rep(subtype, ncol(mtbrc_subtype_expr)),
-    rep("Normal", ncol(mtbrc_normal))
-)
-
-cohort_map <- setNames(cl$COHORT, cl$SAMPLE_ID)
-batch_vec <- unname(cohort_map[colnames(combined)])
-
-if (any(is.na(batch_vec))) {
-    stop("Missing COHORT values found for METABRIC samples")
-}
-
-if (length(unique(batch_vec)) < 2) {
-    stop("ComBat requires at least two METABRIC cohorts")
-}
-
-if (any(table(batch_vec) < 2)) {
-    stop("Each METABRIC cohort must contain at least two samples for ComBat")
-}
-
-cat("Distribución de cohortes en ", subtype, " + Normal:\n")
-print(table(batch_vec, group_labels))
-
-mod <- model.matrix(~ group_labels)
-
-message("Aplicando ComBat (batch = COHORT, mod = ~grupo)...")
-
-combined_corrected <- ComBat(
-    dat = combined,
-    batch = batch_vec,
-    mod = mod
-)
-
-mtbrc_subtype_expr <- combined_corrected[, group_labels == subtype, drop = FALSE]
-mtbrc_normal <- combined_corrected[, group_labels == "Normal", drop = FALSE]
-
-message("ComBat aplicado")
-
-# ── 2.6  Guardar ────────────────────────────────────────────
-
-saveRDS(mtbrc_subtype_expr, mtbrc_expr_file)
-saveRDS(mtbrc_normal, mtbrc_normal_expr_file)
-
-message(mtbrc_expr_file, " — ", nrow(mtbrc_subtype_expr), " genes × ", ncol(mtbrc_subtype_expr), " muestras")
-message(mtbrc_normal_expr_file, " — ", nrow(mtbrc_normal), " genes × ", ncol(mtbrc_normal), " muestras")
-
-write_aracne_matrix(mtbrc_subtype_expr, mtbrc_aracne_file)
+message("\nManifiesto: ", manifest_file)

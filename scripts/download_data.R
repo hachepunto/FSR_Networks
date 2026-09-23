@@ -1,272 +1,235 @@
 library(TCGAbiolinks)
 library(SummarizedExperiment)
+library(yaml)
+
+source("scripts/lib_common.R")
 
 # ============================================================
-# PATHS
-# ============================================================
-tcga_raw_dir <- "data/raw/tcga"
-metabric_raw_dir <- "data/raw/metabric"
-tcga_proc_dir <- "data/processed/tcga"
-metabric_proc_dir <- "data/processed/metabric"
-
-tcga_subtypes_file <- file.path(tcga_proc_dir, "tcga_brca_subtypes.rds")
-tcga_rnaseq_file <- file.path(tcga_proc_dir, "tcga_brca_rnaseq_se.rds")
-
-# Crear directorios de salida si no existen
-dir.create(tcga_raw_dir, recursive = TRUE, showWarnings = FALSE)
-dir.create(metabric_raw_dir, recursive = TRUE, showWarnings = FALSE)
-dir.create(tcga_proc_dir, recursive = TRUE, showWarnings = FALSE)
-dir.create(metabric_proc_dir, recursive = TRUE, showWarnings = FALSE)
-
-# ============================================================
-# DESCARGA DE DATOS
-# TCGA-BRCA + METABRIC
-#
-# Descarga datos clínicos, subtipos y expresión para el
-# análisis de Master Regulators.
+# CONFIGURACIÓN Y RUTAS
 # ============================================================
 
-# ============================================================
-# SALIDAS
-#
-# TCGA:
-#   data/processed/tcga/tcga_brca_subtypes.rds
-#   data/processed/tcga/tcga_brca_rnaseq_se.rds
-#
-# METABRIC:
-#   data/processed/metabric/mtbrc_clinical.rds
-#   data/processed/metabric/mtbrc_clinical_mrna.rds
-#   data/processed/metabric/mtbrc_expr.rds
-# ============================================================
+config <- yaml::read_yaml("config/config.yaml")
+
+data_root <- config$paths$data_root
+projects <- config$projects
+
+tcga_raw_dir  <- file.path(data_root, "raw")
+tcga_proc_dir <- file.path(data_root, "processed")
+tcga_log_dir  <- file.path(data_root, "logs")
 
 # Aumentar el tiempo máximo para descargas grandes
 options(timeout = 1800)
 
 # ============================================================
-# SECCIÓN 1: TCGA-BRCA
+# DESCARGA DE DATOS TCGA — proyectos configurados en config$projects
+#
+# Para cada proyecto de config$projects se descarga:
+#   - expresión Gene Expression Quantification, STAR - Counts,
+#     restringida a Primary Tumor + Solid Tissue Normal;
+#   - clínica (Clinical Supplement, BCR Biotab), para vincular
+#     barcodes con metadatos de paciente;
+#   - tabla de subtipos vía TCGAquery_subtype(), cuando el
+#     proyecto tenga una disponible.
+#
+# Un proyecto se omite por completo solo cuando sus tres
+# salidas procesadas ya existen. No hay reanudación parcial
+# dentro de un mismo paso.
 # ============================================================
 
-if (file.exists(tcga_subtypes_file)) {
-    message("El archivo de subtipos TCGA ya existe. Se omite su descarga")
-} else {
-    message("Falta el archivo de subtipos TCGA. Iniciando descarga y procesamiento")
-    query_clin <- GDCquery(
-    project = "TCGA-BRCA",
-    data.category = "Clinical",
-    data.type = "Clinical Supplement",
-    data.format = "BCR Biotab"
-)
-
-GDCdownload(query_clin, directory = tcga_raw_dir)
-clinical_data <- GDCprepare(query_clin, directory = tcga_raw_dir)
-
-names(clinical_data)
-
-patient_table <- clinical_data[["clinical_patient_brca"]]
-
-# ── 1.2  Subtipos PAM50 ─────────────────────────────────────
-
-brca_subtypes <- TCGAquery_subtype(tumor = "BRCA")
-table(brca_subtypes$BRCA_Subtype_PAM50, useNA = "always")
-
-
-# ── 1.3  Cruzar PAM50 con estado TNBC por IHC ──────────────
-
-patient_table$patient_id_short <- substr(patient_table$bcr_patient_barcode, 1, 12)
-
-tcga_brca_subtypes <- merge(
-  patient_table[, c("patient_id_short", "er_status_by_ihc",
-                    "pr_status_by_ihc",  "her2_status_by_ihc")],
-  brca_subtypes[, c("patient", "BRCA_Subtype_PAM50")],
-  by.x = "patient_id_short",
-  by.y = "patient"
-)
-
-tcga_brca_subtypes$is_TNBC <-
-  tcga_brca_subtypes$er_status_by_ihc   %in% "Negative" &
-  tcga_brca_subtypes$pr_status_by_ihc   %in% "Negative" &
-  tcga_brca_subtypes$her2_status_by_ihc %in% "Negative"
-
-table(tcga_brca_subtypes$BRCA_Subtype_PAM50, tcga_brca_subtypes$is_TNBC, useNA = "always")
-
-saveRDS(
-    tcga_brca_subtypes,
-    tcga_subtypes_file
-    )
-}
-
-message("Subtipos TCGA guardados:", tcga_subtypes_file)
-
-# ── 1.4  Descarga RNA-seq STAR Counts ───────────────────────
-
-if (file.exists(tcga_rnaseq_file)) {
-    message("El archivo RNA-seq TCGA ya existe. Se omite su descarga")
-} else {
-    message(format(Sys.time()), " — Iniciando descarga TCGA-BRCA RNA-seq")
-
-    query_rnaseq <- GDCquery(
-      project       = "TCGA-BRCA",
-      data.category = "Transcriptome Profiling",
-      data.type     = "Gene Expression Quantification",
-      workflow.type = "STAR - Counts"
-    )
-
-    message(format(Sys.time()), " — Query OK: ", nrow(getResults(query_rnaseq)), " archivos")
-
-    GDCdownload(query_rnaseq, directory = tcga_raw_dir, files.per.chunk = 100)
-
-    message(format(Sys.time()), " — Descarga completa. Preparando SummarizedExperiment...")
-
-    tcga_brca_rnaseq_se <- GDCprepare(query_rnaseq, directory = tcga_raw_dir)
-
-    message(format(Sys.time()), " — SE creado: ",
-            nrow(tcga_brca_rnaseq_se), " genes × ", ncol(tcga_brca_rnaseq_se), " muestras")
-
-    saveRDS(
-        tcga_brca_rnaseq_se,
-        tcga_rnaseq_file
-    )
-}
-
-
-message("TCGA RNA-seq guardado: ", tcga_rnaseq_file)
-
 # ============================================================
-# SECCIÓN 2: METABRIC
+# SALIDAS (por proyecto, p.ej. TCGA-BRCA -> tumor "brca")
+#
+#   <data_root>/processed/<PROJECT>/<tumor>_rnaseq_se.rds
+#   <data_root>/processed/<PROJECT>/<tumor>_clinical.rds
+#   <data_root>/processed/<PROJECT>/<tumor>_subtype.rds
+#   <data_root>/logs/<tumor>_manifest.tsv
 # ============================================================
 
-# ── 2.1  Descarga desde cBioPortal ──────────────────────────
+download_project <- function(project) {
 
-if (!file.exists(file.path(metabric_raw_dir, "brca_metabric.tar.gz"))) {
+  tumor <- tumor_from_project(project)
 
-    download.file(
-        url = "https://datahub.assets.cbioportal.org/brca_metabric.tar.gz",
-        destfile = file.path(metabric_raw_dir, "brca_metabric.tar.gz"),
-        mode = "wb"
+  proj_raw_dir  <- file.path(tcga_raw_dir, project)
+  proj_proc_dir <- file.path(tcga_proc_dir, project)
+
+  rnaseq_file   <- file.path(proj_proc_dir, paste0(tumor, "_rnaseq_se.rds"))
+  clinical_file <- file.path(proj_proc_dir, paste0(tumor, "_clinical.rds"))
+  subtype_file  <- file.path(proj_proc_dir, paste0(tumor, "_subtype.rds"))
+  manifest_file <- file.path(tcga_log_dir, paste0(tumor, "_manifest.tsv"))
+
+  if (file.exists(rnaseq_file) && file.exists(clinical_file) && file.exists(subtype_file)) {
+    message(project, ": las tres salidas procesadas ya existen. Se omite por completo.")
+    return(invisible(NULL))
+  }
+
+  dir.create(proj_raw_dir, recursive = TRUE, showWarnings = FALSE)
+  dir.create(proj_proc_dir, recursive = TRUE, showWarnings = FALSE)
+  dir.create(tcga_log_dir, recursive = TRUE, showWarnings = FALSE)
+
+  log_manifest_row <- function(step, data_category, data_type = NA_character_,
+                                workflow_type = NA_character_, sample_type = NA_character_,
+                                n_files = NA_integer_, n_rows = NA_integer_,
+                                n_cols = NA_integer_, n_tables = NA_integer_,
+                                output_file = NA_character_) {
+    row <- data.frame(
+      date = as.character(Sys.time()),
+      project = project,
+      step = step,
+      data_category = data_category,
+      data_type = data_type,
+      workflow_type = workflow_type,
+      sample_type = sample_type,
+      n_files = n_files,
+      n_rows = n_rows,
+      n_cols = n_cols,
+      n_tables = n_tables,
+      tcgabiolinks_version = as.character(packageVersion("TCGAbiolinks")),
+      output_file = output_file,
+      stringsAsFactors = FALSE
     )
 
-}
+    # Se escribe de inmediato (no al final de download_project) para que un
+    # error en un paso posterior no descarte el registro de un paso ya
+    # completado y guardado en disco.
+    append_manifest_row(row, manifest_file)
+  }
 
-if (!dir.exists(file.path(metabric_raw_dir, "brca_metabric"))) {
+  # ── 1. Expresión RNA-seq: Primary Tumor + Solid Tissue Normal ──
 
-    untar(
-        file.path(metabric_raw_dir, "brca_metabric.tar.gz"),
-        exdir = metabric_raw_dir
+  if (file.exists(rnaseq_file)) {
+    message(project, ": expresión ya existe. Se omite su descarga")
+  } else {
+    message(format(Sys.time()), " — ", project, ": iniciando descarga RNA-seq")
+
+    rnaseq_ok <- tryCatch({
+      query_rnaseq <- GDCquery(
+        project       = project,
+        data.category = "Transcriptome Profiling",
+        data.type     = "Gene Expression Quantification",
+        workflow.type = "STAR - Counts",
+        access        = "open",
+        sample.type   = c("Primary Tumor", "Solid Tissue Normal")
+      )
+
+      n_files <- nrow(getResults(query_rnaseq))
+      message(project, ": ", n_files, " archivos STAR - Counts encontrados (tumor + control)")
+
+      GDCdownload(query_rnaseq, directory = proj_raw_dir, files.per.chunk = 100)
+
+      rnaseq_se <- GDCprepare(query_rnaseq, directory = proj_raw_dir)
+
+      message(
+        project, ": SummarizedExperiment creado — ",
+        nrow(rnaseq_se), " genes × ", ncol(rnaseq_se), " muestras — ",
+        "tabla(sample_type): ",
+        paste(capture.output(print(table(rnaseq_se$sample_type, useNA = "always"))), collapse = " | ")
+      )
+
+      saveRDS(rnaseq_se, rnaseq_file)
+
+      log_manifest_row(
+        step = "rnaseq",
+        data_category = "Transcriptome Profiling",
+        data_type = "Gene Expression Quantification",
+        workflow_type = "STAR - Counts",
+        sample_type = "Primary Tumor;Solid Tissue Normal",
+        n_files = n_files,
+        n_rows = nrow(rnaseq_se),
+        n_cols = ncol(rnaseq_se),
+        output_file = rnaseq_file
+      )
+      TRUE
+    }, error = function(error) {
+      message(project, ": ERROR al descargar RNA-seq — ", conditionMessage(error))
+      log_manifest_row(
+        step = "rnaseq",
+        data_category = paste0("ERROR: ", conditionMessage(error))
+      )
+      FALSE
+    })
+
+    if (!rnaseq_ok) return(invisible(NULL))
+  }
+
+  # ── 2. Clínica (BCR Biotab), para vincular barcodes ──
+
+  if (file.exists(clinical_file)) {
+    message(project, ": clínica ya existe. Se omite su descarga")
+  } else {
+    message(format(Sys.time()), " — ", project, ": iniciando descarga clínica")
+
+    tryCatch({
+      query_clin <- GDCquery(
+        project       = project,
+        data.category = "Clinical",
+        data.type     = "Clinical Supplement",
+        data.format   = "BCR Biotab"
+      )
+
+      GDCdownload(query_clin, directory = proj_raw_dir)
+      clinical_data <- GDCprepare(query_clin, directory = proj_raw_dir)
+
+      saveRDS(clinical_data, clinical_file)
+
+      message(project, ": clínica guardada — ", length(clinical_data), " tablas BCR Biotab")
+
+      log_manifest_row(
+        step = "clinical",
+        data_category = "Clinical",
+        data_type = "Clinical Supplement",
+        workflow_type = "BCR Biotab",
+        n_tables = length(clinical_data),
+        output_file = clinical_file
+      )
+    }, error = function(error) {
+      message(project, ": ERROR al descargar clínica — ", conditionMessage(error))
+      log_manifest_row(
+        step = "clinical",
+        data_category = paste0("ERROR: ", conditionMessage(error))
+      )
+    })
+  }
+
+  # ── 3. Tabla de subtipos (TCGAquery_subtype), si existe ──
+
+  if (file.exists(subtype_file)) {
+    message(project, ": tabla de subtipos ya existe. Se omite su descarga")
+  } else {
+    message(format(Sys.time()), " — ", project, ": consultando tabla de subtipos")
+
+    subtype_table <- tryCatch(
+      TCGAquery_subtype(tumor = tumor),
+      error = function(error) {
+        message(project, ": sin tabla de subtipos disponible — ", conditionMessage(error))
+        NULL
+      }
     )
 
+    if (!is.null(subtype_table)) {
+      saveRDS(subtype_table, subtype_file)
+      message(project, ": tabla de subtipos guardada — ", nrow(subtype_table), " registros")
+    }
+
+    log_manifest_row(
+      step = "subtype",
+      data_category = "TCGAquery_subtype",
+      n_rows = if (!is.null(subtype_table)) nrow(subtype_table) else NA_integer_,
+      output_file = if (!is.null(subtype_table)) subtype_file else NA_character_
+    )
+  }
+
+  invisible(NULL)
 }
 
-message("METABRIC extracted in data/raw/metabric/brca_metabric/")
-
-# ── 2.2  Clínica ─────────────────────────────────────────────
-
-mtbrc_patient <- read.delim(
-    file.path(metabric_raw_dir, "brca_metabric", "data_clinical_patient.txt"),
-    header = TRUE,
-    sep = "\t",
-    stringsAsFactors = FALSE,
-    comment.char = "#"
-)
-
-mtbrc_sample <- read.delim(
-    file.path(metabric_raw_dir, "brca_metabric", "data_clinical_sample.txt"),
-    header = TRUE,
-    sep = "\t",
-    stringsAsFactors = FALSE,
-    comment.char = "#"
-)
-
-mtbrc_clinical <- merge(
-  mtbrc_patient,
-  mtbrc_sample[, c("PATIENT_ID", "SAMPLE_ID", "ER_STATUS", "HER2_STATUS", "PR_STATUS")],
-  by    = "PATIENT_ID",
-  all.x = TRUE
-)
-
-table(mtbrc_clinical$CLAUDIN_SUBTYPE, useNA = "always")
-table(mtbrc_clinical$INTCLUST,        useNA = "always")
-
-saveRDS(
-    mtbrc_clinical,
-    file.path(metabric_proc_dir, "mtbrc_clinical.rds")
-)
-
-message(
-    "Clinical data saved: ",
-    file.path(metabric_proc_dir, "mtbrc_clinical.rds"),
-    " (", nrow(mtbrc_clinical), " patients)"
-)
-
-# ── 2.3  Clínica restringida a muestras con expresión ────────
-
-mrna_ids_raw <- readLines(
-	file.path(metabric_raw_dir, "brca_metabric", "case_lists", "cases_mRNA.txt")
-)
-mrna_ids_line <- grep("^case_list_ids:", mrna_ids_raw, value = TRUE)
-mrna_ids      <- strsplit(sub("^case_list_ids:\\s*", "", mrna_ids_line), "\t")[[1]]
-
-mtbrc_clinical_mrna <- mtbrc_clinical[mtbrc_clinical$SAMPLE_ID %in% mrna_ids, ]
-
-table(mtbrc_clinical_mrna$CLAUDIN_SUBTYPE, useNA = "always")
-
-saveRDS(
-    mtbrc_clinical_mrna,
-    file.path(metabric_proc_dir, "mtbrc_clinical_mrna.rds")
-)
-
-message("Clinical data with expression saved: ", nrow(mtbrc_clinical_mrna), " samples")
-
-# ── 2.4  Matriz de expresión (microarray Illumina) ───────────
-
-message("Leyendo data_mrna_illumina_microarray.txt (~658 MB, ~1 min)...")
-
-mtbrc_expr_raw <- read.delim(
-    file.path(metabric_raw_dir, "brca_metabric", "data_mrna_illumina_microarray.txt"),
-    header = TRUE,
-    sep = "\t",
-    stringsAsFactors = FALSE,
-    check.names = FALSE
-)
-
-# Convertir a matriz numérica (columnas 3 en adelante son muestras)
-expr_mat <- as.matrix(mtbrc_expr_raw[, -(1:2)])
-rownames(expr_mat) <- mtbrc_expr_raw$Hugo_Symbol
-
-invalid_genes <- is.na(rownames(expr_mat)) | trimws(rownames(expr_mat)) == ""
-expr_mat <- expr_mat[!invalid_genes, , drop = FALSE]
-
-message(sum(invalid_genes), " genes sin símbolo HGNC eliminados")
-
-# Resolver duplicados: colapsar por mediana de columnas
-dup_genes <- unique(rownames(expr_mat)[duplicated(rownames(expr_mat))])
-message(length(dup_genes), " símbolos duplicados — colapsando por mediana")
-
-df_expr <- as.data.frame(expr_mat)
-df_expr$.symbol <- rownames(expr_mat)
-mtbrc_expr <- do.call(rbind,
-  lapply(
-    split(df_expr[, colnames(df_expr) != ".symbol"], df_expr$.symbol),
-    function(chunk) apply(chunk, 2, median, na.rm = TRUE)
+for (project in projects) {
+  tryCatch(
+    download_project(project),
+    error = function(error) {
+      message(project, ": ERROR inesperado, se omite el resto de este proyecto — ", conditionMessage(error))
+    }
   )
-)
+}
 
-message("Dimensiones finales: ", nrow(mtbrc_expr), " genes × ", ncol(mtbrc_expr), " muestras")
-
-saveRDS(
-    mtbrc_expr,
-    file.path(metabric_proc_dir, "mtbrc_expr.rds")
-)
-
-message("Expression matrix saved.")
 message("\n========================================")
-message("Download completed successfully")
+message("Descarga TCGA completada para los ", length(projects), " proyectos configurados")
 message("========================================")
-
-message("Processed files:")
-
-message("  data/processed/tcga/tcga_brca_subtypes.rds")
-message("  data/processed/tcga/tcga_brca_rnaseq_se.rds")
-
-message("  data/processed/metabric/mtbrc_clinical.rds")
-message("  data/processed/metabric/mtbrc_clinical_mrna.rds")
-message("  data/processed/metabric/mtbrc_expr.rds")

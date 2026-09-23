@@ -116,9 +116,26 @@ THCA_BRS_GENES <- setdiff(
 
 # tumor_se: SummarizedExperiment ya deduplicado a Primary Tumor, una
 # muestra por paciente (ver dedup_one_per_patient). subtype_table: la
-# tabla de TCGAquery_subtype("thca") con la columna BRAF_RAF_class.
-# Devuelve un data.frame con una fila por paciente en tumor_se:
-# patient, published_class ("" tratado como NA), brs_score, brs_class.
+# tabla de TCGAquery_subtype("thca").
+#
+# CORREGIDO (revisión externa, ver results/final/tables/subtype_classification_methods.tsv):
+#   1. Grupos de referencia: se usa BRAFV600E_RAS (genotipo real por
+#      mutación: BRAF_V600E / RAS / OTHER), NO BRAF_RAF_class. Esta
+#      última es sign(BRAF_RAF_score) -- la salida del propio
+#      clasificador -- así que ajustar los centroides con ella sería
+#      circular. "OTHER" (drivers distintos de BRAF-V600E puro/RAS) se
+#      excluye del ajuste, igual que en el paper.
+#   2. Fórmula: BRS(t) = |v(t)-c(B)|_2 - |v(t)-c(R)|_2, la DIFERENCIA DE
+#      DISTANCIAS EUCLIDIANAS (norma L2), no de distancias al cuadrado.
+#      Confirmado contra el XML crudo del .docx original (Extended
+#      Experimental Procedures 14.1): el "2" en |x-y|_2 está marcado
+#      como subscript (notación de norma), no superscript.
+#
+# published_class (BRAF_RAF_class, "" tratada como NA) y reference_group
+# (BRAFV600E_RAS para quienes definieron los centroides, NA para el
+# resto) se devuelven por separado para que la validación pueda
+# distinguir resustitución (pacientes que sí entraron al ajuste) de
+# validación genuina (pacientes con published_class que NO entraron).
 compute_thca_brs <- function(tumor_se, subtype_table) {
   rd <- as.data.frame(rowData(tumor_se))
   gene_idx <- rd$gene_name %in% THCA_BRS_GENES
@@ -131,12 +148,16 @@ compute_thca_brs <- function(tumor_se, subtype_table) {
 
   log2tpm <- log2(tpm_dedup + 1)
 
+  genotype <- setNames(as.character(subtype_table$BRAFV600E_RAS), subtype_table$patient)
+  genotype[trimws(genotype) == ""] <- NA_character_
+  genotype <- genotype[colnames(log2tpm)]
+
   published_class <- setNames(as.character(subtype_table$BRAF_RAF_class), subtype_table$patient)
   published_class[trimws(published_class) == ""] <- NA_character_
   published_class <- published_class[colnames(log2tpm)]
 
-  is_braf <- !is.na(published_class) & published_class == "Braf-like"
-  is_ras  <- !is.na(published_class) & published_class == "Ras-like"
+  is_braf <- !is.na(genotype) & genotype == "BRAF_V600E"
+  is_ras  <- !is.na(genotype) & genotype == "RAS"
   ref_samples <- is_braf | is_ras
 
   ref_mean <- rowMeans(log2tpm[, ref_samples, drop = FALSE])
@@ -149,11 +170,12 @@ compute_thca_brs <- function(tumor_se, subtype_table) {
   centroid_braf <- rowMeans(z[, is_braf, drop = FALSE])
   centroid_ras  <- rowMeans(z[, is_ras, drop = FALSE])
 
-  sq_dist <- function(mat, centroid) colSums((mat - centroid)^2)
-  brs_score <- sq_dist(z, centroid_braf) - sq_dist(z, centroid_ras)
+  euclid_dist <- function(mat, centroid) sqrt(colSums((mat - centroid)^2))
+  brs_score <- euclid_dist(z, centroid_braf) - euclid_dist(z, centroid_ras)
 
   data.frame(
     patient = colnames(z),
+    reference_group = ifelse(ref_samples, genotype, NA_character_),
     published_class = published_class[colnames(z)],
     brs_score = brs_score,
     brs_class = ifelse(brs_score < 0, "Braf-like", "Ras-like"),

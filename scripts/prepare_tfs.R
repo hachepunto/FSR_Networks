@@ -2,8 +2,12 @@
 # PATHS
 # ============================================================
 
-data_raw_dir <- "data/raw"
-aracne_input_dir <- "networks/input"
+library(yaml)
+
+config <- yaml::read_yaml("config/config.yaml")
+
+data_raw_dir <- file.path(config$paths$data_root, "raw", "tfs")
+aracne_input_dir <- file.path(config$paths$work_root, "networks", "input")
 
 lambert_raw_file <- file.path(data_raw_dir, "lambert2018_DatabaseExtract_v1.01.csv")
 tf_file <- file.path(aracne_input_dir, "TFs_Lambert2018.txt")

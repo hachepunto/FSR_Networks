@@ -66,9 +66,27 @@ ARACNE3_BIN="$(realpath "$ARACNE3_DIR")/build/src/app/ARACNe3_app_release"
 
 [[ -x "$ARACNE3_BIN" ]] || {
     echo "ERROR: No se encontró el ejecutable compilado de ARACNe3: $ARACNE3_BIN"
-    echo "Compílalo primero con CMake en modo Release (ver README del fork)."
+    echo "Compílalo primero con: bash scripts/setup_aracne3.sh"
     exit 1
 }
+
+# El binario debe venir del commit fijado en config.yaml (versión sin
+# los data races de calcAPMI y del modelo nulo). setup_aracne3.sh
+# escribe build/ARACNe3_BUILT_COMMIT solo tras compilar ese commit.
+REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+EXPECTED_COMMIT="$(Rscript -e 'cat(yaml::yaml.load(readLines(commandArgs(TRUE)[1], warn = FALSE, encoding = "UTF-8"))$network_inference$aracne3$commit)' \
+    "$REPO_ROOT/config/config.yaml")"
+BUILT_COMMIT="$(cat "$(realpath "$ARACNE3_DIR")/build/ARACNe3_BUILT_COMMIT" 2>/dev/null || true)"
+SOURCE_COMMIT="$(git -C "$ARACNE3_DIR" rev-parse HEAD 2>/dev/null || true)"
+
+if [[ -z "$EXPECTED_COMMIT" || "$BUILT_COMMIT" != "$EXPECTED_COMMIT" || "$SOURCE_COMMIT" != "$EXPECTED_COMMIT" ]]; then
+    echo "ERROR: ARACNe3 no está compilado en el commit de config.yaml."
+    echo "  esperado:  ${EXPECTED_COMMIT:-<no definido>}"
+    echo "  compilado: ${BUILT_COMMIT:-<desconocido>}"
+    echo "  fuente:    ${SOURCE_COMMIT:-<desconocido>}"
+    echo "Corre primero: bash scripts/setup_aracne3.sh"
+    exit 1
+fi
 
 EXPFILE="$(realpath "$EXPFILE")"
 REGULATORS="$(realpath "$REGULATORS")"

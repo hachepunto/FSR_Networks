@@ -46,17 +46,57 @@ append_manifest_row <- function(row, manifest_file) {
 }
 
 # Colapsa filas con el mismo rowname (p.ej. varios Ensembl ID mapeando al
-# mismo símbolo HGNC) tomando la mediana por columna. Usada tanto por
-# preprocess_expression.R (build_symbol_tpm, genes protein_coding) como por
-# compute_thca_brs() más abajo — antes duplicada en ambos lugares.
-collapse_duplicate_rownames_median <- function(mat) {
+# mismo símbolo HGNC) aplicando `fun` por columna dentro de cada grupo de
+# filas duplicadas. No se usa directamente — ver los dos wrappers de
+# abajo, uno por criterio de agregación.
+collapse_duplicate_rownames <- function(mat, fun) {
   df <- as.data.frame(mat)
   df$.sym <- rownames(mat)
   collapsed <- do.call(rbind,
     lapply(split(df[, colnames(df) != ".sym", drop = FALSE], df$.sym),
-           function(chunk) apply(chunk, 2, median, na.rm = TRUE))
+           function(chunk) apply(chunk, 2, fun, na.rm = TRUE))
   )
   collapsed[, colnames(mat), drop = FALSE]
+}
+
+# Mediana por columna — para TPM/log2TPM, ya normalizado. Usada tanto por
+# preprocess_expression.R (build_symbol_tpm, genes protein_coding) como por
+# compute_thca_brs() más abajo — antes duplicada en ambos lugares.
+collapse_duplicate_rownames_median <- function(mat) collapse_duplicate_rownames(mat, median)
+
+# Suma por columna — el criterio correcto para CUENTAS crudas (dos
+# Ensembl ID con el mismo símbolo son cuentas independientes que deben
+# sumarse, no promediarse). Usada por run_deseq2.R al construir la
+# matriz de cuentas para DESeq2.
+collapse_duplicate_rownames_sum <- function(mat) collapse_duplicate_rownames(mat, sum)
+
+# Reconstruye a qué cáncer/proyecto/label_spec corresponde un analysis_id
+# ("BRCA_basal") sin asumir su estructura de texto (varios standardized_label
+# ya tienen guión bajo, p.ej. "prox_inflam") — recorre config$subtypes y
+# arma el mismo analysis_id que preprocess_expression.R y run_mra.R hasta
+# encontrar el que coincide. Usada por scripts de línea de comandos por
+# analysis_id (p.ej. run_deseq2.R) que reciben solo el analysis_id y
+# necesitan derivar el resto (cáncer, proyecto, network_method) desde
+# config.yaml, igual que ya lo hacen los scripts que recorren todos.
+find_analysis_spec <- function(analysis_id, config) {
+  for (cancer in names(config$subtypes)) {
+    spec <- config$subtypes[[cancer]]
+    for (original_value in names(spec$labels)) {
+      label_spec <- spec$labels[[original_value]]
+      if (identical(paste0(cancer, "_", label_spec$standardized_label), analysis_id)) {
+        project <- config$projects[
+          vapply(config$projects, function(p) cancer_from_project(p) == cancer, logical(1))
+        ]
+        return(list(
+          cancer = cancer,
+          project = project[1],
+          original_value = original_value,
+          label_spec = label_spec
+        ))
+      }
+    }
+  }
+  NULL
 }
 
 # Reemplaza los rownames de una matriz por el gene_id de Ensembl sin

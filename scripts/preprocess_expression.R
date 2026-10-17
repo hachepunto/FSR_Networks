@@ -251,11 +251,8 @@ for (project in config$projects) {
     if (n_red_final != label_spec$n_red) {
       warning(
         analysis_id, ": n_red final (", n_red_final,
-        ") difiere del calculado en classify_subtypes.R (", label_spec$n_red, "). ",
-        "Si esto además cruza el umbral ARACNE3_MIN_N=", ARACNE3_MIN_N,
-        ", network_method en el manifiesto (", network_method,
-        ") puede quedar en desacuerdo con config.yaml (", label_spec$network_method,
-        ") — revisar y actualizar config.yaml a mano si corresponde.",
+        ") difiere del calculado en classify_subtypes.R (", label_spec$n_red, ") — ",
+        "actualizar n_red en config.yaml. (El método de red ya no depende de n; es corto para todos.)",
         call. = FALSE
       )
     }

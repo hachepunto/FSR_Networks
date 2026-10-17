@@ -1,0 +1,1206 @@
+id	value	description
+real_n_analysis	34	real analysis_ids evaluated
+current_small_n_median_regulators_ge_min	518	current corto, n<95: median regulators with >= min targets
+A_small_n_median_regulators_ge_min	1270	scheme A, n<95: median regulators with >= min targets
+current_median_targets_range_low	2	current corto: min over analysis_ids of median targets per regulator
+current_median_targets_range_high	102	current corto: max over analysis_ids of median targets per regulator
+A_median_targets_range_low	53	scheme A: min over analysis_ids of median targets per regulator
+A_median_targets_range_high	100	scheme A: max over analysis_ids of median targets per regulator
+current_cor_n_vs_median_targets	0.592	current corto: Spearman(n, median targets)
+A_cor_n_vs_median_targets	-0.408	scheme A: Spearman(n, median targets)
+n_min	27	smallest cohort size
+n_max	562	largest cohort size
+current_r_threshold_at_n_min	0.859	current corto: effective |r| threshold at the smallest n
+current_r_threshold_at_n_max	0.239	current corto: effective |r| threshold at the largest n
+current_small_n_median_frac_negative	0.00281	current corto, n<95: median fraction of negative-mode edges
+current_small_n_count_frac_negative_lt_0.01	17	current corto, n<95: cohorts with < 1% negative-mode edges
+n_small_cohorts	19	cohorts with n < 95
+A_n_cohorts_lt30	3	cohorts with n < 30
+collectri_enrichment_median_current	2.03	median CollecTRI enrichment, all cohorts where defined: current
+collectri_enrichment_median_A_k100	2.3	median CollecTRI enrichment, all cohorts where defined: A_k100
+collectri_enrichment_median_aracne3_full	1.14	median CollecTRI enrichment, all cohorts where defined: aracne3_full
+collectri_enrichment_median_aracne3_c10	2.19	median CollecTRI enrichment, all cohorts where defined: aracne3_c10
+collectri_enrichment_median_B_k100	2.53	median CollecTRI enrichment, all cohorts where defined: B_k100
+collectri_enrichment_median_big_current	2.1	median CollecTRI enrichment over the ARACNe3 cohorts: current
+collectri_enrichment_median_big_A_k100	2.52	median CollecTRI enrichment over the ARACNe3 cohorts: A_k100
+collectri_enrichment_median_big_aracne3_full	1.14	median CollecTRI enrichment over the ARACNe3 cohorts: aracne3_full
+collectri_enrichment_median_big_aracne3_c10	2.19	median CollecTRI enrichment over the ARACNe3 cohorts: aracne3_c10
+collectri_enrichment_median_big_B_k100	2.53	median CollecTRI enrichment over the ARACNe3 cohorts: B_k100
+aracne3_full_n_le130_edges_min	2506128	full ARACNe3 network, cohorts with 95 <= n <= 130: min edges
+aracne3_full_n_le130_edges_max	4142445	full ARACNe3 network, cohorts with 95 <= n <= 130: max edges
+B_n_le130_regulators_ge_min_min	1204	scheme B, cohorts with 95 <= n <= 130: min evaluable regulators
+B_n_le130_regulators_ge_min_max	1317	scheme B, cohorts with 95 <= n <= 130: max evaluable regulators
+collectri_enrichment_median_small_current	1.96	median CollecTRI enrichment over the n<95 cohorts: current
+collectri_enrichment_median_small_A_k100	2.18	median CollecTRI enrichment over the n<95 cohorts: A_k100
+A_collectri_enrichment_cor_n	0.756	scheme A: Spearman(n, CollecTRI enrichment)
+A_collectri_enrichment_min_n_lt30	1.62	scheme A, n<30: min CollecTRI enrichment
+A_collectri_enrichment_max_n_lt30	1.82	scheme A, n<30: max CollecTRI enrichment
+collectri_enrichment_median_A_k50	2.8	median CollecTRI enrichment, scheme A with k = 50
+collectri_enrichment_median_A_k150	2.07	median CollecTRI enrichment, scheme A with k = 150
+current_small_n_median_targets_low	2	corto fixed p, n<95: min median targets
+current_small_n_median_targets_high	102	corto fixed p, n<95: max median targets
+current_small_n_cor_n_vs_median_targets	0.779	corto fixed p, n<95: Spearman(n, median targets)
+current_r_threshold_at_n95	0.549	corto fixed p: effective |r| threshold at the largest n < 95
+n_max_small	94	largest cohort size below 95
+AvsB_median_rho	0.926	scheme A vs B, median over ARACNe3 analysis_ids: rho
+BvsC_median_rho	0.985	scheme B vs support-filtered ARACNe3, median: rho
+AvsB_min_rho	0.851	scheme A vs B, minimum: rho
+AvsB_median_top20	0.7	scheme A vs B, median over ARACNe3 analysis_ids: top20
+BvsC_median_top20	0.7	scheme B vs support-filtered ARACNe3, median: top20
+AvsB_min_top20	0.45	scheme A vs B, minimum: top20
+AvsB_median_top50	0.7	scheme A vs B, median over ARACNe3 analysis_ids: top50
+BvsC_median_top50	0.72	scheme B vs support-filtered ARACNe3, median: top50
+AvsB_min_top50	0.6	scheme A vs B, minimum: top50
+AvsB_n_aracne3	15	ARACNe3 analysis_ids in the A vs B comparison
+BvsFull_median_rho	0.928	scheme B vs full ARACNe3 network, median: rho
+BvsFull_median_top20	0.55	scheme B vs full ARACNe3 network, median: top20
+BvsFull_median_top50	0.62	scheme B vs full ARACNe3 network, median: top50
+AvsB_rho_lower_than_BvsC_count	15	cohorts where rho(A,B) < rho(B, support-filtered ARACNe3)
+AvsB_minus_BvsC_top20_min	-0.3	paired difference top-20 overlap, (A vs B) - (B vs C): min
+AvsB_minus_BvsC_top20_max	0.1	paired difference top-20 overlap, (A vs B) - (B vs C): max
+AvsB_rho_at_smallest_n	0.933	scheme A vs B: Spearman rho in the smallest ARACNe3 cohort
+AvsB_smallest_n	96	smallest ARACNe3 cohort size
+A_vs_current_median_rho	0.948	scheme A vs current : median Spearman rho of NES
+A_vs_A_k100_awlik_median_rho	0.963	scheme A vs A_k100_awlik : median Spearman rho of NES
+A_vs_A_k50_median_rho	0.981	scheme A vs A_k50 : median Spearman rho of NES
+A_vs_A_k150_median_rho	0.994	scheme A vs A_k150 : median Spearman rho of NES
+A_k100_vs_CollecTRI_median_rho	0.21	A_k100 vs CollecTRI: median Spearman rho of NES
+current_vs_CollecTRI_median_rho	0.24	current vs CollecTRI: median Spearman rho of NES
+A_r0.0_vs_CollecTRI_median_rho	0.208	A_r0.0 vs CollecTRI: median Spearman rho of NES
+A_r0.1_vs_CollecTRI_median_rho	0.208	A_r0.1 vs CollecTRI: median Spearman rho of NES
+A_r0.2_vs_CollecTRI_median_rho	0.21	A_r0.2 vs CollecTRI: median Spearman rho of NES
+A_r0.3_vs_CollecTRI_median_rho	0.213	A_r0.3 vs CollecTRI: median Spearman rho of NES
+A_r0.4_vs_CollecTRI_median_rho	0.219	A_r0.4 vs CollecTRI: median Spearman rho of NES
+B_k100_vs_CollecTRI_median_rho	0.182	B_k100 vs CollecTRI: median Spearman rho of NES
+aracne3_full_vs_CollecTRI_median_rho	0.173	aracne3_full vs CollecTRI: median Spearman rho of NES
+within_cancer_median_rho	0.575	subtypes of the same cancer, scheme A, median: rho
+null_median_rho	0.526	null (own signature, scheme A network from another cancer), median: rho
+null_max_rho	0.749	null, max: rho
+within_cancer_median_top20	0.45	subtypes of the same cancer, scheme A, median: top20
+null_median_top20	0.3	null (own signature, scheme A network from another cancer), median: top20
+null_max_top20	0.6	null, max: top20
+within_cancer_median_top50	0.4	subtypes of the same cancer, scheme A, median: top50
+null_median_top50	0.36	null (own signature, scheme A network from another cancer), median: top50
+null_max_top50	0.64	null, max: top50
+within_cancer_n_pairs	43	pairs of subtypes of the same cancer
+null_n_pairs	102	null pairs
+method_effect_top20_turnover	0.3	top-20 turnover when changing method (1 - median overlap A vs B)
+subtype_effect_top20_turnover	0.55	top-20 turnover between subtypes of the same cancer (1 - median overlap)
+within_net_median_rho	0.707	own signature, scheme-A network of another subtype of the same cancer , median: rho
+within_net_median_top20	0.55	own signature, scheme-A network of another subtype of the same cancer , median: top20
+within_net_median_top50	0.52	own signature, scheme-A network of another subtype of the same cancer , median: top50
+within_net_n_pairs	86	within_net directed pairs
+within_sig_median_rho	0.822	own network, signature of another subtype of the same cancer , median: rho
+within_sig_median_top20	0.6	own network, signature of another subtype of the same cancer , median: top20
+within_sig_median_top50	0.6	own network, signature of another subtype of the same cancer , median: top50
+within_sig_n_pairs	86	within_sig directed pairs
+network_effect_between_subtypes_top20_turnover	0.45	top-20 turnover when swapping only the network between subtypes of the same cancer
+signature_effect_between_subtypes_top20_turnover	0.4	top-20 turnover when swapping only the signature between subtypes of the same cancer
+within_vs_null_top20_wilcoxon_p	0.00679	Wilcoxon p, top-20 overlap within-cancer vs null
+within_cancer_top20_q25	0.225	within-cancer top-20 overlap, 25th percentile
+within_cancer_top20_q75	0.5	within-cancer top-20 overlap, 75th percentile
+null_top20_q25	0.213	null top-20 overlap, 25th percentile
+null_top20_q75	0.4	null top-20 overlap, 75th percentile
+nonmono_frac_low_scc_min_c1	0.14	support >= 1: min fraction of edges with |Spearman| < 0.2
+nonmono_frac_low_scc_max_c1	0.531	support >= 1: max fraction of edges with |Spearman| < 0.2
+nonmono_frac_low_scc_min_c10	0.00685	support >= 10: min fraction of edges with |Spearman| < 0.2
+nonmono_frac_low_scc_max_c10	0.085	support >= 10: max fraction of edges with |Spearman| < 0.2
+nonmono_frac_low_scc_min_c50	0	support >= 50: min fraction of edges with |Spearman| < 0.2
+nonmono_frac_low_scc_max_c50	0.00176	support >= 50: max fraction of edges with |Spearman| < 0.2
+nonmono_frac_low_scc_median_B	0.0755	scheme B regulons: median fraction of edges with |Spearman| < 0.2
+nonmono_frac_low_scc_min_B	0.0262	scheme B regulons: min fraction with |Spearman| < 0.2
+nonmono_frac_low_scc_max_B	0.119	scheme B regulons: max fraction with |Spearman| < 0.2
+nonmono_frac_low_scc_c1	0.387	support >= 1: median fraction of edges with |Spearman| < 0.2
+nonmono_hi_mi_low_scc_total_c1	434914	support >= 1: total top-quartile-MI edges with |Spearman| < 0.2
+nonmono_hi_mi_total_c1	11826892	support >= 1: total top-quartile-MI edges
+nonmono_cor_mi_scc_c1	0.81	support >= 1: median Spearman(MI, |Spearman|)
+nonmono_frac_low_scc_c10	0.0437	support >= 10: median fraction of edges with |Spearman| < 0.2
+nonmono_hi_mi_low_scc_total_c10	65	support >= 10: total top-quartile-MI edges with |Spearman| < 0.2
+nonmono_hi_mi_total_c10	598261	support >= 10: total top-quartile-MI edges
+nonmono_cor_mi_scc_c10	0.875	support >= 10: median Spearman(MI, |Spearman|)
+nonmono_frac_low_scc_c50	0.000508	support >= 50: median fraction of edges with |Spearman| < 0.2
+nonmono_hi_mi_low_scc_total_c50	0	support >= 50: total top-quartile-MI edges with |Spearman| < 0.2
+nonmono_hi_mi_total_c50	37574	support >= 50: total top-quartile-MI edges
+nonmono_cor_mi_scc_c50	0.912	support >= 50: median Spearman(MI, |Spearman|)
+A_r0.0_median_targets_min	53	A_r0.0 : min over analysis_ids of median targets per regulator
+A_r0.0_regulators_ge_min_min	832	A_r0.0 : min over analysis_ids of regulators with >= min targets
+A_r0.0_n_ids_median_targets_eq_k	32	A_r0.0 : analysis_ids whose median regulon size reaches k
+A_r0.0_vsB_median_rho	0.927	A_r0.0 vs scheme B, median: rho
+A_r0.0_vsB_median_top20	0.7	A_r0.0 vs scheme B, median: top20
+A_r0.0_vsB_median_top50	0.7	A_r0.0 vs scheme B, median: top50
+A_r0.0_collectri_enrichment_median	2.29	A_r0.0 : median CollecTRI enrichment
+A_r0.1_median_targets_min	53	A_r0.1 : min over analysis_ids of median targets per regulator
+A_r0.1_regulators_ge_min_min	831	A_r0.1 : min over analysis_ids of regulators with >= min targets
+A_r0.1_n_ids_median_targets_eq_k	32	A_r0.1 : analysis_ids whose median regulon size reaches k
+A_r0.1_vsB_median_rho	0.927	A_r0.1 vs scheme B, median: rho
+A_r0.1_vsB_median_top20	0.7	A_r0.1 vs scheme B, median: top20
+A_r0.1_vsB_median_top50	0.7	A_r0.1 vs scheme B, median: top50
+A_r0.1_collectri_enrichment_median	2.29	A_r0.1 : median CollecTRI enrichment
+A_r0.2_median_targets_min	53	A_r0.2 : min over analysis_ids of median targets per regulator
+A_r0.2_regulators_ge_min_min	828	A_r0.2 : min over analysis_ids of regulators with >= min targets
+A_r0.2_n_ids_median_targets_eq_k	32	A_r0.2 : analysis_ids whose median regulon size reaches k
+A_r0.2_vsB_median_rho	0.926	A_r0.2 vs scheme B, median: rho
+A_r0.2_vsB_median_top20	0.7	A_r0.2 vs scheme B, median: top20
+A_r0.2_vsB_median_top50	0.7	A_r0.2 vs scheme B, median: top50
+A_r0.2_collectri_enrichment_median	2.3	A_r0.2 : median CollecTRI enrichment
+A_r0.3_median_targets_min	44	A_r0.3 : min over analysis_ids of median targets per regulator
+A_r0.3_regulators_ge_min_min	795	A_r0.3 : min over analysis_ids of regulators with >= min targets
+A_r0.3_n_ids_median_targets_eq_k	30	A_r0.3 : analysis_ids whose median regulon size reaches k
+A_r0.3_vsB_median_rho	0.937	A_r0.3 vs scheme B, median: rho
+A_r0.3_vsB_median_top20	0.7	A_r0.3 vs scheme B, median: top20
+A_r0.3_vsB_median_top50	0.72	A_r0.3 vs scheme B, median: top50
+A_r0.3_collectri_enrichment_median	2.34	A_r0.3 : median CollecTRI enrichment
+A_r0.4_median_targets_min	32	A_r0.4 : min over analysis_ids of median targets per regulator
+A_r0.4_regulators_ge_min_min	627	A_r0.4 : min over analysis_ids of regulators with >= min targets
+A_r0.4_n_ids_median_targets_eq_k	25	A_r0.4 : analysis_ids whose median regulon size reaches k
+A_r0.4_vsB_median_rho	0.942	A_r0.4 vs scheme B, median: rho
+A_r0.4_vsB_median_top20	0.7	A_r0.4 vs scheme B, median: top20
+A_r0.4_vsB_median_top50	0.72	A_r0.4 vs scheme B, median: top50
+A_r0.4_collectri_enrichment_median	2.42	A_r0.4 : median CollecTRI enrichment
+runtime_aracne3_total_hours	5.93	ARACNe3: total wall-clock hours
+runtime_aracne3_max_hours	1.32	ARACNe3: max wall-clock hours for one analysis_id
+runtime_corto_same_ids_total_hours	1.83	corto (lenient): total wall-clock hours, same analysis_ids
+runtime_aracne3_core_hours	107	ARACNe3: core-hours (wall x threads), same analysis_ids
+runtime_corto_core_hours	14.6	corto (lenient): core-hours (wall x threads), same analysis_ids
+runtime_aracne3_threads	18	ARACNe3 threads per run
+runtime_corto_threads	8	corto threads per run
+syn_nonmono_strong_n100_c10_frac_low_scc	0.000366	synthetic strong, n=100, support >= 10: mean fraction of edges with |Spearman| < 0.2
+syn_nonmono_strong_n200_c10_frac_low_scc	0.028	synthetic strong, n=200, support >= 10: mean fraction of edges with |Spearman| < 0.2
+syn_nonmono_weak_n200_c10_frac_low_scc	0	synthetic weak, n=200, support >= 10: mean fraction of edges with |Spearman| < 0.2
+syn_nonmono_strong_c1_frac_low_scc	0.545	synthetic strong, n max, aracne3_c1: mean fraction of edges with |Spearman| < 0.2
+syn_nonmono_strong_c1_frac_true_nm	0.0198	synthetic strong, n max, aracne3_c1: mean fraction of edges that are true non-monotone
+syn_nonmono_strong_c1_n_true_nm	1640	synthetic strong, n max, aracne3_c1: mean true non-monotone edges recovered
+syn_nonmono_strong_c1_frac_true_nm_low_scc	0.878	synthetic strong, n max, aracne3_c1: mean fraction of recovered true non-monotone edges with |Spearman| < 0.2
+syn_nonmono_strong_c10_frac_low_scc	0.0577	synthetic strong, n max, aracne3_c10: mean fraction of edges with |Spearman| < 0.2
+syn_nonmono_strong_c10_frac_true_nm	0.0636	synthetic strong, n max, aracne3_c10: mean fraction of edges that are true non-monotone
+syn_nonmono_strong_c10_n_true_nm	987	synthetic strong, n max, aracne3_c10: mean true non-monotone edges recovered
+syn_nonmono_strong_c10_frac_true_nm_low_scc	0.806	synthetic strong, n max, aracne3_c10: mean fraction of recovered true non-monotone edges with |Spearman| < 0.2
+syn_nonmono_strong_c50_frac_low_scc	0.0491	synthetic strong, n max, aracne3_c50: mean fraction of edges with |Spearman| < 0.2
+syn_nonmono_strong_c50_frac_true_nm	0.0742	synthetic strong, n max, aracne3_c50: mean fraction of edges that are true non-monotone
+syn_nonmono_strong_c50_n_true_nm	486	synthetic strong, n max, aracne3_c50: mean true non-monotone edges recovered
+syn_nonmono_strong_c50_frac_true_nm_low_scc	0.663	synthetic strong, n max, aracne3_c50: mean fraction of recovered true non-monotone edges with |Spearman| < 0.2
+syn_nonmono_strong_B_k100_frac_low_scc	0.0965	synthetic strong, n max, B_k100: mean fraction of edges with |Spearman| < 0.2
+syn_nonmono_strong_B_k100_frac_true_nm	0.0439	synthetic strong, n max, B_k100: mean fraction of edges that are true non-monotone
+syn_nonmono_strong_B_k100_n_true_nm	877	synthetic strong, n max, B_k100: mean true non-monotone edges recovered
+syn_nonmono_weak_c1_frac_low_scc	0.456	synthetic weak, n max, aracne3_c1: mean fraction of edges with |Spearman| < 0.2
+syn_nonmono_weak_c1_frac_true_nm	0.0321	synthetic weak, n max, aracne3_c1: mean fraction of edges that are true non-monotone
+syn_nonmono_weak_c1_n_true_nm	794	synthetic weak, n max, aracne3_c1: mean true non-monotone edges recovered
+syn_nonmono_weak_c1_frac_true_nm_low_scc	0.781	synthetic weak, n max, aracne3_c1: mean fraction of recovered true non-monotone edges with |Spearman| < 0.2
+syn_nonmono_weak_c10_frac_low_scc	0.0195	synthetic weak, n max, aracne3_c10: mean fraction of edges with |Spearman| < 0.2
+syn_nonmono_weak_c10_frac_true_nm	0.0481	synthetic weak, n max, aracne3_c10: mean fraction of edges that are true non-monotone
+syn_nonmono_weak_c10_n_true_nm	236	synthetic weak, n max, aracne3_c10: mean true non-monotone edges recovered
+syn_nonmono_weak_c10_frac_true_nm_low_scc	0.37	synthetic weak, n max, aracne3_c10: mean fraction of recovered true non-monotone edges with |Spearman| < 0.2
+syn_nonmono_weak_c50_frac_low_scc	0.000647	synthetic weak, n max, aracne3_c50: mean fraction of edges with |Spearman| < 0.2
+syn_nonmono_weak_c50_frac_true_nm	0.0627	synthetic weak, n max, aracne3_c50: mean fraction of edges that are true non-monotone
+syn_nonmono_weak_c50_n_true_nm	99.6	synthetic weak, n max, aracne3_c50: mean true non-monotone edges recovered
+syn_nonmono_weak_c50_frac_true_nm_low_scc	0.0105	synthetic weak, n max, aracne3_c50: mean fraction of recovered true non-monotone edges with |Spearman| < 0.2
+syn_nonmono_weak_B_k100_frac_low_scc	0.371	synthetic weak, n max, B_k100: mean fraction of edges with |Spearman| < 0.2
+syn_nonmono_weak_B_k100_frac_true_nm	0.0309	synthetic weak, n max, B_k100: mean fraction of edges that are true non-monotone
+syn_nonmono_weak_B_k100_n_true_nm	593	synthetic weak, n max, B_k100: mean true non-monotone edges recovered
+syn_prec10_se_min	0.02	synthetic: min over (regime, n) of the s.e. of the top-10 fraction, scheme A
+syn_prec10_se_max	0.0775	synthetic: max over (regime, n) of the s.e. of the top-10 fraction, scheme A
+syn_strong_nmax_prec10_range_three_schemes	0.08	synthetic strong, n = 400: range of top-10 fraction across A, B and fixed p
+syn_strong_A_gap_to_truth_max_n_ge100	0.06	synthetic strong: max over n >= 100 of (truth - scheme A) top-10 fraction
+syn_weak_nmax_prec10_range_three_schemes	0.16	synthetic weak, n = 400: range of top-10 fraction across A, B and fixed p
+syn_weak_A_gap_to_truth_max_n_ge100	0.06	synthetic weak: max over n >= 100 of (truth - scheme A) top-10 fraction
+syn_truth_strong_n30_truth_no_nonmono_prec10	0.76	synthetic strong, n=30, true regulon variant truth_no_nonmono: mean top-10 fraction
+syn_truth_weak_n30_truth_no_nonmono_prec10	0.8	synthetic weak, n=30, true regulon variant truth_no_nonmono: mean top-10 fraction
+syn_truth_strong_n60_truth_no_nonmono_prec10	0.8	synthetic strong, n=60, true regulon variant truth_no_nonmono: mean top-10 fraction
+syn_truth_weak_n60_truth_no_nonmono_prec10	0.8	synthetic weak, n=60, true regulon variant truth_no_nonmono: mean top-10 fraction
+syn_truth_strong_n100_truth_no_nonmono_prec10	0.82	synthetic strong, n=100, true regulon variant truth_no_nonmono: mean top-10 fraction
+syn_truth_weak_n100_truth_no_nonmono_prec10	0.82	synthetic weak, n=100, true regulon variant truth_no_nonmono: mean top-10 fraction
+syn_truth_strong_n200_truth_no_nonmono_prec10	0.82	synthetic strong, n=200, true regulon variant truth_no_nonmono: mean top-10 fraction
+syn_truth_weak_n200_truth_no_nonmono_prec10	0.8	synthetic weak, n=200, true regulon variant truth_no_nonmono: mean top-10 fraction
+syn_truth_strong_n400_truth_no_nonmono_prec10	0.78	synthetic strong, n=400, true regulon variant truth_no_nonmono: mean top-10 fraction
+syn_truth_weak_n400_truth_no_nonmono_prec10	0.8	synthetic weak, n=400, true regulon variant truth_no_nonmono: mean top-10 fraction
+syn_truth_strong_n30_truth_nonmono_signed_prec10	0.82	synthetic strong, n=30, true regulon variant truth_nonmono_signed: mean top-10 fraction
+syn_truth_weak_n30_truth_nonmono_signed_prec10	0.82	synthetic weak, n=30, true regulon variant truth_nonmono_signed: mean top-10 fraction
+syn_truth_strong_n60_truth_nonmono_signed_prec10	0.82	synthetic strong, n=60, true regulon variant truth_nonmono_signed: mean top-10 fraction
+syn_truth_weak_n60_truth_nonmono_signed_prec10	0.88	synthetic weak, n=60, true regulon variant truth_nonmono_signed: mean top-10 fraction
+syn_truth_strong_n100_truth_nonmono_signed_prec10	0.94	synthetic strong, n=100, true regulon variant truth_nonmono_signed: mean top-10 fraction
+syn_truth_weak_n100_truth_nonmono_signed_prec10	0.94	synthetic weak, n=100, true regulon variant truth_nonmono_signed: mean top-10 fraction
+syn_truth_strong_n200_truth_nonmono_signed_prec10	0.94	synthetic strong, n=200, true regulon variant truth_nonmono_signed: mean top-10 fraction
+syn_truth_weak_n200_truth_nonmono_signed_prec10	0.98	synthetic weak, n=200, true regulon variant truth_nonmono_signed: mean top-10 fraction
+syn_truth_strong_n400_truth_nonmono_signed_prec10	0.92	synthetic strong, n=400, true regulon variant truth_nonmono_signed: mean top-10 fraction
+syn_truth_weak_n400_truth_nonmono_signed_prec10	0.96	synthetic weak, n=400, true regulon variant truth_nonmono_signed: mean top-10 fraction
+syn_strong_mt10_current_n30_auroc	0.5	synthetic strong, min targets 10, current, n=30: mean AUROC over all TFs
+syn_strong_mt10_current_n30_prec10	0	synthetic strong, min targets 10, current, n=30: mean precision in top-10
+syn_strong_mt10_current_n30_mreval	0	synthetic strong, min targets 10, current, n=30: mean true MRs evaluable
+syn_strong_mt10_current_n60_auroc	0.506	synthetic strong, min targets 10, current, n=60: mean AUROC over all TFs
+syn_strong_mt10_current_n60_prec10	0.12	synthetic strong, min targets 10, current, n=60: mean precision in top-10
+syn_strong_mt10_current_n60_mreval	1.2	synthetic strong, min targets 10, current, n=60: mean true MRs evaluable
+syn_strong_mt10_current_n100_auroc	0.811	synthetic strong, min targets 10, current, n=100: mean AUROC over all TFs
+syn_strong_mt10_current_n100_prec10	0.74	synthetic strong, min targets 10, current, n=100: mean precision in top-10
+syn_strong_mt10_current_n100_mreval	7.4	synthetic strong, min targets 10, current, n=100: mean true MRs evaluable
+syn_strong_mt10_current_n200_auroc	0.999	synthetic strong, min targets 10, current, n=200: mean AUROC over all TFs
+syn_strong_mt10_current_n200_prec10	0.9	synthetic strong, min targets 10, current, n=200: mean precision in top-10
+syn_strong_mt10_current_n200_mreval	10	synthetic strong, min targets 10, current, n=200: mean true MRs evaluable
+syn_strong_mt10_current_n400_auroc	0.996	synthetic strong, min targets 10, current, n=400: mean AUROC over all TFs
+syn_strong_mt10_current_n400_prec10	0.84	synthetic strong, min targets 10, current, n=400: mean precision in top-10
+syn_strong_mt10_current_n400_mreval	10	synthetic strong, min targets 10, current, n=400: mean true MRs evaluable
+syn_strong_mt10_A_k100_n30_auroc	0.871	synthetic strong, min targets 10, A_k100, n=30: mean AUROC over all TFs
+syn_strong_mt10_A_k100_n30_prec10	0.38	synthetic strong, min targets 10, A_k100, n=30: mean precision in top-10
+syn_strong_mt10_A_k100_n30_mreval	10	synthetic strong, min targets 10, A_k100, n=30: mean true MRs evaluable
+syn_strong_mt10_A_k100_n60_auroc	0.979	synthetic strong, min targets 10, A_k100, n=60: mean AUROC over all TFs
+syn_strong_mt10_A_k100_n60_prec10	0.76	synthetic strong, min targets 10, A_k100, n=60: mean precision in top-10
+syn_strong_mt10_A_k100_n60_mreval	10	synthetic strong, min targets 10, A_k100, n=60: mean true MRs evaluable
+syn_strong_mt10_A_k100_n100_auroc	0.995	synthetic strong, min targets 10, A_k100, n=100: mean AUROC over all TFs
+syn_strong_mt10_A_k100_n100_prec10	0.84	synthetic strong, min targets 10, A_k100, n=100: mean precision in top-10
+syn_strong_mt10_A_k100_n100_mreval	10	synthetic strong, min targets 10, A_k100, n=100: mean true MRs evaluable
+syn_strong_mt10_A_k100_n200_auroc	0.997	synthetic strong, min targets 10, A_k100, n=200: mean AUROC over all TFs
+syn_strong_mt10_A_k100_n200_prec10	0.9	synthetic strong, min targets 10, A_k100, n=200: mean precision in top-10
+syn_strong_mt10_A_k100_n200_mreval	10	synthetic strong, min targets 10, A_k100, n=200: mean true MRs evaluable
+syn_strong_mt10_A_k100_n400_auroc	0.997	synthetic strong, min targets 10, A_k100, n=400: mean AUROC over all TFs
+syn_strong_mt10_A_k100_n400_prec10	0.86	synthetic strong, min targets 10, A_k100, n=400: mean precision in top-10
+syn_strong_mt10_A_k100_n400_mreval	10	synthetic strong, min targets 10, A_k100, n=400: mean true MRs evaluable
+syn_strong_mt10_aracne3_full_n30_auroc	0.5	synthetic strong, min targets 10, aracne3_full, n=30: mean AUROC over all TFs
+syn_strong_mt10_aracne3_full_n30_prec10	0	synthetic strong, min targets 10, aracne3_full, n=30: mean precision in top-10
+syn_strong_mt10_aracne3_full_n30_mreval	0	synthetic strong, min targets 10, aracne3_full, n=30: mean true MRs evaluable
+syn_strong_mt10_aracne3_full_n60_auroc	0.5	synthetic strong, min targets 10, aracne3_full, n=60: mean AUROC over all TFs
+syn_strong_mt10_aracne3_full_n60_prec10	0	synthetic strong, min targets 10, aracne3_full, n=60: mean precision in top-10
+syn_strong_mt10_aracne3_full_n60_mreval	0	synthetic strong, min targets 10, aracne3_full, n=60: mean true MRs evaluable
+syn_strong_mt10_aracne3_full_n100_auroc	0.884	synthetic strong, min targets 10, aracne3_full, n=100: mean AUROC over all TFs
+syn_strong_mt10_aracne3_full_n100_prec10	0.76	synthetic strong, min targets 10, aracne3_full, n=100: mean precision in top-10
+syn_strong_mt10_aracne3_full_n100_mreval	8.6	synthetic strong, min targets 10, aracne3_full, n=100: mean true MRs evaluable
+syn_strong_mt10_aracne3_full_n200_auroc	0.974	synthetic strong, min targets 10, aracne3_full, n=200: mean AUROC over all TFs
+syn_strong_mt10_aracne3_full_n200_prec10	0.68	synthetic strong, min targets 10, aracne3_full, n=200: mean precision in top-10
+syn_strong_mt10_aracne3_full_n200_mreval	10	synthetic strong, min targets 10, aracne3_full, n=200: mean true MRs evaluable
+syn_strong_mt10_aracne3_full_n400_auroc	0.855	synthetic strong, min targets 10, aracne3_full, n=400: mean AUROC over all TFs
+syn_strong_mt10_aracne3_full_n400_prec10	0.44	synthetic strong, min targets 10, aracne3_full, n=400: mean precision in top-10
+syn_strong_mt10_aracne3_full_n400_mreval	10	synthetic strong, min targets 10, aracne3_full, n=400: mean true MRs evaluable
+syn_strong_mt10_B_k100_n30_auroc	0.5	synthetic strong, min targets 10, B_k100, n=30: mean AUROC over all TFs
+syn_strong_mt10_B_k100_n30_prec10	0	synthetic strong, min targets 10, B_k100, n=30: mean precision in top-10
+syn_strong_mt10_B_k100_n30_mreval	0	synthetic strong, min targets 10, B_k100, n=30: mean true MRs evaluable
+syn_strong_mt10_B_k100_n60_auroc	0.5	synthetic strong, min targets 10, B_k100, n=60: mean AUROC over all TFs
+syn_strong_mt10_B_k100_n60_prec10	0	synthetic strong, min targets 10, B_k100, n=60: mean precision in top-10
+syn_strong_mt10_B_k100_n60_mreval	0	synthetic strong, min targets 10, B_k100, n=60: mean true MRs evaluable
+syn_strong_mt10_B_k100_n100_auroc	0.884	synthetic strong, min targets 10, B_k100, n=100: mean AUROC over all TFs
+syn_strong_mt10_B_k100_n100_prec10	0.76	synthetic strong, min targets 10, B_k100, n=100: mean precision in top-10
+syn_strong_mt10_B_k100_n100_mreval	8.6	synthetic strong, min targets 10, B_k100, n=100: mean true MRs evaluable
+syn_strong_mt10_B_k100_n200_auroc	0.985	synthetic strong, min targets 10, B_k100, n=200: mean AUROC over all TFs
+syn_strong_mt10_B_k100_n200_prec10	0.74	synthetic strong, min targets 10, B_k100, n=200: mean precision in top-10
+syn_strong_mt10_B_k100_n200_mreval	10	synthetic strong, min targets 10, B_k100, n=200: mean true MRs evaluable
+syn_strong_mt10_B_k100_n400_auroc	0.981	synthetic strong, min targets 10, B_k100, n=400: mean AUROC over all TFs
+syn_strong_mt10_B_k100_n400_prec10	0.74	synthetic strong, min targets 10, B_k100, n=400: mean precision in top-10
+syn_strong_mt10_B_k100_n400_mreval	10	synthetic strong, min targets 10, B_k100, n=400: mean true MRs evaluable
+syn_strong_mt10_truth_n30_auroc	0.979	synthetic strong, min targets 10, truth, n=30: mean AUROC over all TFs
+syn_strong_mt10_truth_n30_prec10	0.8	synthetic strong, min targets 10, truth, n=30: mean precision in top-10
+syn_strong_mt10_truth_n30_mreval	10	synthetic strong, min targets 10, truth, n=30: mean true MRs evaluable
+syn_strong_mt10_truth_n60_auroc	0.994	synthetic strong, min targets 10, truth, n=60: mean AUROC over all TFs
+syn_strong_mt10_truth_n60_prec10	0.84	synthetic strong, min targets 10, truth, n=60: mean precision in top-10
+syn_strong_mt10_truth_n60_mreval	10	synthetic strong, min targets 10, truth, n=60: mean true MRs evaluable
+syn_strong_mt10_truth_n100_auroc	0.997	synthetic strong, min targets 10, truth, n=100: mean AUROC over all TFs
+syn_strong_mt10_truth_n100_prec10	0.9	synthetic strong, min targets 10, truth, n=100: mean precision in top-10
+syn_strong_mt10_truth_n100_mreval	10	synthetic strong, min targets 10, truth, n=100: mean true MRs evaluable
+syn_strong_mt10_truth_n200_auroc	0.998	synthetic strong, min targets 10, truth, n=200: mean AUROC over all TFs
+syn_strong_mt10_truth_n200_prec10	0.9	synthetic strong, min targets 10, truth, n=200: mean precision in top-10
+syn_strong_mt10_truth_n200_mreval	10	synthetic strong, min targets 10, truth, n=200: mean true MRs evaluable
+syn_strong_mt10_truth_n400_auroc	0.997	synthetic strong, min targets 10, truth, n=400: mean AUROC over all TFs
+syn_strong_mt10_truth_n400_prec10	0.86	synthetic strong, min targets 10, truth, n=400: mean precision in top-10
+syn_strong_mt10_truth_n400_mreval	10	synthetic strong, min targets 10, truth, n=400: mean true MRs evaluable
+syn_strong_mt30_current_n30_auroc	0.5	synthetic strong, min targets 30, current, n=30: mean AUROC over all TFs
+syn_strong_mt30_current_n30_prec10	0	synthetic strong, min targets 30, current, n=30: mean precision in top-10
+syn_strong_mt30_current_n30_mreval	0	synthetic strong, min targets 30, current, n=30: mean true MRs evaluable
+syn_strong_mt30_current_n60_auroc	0.498	synthetic strong, min targets 30, current, n=60: mean AUROC over all TFs
+syn_strong_mt30_current_n60_prec10	0	synthetic strong, min targets 30, current, n=60: mean precision in top-10
+syn_strong_mt30_current_n60_mreval	0	synthetic strong, min targets 30, current, n=60: mean true MRs evaluable
+syn_strong_mt30_current_n100_auroc	0.518	synthetic strong, min targets 30, current, n=100: mean AUROC over all TFs
+syn_strong_mt30_current_n100_prec10	0.12	synthetic strong, min targets 30, current, n=100: mean precision in top-10
+syn_strong_mt30_current_n100_mreval	1.2	synthetic strong, min targets 30, current, n=100: mean true MRs evaluable
+syn_strong_mt30_current_n200_auroc	0.821	synthetic strong, min targets 30, current, n=200: mean AUROC over all TFs
+syn_strong_mt30_current_n200_prec10	0.74	synthetic strong, min targets 30, current, n=200: mean precision in top-10
+syn_strong_mt30_current_n200_mreval	7.4	synthetic strong, min targets 30, current, n=200: mean true MRs evaluable
+syn_strong_mt30_current_n400_auroc	0.899	synthetic strong, min targets 30, current, n=400: mean AUROC over all TFs
+syn_strong_mt30_current_n400_prec10	0.8	synthetic strong, min targets 30, current, n=400: mean precision in top-10
+syn_strong_mt30_current_n400_mreval	8.6	synthetic strong, min targets 30, current, n=400: mean true MRs evaluable
+syn_strong_mt30_A_k100_n30_auroc	0.871	synthetic strong, min targets 30, A_k100, n=30: mean AUROC over all TFs
+syn_strong_mt30_A_k100_n30_prec10	0.38	synthetic strong, min targets 30, A_k100, n=30: mean precision in top-10
+syn_strong_mt30_A_k100_n30_mreval	10	synthetic strong, min targets 30, A_k100, n=30: mean true MRs evaluable
+syn_strong_mt30_A_k100_n60_auroc	0.979	synthetic strong, min targets 30, A_k100, n=60: mean AUROC over all TFs
+syn_strong_mt30_A_k100_n60_prec10	0.76	synthetic strong, min targets 30, A_k100, n=60: mean precision in top-10
+syn_strong_mt30_A_k100_n60_mreval	10	synthetic strong, min targets 30, A_k100, n=60: mean true MRs evaluable
+syn_strong_mt30_A_k100_n100_auroc	0.995	synthetic strong, min targets 30, A_k100, n=100: mean AUROC over all TFs
+syn_strong_mt30_A_k100_n100_prec10	0.84	synthetic strong, min targets 30, A_k100, n=100: mean precision in top-10
+syn_strong_mt30_A_k100_n100_mreval	10	synthetic strong, min targets 30, A_k100, n=100: mean true MRs evaluable
+syn_strong_mt30_A_k100_n200_auroc	0.997	synthetic strong, min targets 30, A_k100, n=200: mean AUROC over all TFs
+syn_strong_mt30_A_k100_n200_prec10	0.9	synthetic strong, min targets 30, A_k100, n=200: mean precision in top-10
+syn_strong_mt30_A_k100_n200_mreval	10	synthetic strong, min targets 30, A_k100, n=200: mean true MRs evaluable
+syn_strong_mt30_A_k100_n400_auroc	0.882	synthetic strong, min targets 30, A_k100, n=400: mean AUROC over all TFs
+syn_strong_mt30_A_k100_n400_prec10	0.82	synthetic strong, min targets 30, A_k100, n=400: mean precision in top-10
+syn_strong_mt30_A_k100_n400_mreval	8.4	synthetic strong, min targets 30, A_k100, n=400: mean true MRs evaluable
+syn_strong_mt30_aracne3_full_n30_auroc	0.5	synthetic strong, min targets 30, aracne3_full, n=30: mean AUROC over all TFs
+syn_strong_mt30_aracne3_full_n30_prec10	0	synthetic strong, min targets 30, aracne3_full, n=30: mean precision in top-10
+syn_strong_mt30_aracne3_full_n30_mreval	0	synthetic strong, min targets 30, aracne3_full, n=30: mean true MRs evaluable
+syn_strong_mt30_aracne3_full_n60_auroc	0.5	synthetic strong, min targets 30, aracne3_full, n=60: mean AUROC over all TFs
+syn_strong_mt30_aracne3_full_n60_prec10	0	synthetic strong, min targets 30, aracne3_full, n=60: mean precision in top-10
+syn_strong_mt30_aracne3_full_n60_mreval	0	synthetic strong, min targets 30, aracne3_full, n=60: mean true MRs evaluable
+syn_strong_mt30_aracne3_full_n100_auroc	0.527	synthetic strong, min targets 30, aracne3_full, n=100: mean AUROC over all TFs
+syn_strong_mt30_aracne3_full_n100_prec10	0.14	synthetic strong, min targets 30, aracne3_full, n=100: mean precision in top-10
+syn_strong_mt30_aracne3_full_n100_mreval	1.4	synthetic strong, min targets 30, aracne3_full, n=100: mean true MRs evaluable
+syn_strong_mt30_aracne3_full_n200_auroc	0.974	synthetic strong, min targets 30, aracne3_full, n=200: mean AUROC over all TFs
+syn_strong_mt30_aracne3_full_n200_prec10	0.68	synthetic strong, min targets 30, aracne3_full, n=200: mean precision in top-10
+syn_strong_mt30_aracne3_full_n200_mreval	10	synthetic strong, min targets 30, aracne3_full, n=200: mean true MRs evaluable
+syn_strong_mt30_aracne3_full_n400_auroc	0.855	synthetic strong, min targets 30, aracne3_full, n=400: mean AUROC over all TFs
+syn_strong_mt30_aracne3_full_n400_prec10	0.44	synthetic strong, min targets 30, aracne3_full, n=400: mean precision in top-10
+syn_strong_mt30_aracne3_full_n400_mreval	10	synthetic strong, min targets 30, aracne3_full, n=400: mean true MRs evaluable
+syn_strong_mt30_B_k100_n30_auroc	0.5	synthetic strong, min targets 30, B_k100, n=30: mean AUROC over all TFs
+syn_strong_mt30_B_k100_n30_prec10	0	synthetic strong, min targets 30, B_k100, n=30: mean precision in top-10
+syn_strong_mt30_B_k100_n30_mreval	0	synthetic strong, min targets 30, B_k100, n=30: mean true MRs evaluable
+syn_strong_mt30_B_k100_n60_auroc	0.5	synthetic strong, min targets 30, B_k100, n=60: mean AUROC over all TFs
+syn_strong_mt30_B_k100_n60_prec10	0	synthetic strong, min targets 30, B_k100, n=60: mean precision in top-10
+syn_strong_mt30_B_k100_n60_mreval	0	synthetic strong, min targets 30, B_k100, n=60: mean true MRs evaluable
+syn_strong_mt30_B_k100_n100_auroc	0.527	synthetic strong, min targets 30, B_k100, n=100: mean AUROC over all TFs
+syn_strong_mt30_B_k100_n100_prec10	0.14	synthetic strong, min targets 30, B_k100, n=100: mean precision in top-10
+syn_strong_mt30_B_k100_n100_mreval	1.4	synthetic strong, min targets 30, B_k100, n=100: mean true MRs evaluable
+syn_strong_mt30_B_k100_n200_auroc	0.985	synthetic strong, min targets 30, B_k100, n=200: mean AUROC over all TFs
+syn_strong_mt30_B_k100_n200_prec10	0.74	synthetic strong, min targets 30, B_k100, n=200: mean precision in top-10
+syn_strong_mt30_B_k100_n200_mreval	10	synthetic strong, min targets 30, B_k100, n=200: mean true MRs evaluable
+syn_strong_mt30_B_k100_n400_auroc	0.981	synthetic strong, min targets 30, B_k100, n=400: mean AUROC over all TFs
+syn_strong_mt30_B_k100_n400_prec10	0.74	synthetic strong, min targets 30, B_k100, n=400: mean precision in top-10
+syn_strong_mt30_B_k100_n400_mreval	10	synthetic strong, min targets 30, B_k100, n=400: mean true MRs evaluable
+syn_strong_mt30_truth_n30_auroc	0.981	synthetic strong, min targets 30, truth, n=30: mean AUROC over all TFs
+syn_strong_mt30_truth_n30_prec10	0.8	synthetic strong, min targets 30, truth, n=30: mean precision in top-10
+syn_strong_mt30_truth_n30_mreval	10	synthetic strong, min targets 30, truth, n=30: mean true MRs evaluable
+syn_strong_mt30_truth_n60_auroc	0.994	synthetic strong, min targets 30, truth, n=60: mean AUROC over all TFs
+syn_strong_mt30_truth_n60_prec10	0.84	synthetic strong, min targets 30, truth, n=60: mean precision in top-10
+syn_strong_mt30_truth_n60_mreval	10	synthetic strong, min targets 30, truth, n=60: mean true MRs evaluable
+syn_strong_mt30_truth_n100_auroc	0.997	synthetic strong, min targets 30, truth, n=100: mean AUROC over all TFs
+syn_strong_mt30_truth_n100_prec10	0.9	synthetic strong, min targets 30, truth, n=100: mean precision in top-10
+syn_strong_mt30_truth_n100_mreval	10	synthetic strong, min targets 30, truth, n=100: mean true MRs evaluable
+syn_strong_mt30_truth_n200_auroc	0.998	synthetic strong, min targets 30, truth, n=200: mean AUROC over all TFs
+syn_strong_mt30_truth_n200_prec10	0.9	synthetic strong, min targets 30, truth, n=200: mean precision in top-10
+syn_strong_mt30_truth_n200_mreval	10	synthetic strong, min targets 30, truth, n=200: mean true MRs evaluable
+syn_strong_mt30_truth_n400_auroc	0.997	synthetic strong, min targets 30, truth, n=400: mean AUROC over all TFs
+syn_strong_mt30_truth_n400_prec10	0.86	synthetic strong, min targets 30, truth, n=400: mean precision in top-10
+syn_strong_mt30_truth_n400_mreval	10	synthetic strong, min targets 30, truth, n=400: mean true MRs evaluable
+syn_weak_mt10_current_n30_auroc	0.5	synthetic weak, min targets 10, current, n=30: mean AUROC over all TFs
+syn_weak_mt10_current_n30_prec10	0	synthetic weak, min targets 10, current, n=30: mean precision in top-10
+syn_weak_mt10_current_n30_mreval	0	synthetic weak, min targets 10, current, n=30: mean true MRs evaluable
+syn_weak_mt10_current_n60_auroc	0.5	synthetic weak, min targets 10, current, n=60: mean AUROC over all TFs
+syn_weak_mt10_current_n60_prec10	0	synthetic weak, min targets 10, current, n=60: mean precision in top-10
+syn_weak_mt10_current_n60_mreval	0	synthetic weak, min targets 10, current, n=60: mean true MRs evaluable
+syn_weak_mt10_current_n100_auroc	0.504	synthetic weak, min targets 10, current, n=100: mean AUROC over all TFs
+syn_weak_mt10_current_n100_prec10	0.02	synthetic weak, min targets 10, current, n=100: mean precision in top-10
+syn_weak_mt10_current_n100_mreval	0.2	synthetic weak, min targets 10, current, n=100: mean true MRs evaluable
+syn_weak_mt10_current_n200_auroc	0.938	synthetic weak, min targets 10, current, n=200: mean AUROC over all TFs
+syn_weak_mt10_current_n200_prec10	0.86	synthetic weak, min targets 10, current, n=200: mean precision in top-10
+syn_weak_mt10_current_n200_mreval	9.2	synthetic weak, min targets 10, current, n=200: mean true MRs evaluable
+syn_weak_mt10_current_n400_auroc	0.998	synthetic weak, min targets 10, current, n=400: mean AUROC over all TFs
+syn_weak_mt10_current_n400_prec10	0.88	synthetic weak, min targets 10, current, n=400: mean precision in top-10
+syn_weak_mt10_current_n400_mreval	10	synthetic weak, min targets 10, current, n=400: mean true MRs evaluable
+syn_weak_mt10_A_k100_n30_auroc	0.797	synthetic weak, min targets 10, A_k100, n=30: mean AUROC over all TFs
+syn_weak_mt10_A_k100_n30_prec10	0.3	synthetic weak, min targets 10, A_k100, n=30: mean precision in top-10
+syn_weak_mt10_A_k100_n30_mreval	10	synthetic weak, min targets 10, A_k100, n=30: mean true MRs evaluable
+syn_weak_mt10_A_k100_n60_auroc	0.962	synthetic weak, min targets 10, A_k100, n=60: mean AUROC over all TFs
+syn_weak_mt10_A_k100_n60_prec10	0.74	synthetic weak, min targets 10, A_k100, n=60: mean precision in top-10
+syn_weak_mt10_A_k100_n60_mreval	10	synthetic weak, min targets 10, A_k100, n=60: mean true MRs evaluable
+syn_weak_mt10_A_k100_n100_auroc	0.993	synthetic weak, min targets 10, A_k100, n=100: mean AUROC over all TFs
+syn_weak_mt10_A_k100_n100_prec10	0.86	synthetic weak, min targets 10, A_k100, n=100: mean precision in top-10
+syn_weak_mt10_A_k100_n100_mreval	10	synthetic weak, min targets 10, A_k100, n=100: mean true MRs evaluable
+syn_weak_mt10_A_k100_n200_auroc	0.997	synthetic weak, min targets 10, A_k100, n=200: mean AUROC over all TFs
+syn_weak_mt10_A_k100_n200_prec10	0.88	synthetic weak, min targets 10, A_k100, n=200: mean precision in top-10
+syn_weak_mt10_A_k100_n200_mreval	10	synthetic weak, min targets 10, A_k100, n=200: mean true MRs evaluable
+syn_weak_mt10_A_k100_n400_auroc	0.998	synthetic weak, min targets 10, A_k100, n=400: mean AUROC over all TFs
+syn_weak_mt10_A_k100_n400_prec10	0.9	synthetic weak, min targets 10, A_k100, n=400: mean precision in top-10
+syn_weak_mt10_A_k100_n400_mreval	10	synthetic weak, min targets 10, A_k100, n=400: mean true MRs evaluable
+syn_weak_mt10_aracne3_full_n30_auroc	0.5	synthetic weak, min targets 10, aracne3_full, n=30: mean AUROC over all TFs
+syn_weak_mt10_aracne3_full_n30_prec10	0	synthetic weak, min targets 10, aracne3_full, n=30: mean precision in top-10
+syn_weak_mt10_aracne3_full_n30_mreval	0	synthetic weak, min targets 10, aracne3_full, n=30: mean true MRs evaluable
+syn_weak_mt10_aracne3_full_n60_auroc	0.5	synthetic weak, min targets 10, aracne3_full, n=60: mean AUROC over all TFs
+syn_weak_mt10_aracne3_full_n60_prec10	0	synthetic weak, min targets 10, aracne3_full, n=60: mean precision in top-10
+syn_weak_mt10_aracne3_full_n60_mreval	0	synthetic weak, min targets 10, aracne3_full, n=60: mean true MRs evaluable
+syn_weak_mt10_aracne3_full_n100_auroc	0.5	synthetic weak, min targets 10, aracne3_full, n=100: mean AUROC over all TFs
+syn_weak_mt10_aracne3_full_n100_prec10	0	synthetic weak, min targets 10, aracne3_full, n=100: mean precision in top-10
+syn_weak_mt10_aracne3_full_n100_mreval	0	synthetic weak, min targets 10, aracne3_full, n=100: mean true MRs evaluable
+syn_weak_mt10_aracne3_full_n200_auroc	0.648	synthetic weak, min targets 10, aracne3_full, n=200: mean AUROC over all TFs
+syn_weak_mt10_aracne3_full_n200_prec10	0.34	synthetic weak, min targets 10, aracne3_full, n=200: mean precision in top-10
+syn_weak_mt10_aracne3_full_n200_mreval	3.4	synthetic weak, min targets 10, aracne3_full, n=200: mean true MRs evaluable
+syn_weak_mt10_aracne3_full_n400_auroc	0.974	synthetic weak, min targets 10, aracne3_full, n=400: mean AUROC over all TFs
+syn_weak_mt10_aracne3_full_n400_prec10	0.72	synthetic weak, min targets 10, aracne3_full, n=400: mean precision in top-10
+syn_weak_mt10_aracne3_full_n400_mreval	10	synthetic weak, min targets 10, aracne3_full, n=400: mean true MRs evaluable
+syn_weak_mt10_B_k100_n30_auroc	0.5	synthetic weak, min targets 10, B_k100, n=30: mean AUROC over all TFs
+syn_weak_mt10_B_k100_n30_prec10	0	synthetic weak, min targets 10, B_k100, n=30: mean precision in top-10
+syn_weak_mt10_B_k100_n30_mreval	0	synthetic weak, min targets 10, B_k100, n=30: mean true MRs evaluable
+syn_weak_mt10_B_k100_n60_auroc	0.5	synthetic weak, min targets 10, B_k100, n=60: mean AUROC over all TFs
+syn_weak_mt10_B_k100_n60_prec10	0	synthetic weak, min targets 10, B_k100, n=60: mean precision in top-10
+syn_weak_mt10_B_k100_n60_mreval	0	synthetic weak, min targets 10, B_k100, n=60: mean true MRs evaluable
+syn_weak_mt10_B_k100_n100_auroc	0.5	synthetic weak, min targets 10, B_k100, n=100: mean AUROC over all TFs
+syn_weak_mt10_B_k100_n100_prec10	0	synthetic weak, min targets 10, B_k100, n=100: mean precision in top-10
+syn_weak_mt10_B_k100_n100_mreval	0	synthetic weak, min targets 10, B_k100, n=100: mean true MRs evaluable
+syn_weak_mt10_B_k100_n200_auroc	0.648	synthetic weak, min targets 10, B_k100, n=200: mean AUROC over all TFs
+syn_weak_mt10_B_k100_n200_prec10	0.34	synthetic weak, min targets 10, B_k100, n=200: mean precision in top-10
+syn_weak_mt10_B_k100_n200_mreval	3.4	synthetic weak, min targets 10, B_k100, n=200: mean true MRs evaluable
+syn_weak_mt10_B_k100_n400_auroc	0.979	synthetic weak, min targets 10, B_k100, n=400: mean AUROC over all TFs
+syn_weak_mt10_B_k100_n400_prec10	0.76	synthetic weak, min targets 10, B_k100, n=400: mean precision in top-10
+syn_weak_mt10_B_k100_n400_mreval	10	synthetic weak, min targets 10, B_k100, n=400: mean true MRs evaluable
+syn_weak_mt10_truth_n30_auroc	0.982	synthetic weak, min targets 10, truth, n=30: mean AUROC over all TFs
+syn_weak_mt10_truth_n30_prec10	0.86	synthetic weak, min targets 10, truth, n=30: mean precision in top-10
+syn_weak_mt10_truth_n30_mreval	10	synthetic weak, min targets 10, truth, n=30: mean true MRs evaluable
+syn_weak_mt10_truth_n60_auroc	0.994	synthetic weak, min targets 10, truth, n=60: mean AUROC over all TFs
+syn_weak_mt10_truth_n60_prec10	0.86	synthetic weak, min targets 10, truth, n=60: mean precision in top-10
+syn_weak_mt10_truth_n60_mreval	10	synthetic weak, min targets 10, truth, n=60: mean true MRs evaluable
+syn_weak_mt10_truth_n100_auroc	0.998	synthetic weak, min targets 10, truth, n=100: mean AUROC over all TFs
+syn_weak_mt10_truth_n100_prec10	0.92	synthetic weak, min targets 10, truth, n=100: mean precision in top-10
+syn_weak_mt10_truth_n100_mreval	10	synthetic weak, min targets 10, truth, n=100: mean true MRs evaluable
+syn_weak_mt10_truth_n200_auroc	0.998	synthetic weak, min targets 10, truth, n=200: mean AUROC over all TFs
+syn_weak_mt10_truth_n200_prec10	0.92	synthetic weak, min targets 10, truth, n=200: mean precision in top-10
+syn_weak_mt10_truth_n200_mreval	10	synthetic weak, min targets 10, truth, n=200: mean true MRs evaluable
+syn_weak_mt10_truth_n400_auroc	0.997	synthetic weak, min targets 10, truth, n=400: mean AUROC over all TFs
+syn_weak_mt10_truth_n400_prec10	0.86	synthetic weak, min targets 10, truth, n=400: mean precision in top-10
+syn_weak_mt10_truth_n400_mreval	10	synthetic weak, min targets 10, truth, n=400: mean true MRs evaluable
+syn_weak_mt30_current_n30_auroc	0.5	synthetic weak, min targets 30, current, n=30: mean AUROC over all TFs
+syn_weak_mt30_current_n30_prec10	0	synthetic weak, min targets 30, current, n=30: mean precision in top-10
+syn_weak_mt30_current_n30_mreval	0	synthetic weak, min targets 30, current, n=30: mean true MRs evaluable
+syn_weak_mt30_current_n60_auroc	0.5	synthetic weak, min targets 30, current, n=60: mean AUROC over all TFs
+syn_weak_mt30_current_n60_prec10	0	synthetic weak, min targets 30, current, n=60: mean precision in top-10
+syn_weak_mt30_current_n60_mreval	0	synthetic weak, min targets 30, current, n=60: mean true MRs evaluable
+syn_weak_mt30_current_n100_auroc	0.5	synthetic weak, min targets 30, current, n=100: mean AUROC over all TFs
+syn_weak_mt30_current_n100_prec10	0	synthetic weak, min targets 30, current, n=100: mean precision in top-10
+syn_weak_mt30_current_n100_mreval	0	synthetic weak, min targets 30, current, n=100: mean true MRs evaluable
+syn_weak_mt30_current_n200_auroc	0.63	synthetic weak, min targets 30, current, n=200: mean AUROC over all TFs
+syn_weak_mt30_current_n200_prec10	0.32	synthetic weak, min targets 30, current, n=200: mean precision in top-10
+syn_weak_mt30_current_n200_mreval	3.2	synthetic weak, min targets 30, current, n=200: mean true MRs evaluable
+syn_weak_mt30_current_n400_auroc	0.831	synthetic weak, min targets 30, current, n=400: mean AUROC over all TFs
+syn_weak_mt30_current_n400_prec10	0.74	synthetic weak, min targets 30, current, n=400: mean precision in top-10
+syn_weak_mt30_current_n400_mreval	7.6	synthetic weak, min targets 30, current, n=400: mean true MRs evaluable
+syn_weak_mt30_A_k100_n30_auroc	0.797	synthetic weak, min targets 30, A_k100, n=30: mean AUROC over all TFs
+syn_weak_mt30_A_k100_n30_prec10	0.3	synthetic weak, min targets 30, A_k100, n=30: mean precision in top-10
+syn_weak_mt30_A_k100_n30_mreval	10	synthetic weak, min targets 30, A_k100, n=30: mean true MRs evaluable
+syn_weak_mt30_A_k100_n60_auroc	0.962	synthetic weak, min targets 30, A_k100, n=60: mean AUROC over all TFs
+syn_weak_mt30_A_k100_n60_prec10	0.74	synthetic weak, min targets 30, A_k100, n=60: mean precision in top-10
+syn_weak_mt30_A_k100_n60_mreval	10	synthetic weak, min targets 30, A_k100, n=60: mean true MRs evaluable
+syn_weak_mt30_A_k100_n100_auroc	0.993	synthetic weak, min targets 30, A_k100, n=100: mean AUROC over all TFs
+syn_weak_mt30_A_k100_n100_prec10	0.86	synthetic weak, min targets 30, A_k100, n=100: mean precision in top-10
+syn_weak_mt30_A_k100_n100_mreval	10	synthetic weak, min targets 30, A_k100, n=100: mean true MRs evaluable
+syn_weak_mt30_A_k100_n200_auroc	0.997	synthetic weak, min targets 30, A_k100, n=200: mean AUROC over all TFs
+syn_weak_mt30_A_k100_n200_prec10	0.88	synthetic weak, min targets 30, A_k100, n=200: mean precision in top-10
+syn_weak_mt30_A_k100_n200_mreval	10	synthetic weak, min targets 30, A_k100, n=200: mean true MRs evaluable
+syn_weak_mt30_A_k100_n400_auroc	0.981	synthetic weak, min targets 30, A_k100, n=400: mean AUROC over all TFs
+syn_weak_mt30_A_k100_n400_prec10	0.9	synthetic weak, min targets 30, A_k100, n=400: mean precision in top-10
+syn_weak_mt30_A_k100_n400_mreval	9.8	synthetic weak, min targets 30, A_k100, n=400: mean true MRs evaluable
+syn_weak_mt30_aracne3_full_n30_auroc	0.5	synthetic weak, min targets 30, aracne3_full, n=30: mean AUROC over all TFs
+syn_weak_mt30_aracne3_full_n30_prec10	0	synthetic weak, min targets 30, aracne3_full, n=30: mean precision in top-10
+syn_weak_mt30_aracne3_full_n30_mreval	0	synthetic weak, min targets 30, aracne3_full, n=30: mean true MRs evaluable
+syn_weak_mt30_aracne3_full_n60_auroc	0.5	synthetic weak, min targets 30, aracne3_full, n=60: mean AUROC over all TFs
+syn_weak_mt30_aracne3_full_n60_prec10	0	synthetic weak, min targets 30, aracne3_full, n=60: mean precision in top-10
+syn_weak_mt30_aracne3_full_n60_mreval	0	synthetic weak, min targets 30, aracne3_full, n=60: mean true MRs evaluable
+syn_weak_mt30_aracne3_full_n100_auroc	0.5	synthetic weak, min targets 30, aracne3_full, n=100: mean AUROC over all TFs
+syn_weak_mt30_aracne3_full_n100_prec10	0	synthetic weak, min targets 30, aracne3_full, n=100: mean precision in top-10
+syn_weak_mt30_aracne3_full_n100_mreval	0	synthetic weak, min targets 30, aracne3_full, n=100: mean true MRs evaluable
+syn_weak_mt30_aracne3_full_n200_auroc	0.5	synthetic weak, min targets 30, aracne3_full, n=200: mean AUROC over all TFs
+syn_weak_mt30_aracne3_full_n200_prec10	0	synthetic weak, min targets 30, aracne3_full, n=200: mean precision in top-10
+syn_weak_mt30_aracne3_full_n200_mreval	0	synthetic weak, min targets 30, aracne3_full, n=200: mean true MRs evaluable
+syn_weak_mt30_aracne3_full_n400_auroc	0.974	synthetic weak, min targets 30, aracne3_full, n=400: mean AUROC over all TFs
+syn_weak_mt30_aracne3_full_n400_prec10	0.72	synthetic weak, min targets 30, aracne3_full, n=400: mean precision in top-10
+syn_weak_mt30_aracne3_full_n400_mreval	10	synthetic weak, min targets 30, aracne3_full, n=400: mean true MRs evaluable
+syn_weak_mt30_B_k100_n30_auroc	0.5	synthetic weak, min targets 30, B_k100, n=30: mean AUROC over all TFs
+syn_weak_mt30_B_k100_n30_prec10	0	synthetic weak, min targets 30, B_k100, n=30: mean precision in top-10
+syn_weak_mt30_B_k100_n30_mreval	0	synthetic weak, min targets 30, B_k100, n=30: mean true MRs evaluable
+syn_weak_mt30_B_k100_n60_auroc	0.5	synthetic weak, min targets 30, B_k100, n=60: mean AUROC over all TFs
+syn_weak_mt30_B_k100_n60_prec10	0	synthetic weak, min targets 30, B_k100, n=60: mean precision in top-10
+syn_weak_mt30_B_k100_n60_mreval	0	synthetic weak, min targets 30, B_k100, n=60: mean true MRs evaluable
+syn_weak_mt30_B_k100_n100_auroc	0.5	synthetic weak, min targets 30, B_k100, n=100: mean AUROC over all TFs
+syn_weak_mt30_B_k100_n100_prec10	0	synthetic weak, min targets 30, B_k100, n=100: mean precision in top-10
+syn_weak_mt30_B_k100_n100_mreval	0	synthetic weak, min targets 30, B_k100, n=100: mean true MRs evaluable
+syn_weak_mt30_B_k100_n200_auroc	0.5	synthetic weak, min targets 30, B_k100, n=200: mean AUROC over all TFs
+syn_weak_mt30_B_k100_n200_prec10	0	synthetic weak, min targets 30, B_k100, n=200: mean precision in top-10
+syn_weak_mt30_B_k100_n200_mreval	0	synthetic weak, min targets 30, B_k100, n=200: mean true MRs evaluable
+syn_weak_mt30_B_k100_n400_auroc	0.979	synthetic weak, min targets 30, B_k100, n=400: mean AUROC over all TFs
+syn_weak_mt30_B_k100_n400_prec10	0.76	synthetic weak, min targets 30, B_k100, n=400: mean precision in top-10
+syn_weak_mt30_B_k100_n400_mreval	10	synthetic weak, min targets 30, B_k100, n=400: mean true MRs evaluable
+syn_weak_mt30_truth_n30_auroc	0.984	synthetic weak, min targets 30, truth, n=30: mean AUROC over all TFs
+syn_weak_mt30_truth_n30_prec10	0.86	synthetic weak, min targets 30, truth, n=30: mean precision in top-10
+syn_weak_mt30_truth_n30_mreval	10	synthetic weak, min targets 30, truth, n=30: mean true MRs evaluable
+syn_weak_mt30_truth_n60_auroc	0.994	synthetic weak, min targets 30, truth, n=60: mean AUROC over all TFs
+syn_weak_mt30_truth_n60_prec10	0.86	synthetic weak, min targets 30, truth, n=60: mean precision in top-10
+syn_weak_mt30_truth_n60_mreval	10	synthetic weak, min targets 30, truth, n=60: mean true MRs evaluable
+syn_weak_mt30_truth_n100_auroc	0.998	synthetic weak, min targets 30, truth, n=100: mean AUROC over all TFs
+syn_weak_mt30_truth_n100_prec10	0.92	synthetic weak, min targets 30, truth, n=100: mean precision in top-10
+syn_weak_mt30_truth_n100_mreval	10	synthetic weak, min targets 30, truth, n=100: mean true MRs evaluable
+syn_weak_mt30_truth_n200_auroc	0.998	synthetic weak, min targets 30, truth, n=200: mean AUROC over all TFs
+syn_weak_mt30_truth_n200_prec10	0.92	synthetic weak, min targets 30, truth, n=200: mean precision in top-10
+syn_weak_mt30_truth_n200_mreval	10	synthetic weak, min targets 30, truth, n=200: mean true MRs evaluable
+syn_weak_mt30_truth_n400_auroc	0.997	synthetic weak, min targets 30, truth, n=400: mean AUROC over all TFs
+syn_weak_mt30_truth_n400_prec10	0.86	synthetic weak, min targets 30, truth, n=400: mean precision in top-10
+syn_weak_mt30_truth_n400_mreval	10	synthetic weak, min targets 30, truth, n=400: mean true MRs evaluable
+syn_strong_current_n30_precision	1	synthetic strong, current, n=30: mean precision
+syn_strong_current_n30_recall_linear	0.00454	synthetic strong, current, n=30: mean recall_linear
+syn_strong_current_n30_recall_monotone_nonlinear	0.000873	synthetic strong, current, n=30: mean recall_monotone_nonlinear
+syn_strong_current_n30_recall_non_monotone	0	synthetic strong, current, n=30: mean recall_non_monotone
+syn_strong_current_n30_n_fp_indirect	0	synthetic strong, current, n=30: mean n_fp_indirect
+syn_strong_current_n30_fp_indirect_per_100_edges	0	synthetic strong, current, n=30: mean fp_indirect_per_100_edges
+syn_strong_current_n30_frac_fp_indirect	NA	synthetic strong, current, n=30: mean frac_fp_indirect
+syn_strong_current_n60_precision	0.989	synthetic strong, current, n=60: mean precision
+syn_strong_current_n60_recall_linear	0.13	synthetic strong, current, n=60: mean recall_linear
+syn_strong_current_n60_recall_monotone_nonlinear	0.0584	synthetic strong, current, n=60: mean recall_monotone_nonlinear
+syn_strong_current_n60_recall_non_monotone	0.00525	synthetic strong, current, n=60: mean recall_non_monotone
+syn_strong_current_n60_n_fp_indirect	9.4	synthetic strong, current, n=60: mean n_fp_indirect
+syn_strong_current_n60_fp_indirect_per_100_edges	1.14	synthetic strong, current, n=60: mean fp_indirect_per_100_edges
+syn_strong_current_n60_frac_fp_indirect	1	synthetic strong, current, n=60: mean frac_fp_indirect
+syn_strong_current_n100_precision	0.977	synthetic strong, current, n=100: mean precision
+syn_strong_current_n100_recall_linear	0.34	synthetic strong, current, n=100: mean recall_linear
+syn_strong_current_n100_recall_monotone_nonlinear	0.235	synthetic strong, current, n=100: mean recall_monotone_nonlinear
+syn_strong_current_n100_recall_non_monotone	0.0238	synthetic strong, current, n=100: mean recall_non_monotone
+syn_strong_current_n100_n_fp_indirect	58	synthetic strong, current, n=100: mean n_fp_indirect
+syn_strong_current_n100_fp_indirect_per_100_edges	2.3	synthetic strong, current, n=100: mean fp_indirect_per_100_edges
+syn_strong_current_n100_frac_fp_indirect	1	synthetic strong, current, n=100: mean frac_fp_indirect
+syn_strong_current_n200_precision	0.936	synthetic strong, current, n=200: mean precision
+syn_strong_current_n200_recall_linear	0.728	synthetic strong, current, n=200: mean recall_linear
+syn_strong_current_n200_recall_monotone_nonlinear	0.59	synthetic strong, current, n=200: mean recall_monotone_nonlinear
+syn_strong_current_n200_recall_non_monotone	0.0639	synthetic strong, current, n=200: mean recall_non_monotone
+syn_strong_current_n200_n_fp_indirect	376	synthetic strong, current, n=200: mean n_fp_indirect
+syn_strong_current_n200_fp_indirect_per_100_edges	6.38	synthetic strong, current, n=200: mean fp_indirect_per_100_edges
+syn_strong_current_n200_frac_fp_indirect	1	synthetic strong, current, n=200: mean frac_fp_indirect
+syn_strong_current_n400_precision	0.959	synthetic strong, current, n=400: mean precision
+syn_strong_current_n400_recall_linear	0.859	synthetic strong, current, n=400: mean recall_linear
+syn_strong_current_n400_recall_monotone_nonlinear	0.77	synthetic strong, current, n=400: mean recall_monotone_nonlinear
+syn_strong_current_n400_recall_non_monotone	0.0832	synthetic strong, current, n=400: mean recall_non_monotone
+syn_strong_current_n400_n_fp_indirect	288	synthetic strong, current, n=400: mean n_fp_indirect
+syn_strong_current_n400_fp_indirect_per_100_edges	4.07	synthetic strong, current, n=400: mean fp_indirect_per_100_edges
+syn_strong_current_n400_frac_fp_indirect	1	synthetic strong, current, n=400: mean frac_fp_indirect
+syn_strong_A_k100_n30_precision	0.186	synthetic strong, A_k100, n=30: mean precision
+syn_strong_A_k100_n30_recall_linear	0.475	synthetic strong, A_k100, n=30: mean recall_linear
+syn_strong_A_k100_n30_recall_monotone_nonlinear	0.407	synthetic strong, A_k100, n=30: mean recall_monotone_nonlinear
+syn_strong_A_k100_n30_recall_non_monotone	0.062	synthetic strong, A_k100, n=30: mean recall_non_monotone
+syn_strong_A_k100_n30_n_fp_indirect	4419	synthetic strong, A_k100, n=30: mean n_fp_indirect
+syn_strong_A_k100_n30_fp_indirect_per_100_edges	22.1	synthetic strong, A_k100, n=30: mean fp_indirect_per_100_edges
+syn_strong_A_k100_n30_frac_fp_indirect	0.271	synthetic strong, A_k100, n=30: mean frac_fp_indirect
+syn_strong_A_k100_n60_precision	0.278	synthetic strong, A_k100, n=60: mean precision
+syn_strong_A_k100_n60_recall_linear	0.702	synthetic strong, A_k100, n=60: mean recall_linear
+syn_strong_A_k100_n60_recall_monotone_nonlinear	0.635	synthetic strong, A_k100, n=60: mean recall_monotone_nonlinear
+syn_strong_A_k100_n60_recall_non_monotone	0.085	synthetic strong, A_k100, n=60: mean recall_non_monotone
+syn_strong_A_k100_n60_n_fp_indirect	5770	synthetic strong, A_k100, n=60: mean n_fp_indirect
+syn_strong_A_k100_n60_fp_indirect_per_100_edges	28.9	synthetic strong, A_k100, n=60: mean fp_indirect_per_100_edges
+syn_strong_A_k100_n60_frac_fp_indirect	0.4	synthetic strong, A_k100, n=60: mean frac_fp_indirect
+syn_strong_A_k100_n100_precision	0.318	synthetic strong, A_k100, n=100: mean precision
+syn_strong_A_k100_n100_recall_linear	0.795	synthetic strong, A_k100, n=100: mean recall_linear
+syn_strong_A_k100_n100_recall_monotone_nonlinear	0.744	synthetic strong, A_k100, n=100: mean recall_monotone_nonlinear
+syn_strong_A_k100_n100_recall_non_monotone	0.0826	synthetic strong, A_k100, n=100: mean recall_non_monotone
+syn_strong_A_k100_n100_n_fp_indirect	6610	synthetic strong, A_k100, n=100: mean n_fp_indirect
+syn_strong_A_k100_n100_fp_indirect_per_100_edges	33.1	synthetic strong, A_k100, n=100: mean fp_indirect_per_100_edges
+syn_strong_A_k100_n100_frac_fp_indirect	0.485	synthetic strong, A_k100, n=100: mean frac_fp_indirect
+syn_strong_A_k100_n200_precision	0.538	synthetic strong, A_k100, n=200: mean precision
+syn_strong_A_k100_n200_recall_linear	0.861	synthetic strong, A_k100, n=200: mean recall_linear
+syn_strong_A_k100_n200_recall_monotone_nonlinear	0.811	synthetic strong, A_k100, n=200: mean recall_monotone_nonlinear
+syn_strong_A_k100_n200_recall_non_monotone	0.0774	synthetic strong, A_k100, n=200: mean recall_non_monotone
+syn_strong_A_k100_n200_n_fp_indirect	5130	synthetic strong, A_k100, n=200: mean n_fp_indirect
+syn_strong_A_k100_n200_fp_indirect_per_100_edges	40.1	synthetic strong, A_k100, n=200: mean fp_indirect_per_100_edges
+syn_strong_A_k100_n200_frac_fp_indirect	0.867	synthetic strong, A_k100, n=200: mean frac_fp_indirect
+syn_strong_A_k100_n400_precision	0.903	synthetic strong, A_k100, n=400: mean precision
+syn_strong_A_k100_n400_recall_linear	0.823	synthetic strong, A_k100, n=400: mean recall_linear
+syn_strong_A_k100_n400_recall_monotone_nonlinear	0.768	synthetic strong, A_k100, n=400: mean recall_monotone_nonlinear
+syn_strong_A_k100_n400_recall_non_monotone	0.0733	synthetic strong, A_k100, n=400: mean recall_non_monotone
+syn_strong_A_k100_n400_n_fp_indirect	704	synthetic strong, A_k100, n=400: mean n_fp_indirect
+syn_strong_A_k100_n400_fp_indirect_per_100_edges	9.64	synthetic strong, A_k100, n=400: mean fp_indirect_per_100_edges
+syn_strong_A_k100_n400_frac_fp_indirect	0.992	synthetic strong, A_k100, n=400: mean frac_fp_indirect
+syn_strong_aracne3_full_n30_precision	NA	synthetic strong, aracne3_full, n=30: mean precision
+syn_strong_aracne3_full_n30_recall_linear	0	synthetic strong, aracne3_full, n=30: mean recall_linear
+syn_strong_aracne3_full_n30_recall_monotone_nonlinear	0	synthetic strong, aracne3_full, n=30: mean recall_monotone_nonlinear
+syn_strong_aracne3_full_n30_recall_non_monotone	0	synthetic strong, aracne3_full, n=30: mean recall_non_monotone
+syn_strong_aracne3_full_n30_n_fp_indirect	0	synthetic strong, aracne3_full, n=30: mean n_fp_indirect
+syn_strong_aracne3_full_n30_fp_indirect_per_100_edges	NA	synthetic strong, aracne3_full, n=30: mean fp_indirect_per_100_edges
+syn_strong_aracne3_full_n30_frac_fp_indirect	NA	synthetic strong, aracne3_full, n=30: mean frac_fp_indirect
+syn_strong_aracne3_full_n60_precision	0.961	synthetic strong, aracne3_full, n=60: mean precision
+syn_strong_aracne3_full_n60_recall_linear	0.00181	synthetic strong, aracne3_full, n=60: mean recall_linear
+syn_strong_aracne3_full_n60_recall_monotone_nonlinear	0.000671	synthetic strong, aracne3_full, n=60: mean recall_monotone_nonlinear
+syn_strong_aracne3_full_n60_recall_non_monotone	9.9e-05	synthetic strong, aracne3_full, n=60: mean recall_non_monotone
+syn_strong_aracne3_full_n60_n_fp_indirect	0.2	synthetic strong, aracne3_full, n=60: mean n_fp_indirect
+syn_strong_aracne3_full_n60_fp_indirect_per_100_edges	1.54	synthetic strong, aracne3_full, n=60: mean fp_indirect_per_100_edges
+syn_strong_aracne3_full_n60_frac_fp_indirect	0.25	synthetic strong, aracne3_full, n=60: mean frac_fp_indirect
+syn_strong_aracne3_full_n100_precision	0.7	synthetic strong, aracne3_full, n=100: mean precision
+syn_strong_aracne3_full_n100_recall_linear	0.252	synthetic strong, aracne3_full, n=100: mean recall_linear
+syn_strong_aracne3_full_n100_recall_monotone_nonlinear	0.243	synthetic strong, aracne3_full, n=100: mean recall_monotone_nonlinear
+syn_strong_aracne3_full_n100_recall_non_monotone	0.0419	synthetic strong, aracne3_full, n=100: mean recall_non_monotone
+syn_strong_aracne3_full_n100_n_fp_indirect	367	synthetic strong, aracne3_full, n=100: mean n_fp_indirect
+syn_strong_aracne3_full_n100_fp_indirect_per_100_edges	12.4	synthetic strong, aracne3_full, n=100: mean fp_indirect_per_100_edges
+syn_strong_aracne3_full_n100_frac_fp_indirect	0.413	synthetic strong, aracne3_full, n=100: mean frac_fp_indirect
+syn_strong_aracne3_full_n200_precision	0.257	synthetic strong, aracne3_full, n=200: mean precision
+syn_strong_aracne3_full_n200_recall_linear	0.783	synthetic strong, aracne3_full, n=200: mean recall_linear
+syn_strong_aracne3_full_n200_recall_monotone_nonlinear	0.768	synthetic strong, aracne3_full, n=200: mean recall_monotone_nonlinear
+syn_strong_aracne3_full_n200_recall_non_monotone	0.406	synthetic strong, aracne3_full, n=200: mean recall_non_monotone
+syn_strong_aracne3_full_n200_n_fp_indirect	10100	synthetic strong, aracne3_full, n=200: mean n_fp_indirect
+syn_strong_aracne3_full_n200_fp_indirect_per_100_edges	37.2	synthetic strong, aracne3_full, n=200: mean fp_indirect_per_100_edges
+syn_strong_aracne3_full_n200_frac_fp_indirect	0.501	synthetic strong, aracne3_full, n=200: mean frac_fp_indirect
+syn_strong_aracne3_full_n400_precision	0.114	synthetic strong, aracne3_full, n=400: mean precision
+syn_strong_aracne3_full_n400_recall_linear	0.974	synthetic strong, aracne3_full, n=400: mean recall_linear
+syn_strong_aracne3_full_n400_recall_monotone_nonlinear	0.963	synthetic strong, aracne3_full, n=400: mean recall_monotone_nonlinear
+syn_strong_aracne3_full_n400_recall_non_monotone	0.816	synthetic strong, aracne3_full, n=400: mean recall_non_monotone
+syn_strong_aracne3_full_n400_n_fp_indirect	34200	synthetic strong, aracne3_full, n=400: mean n_fp_indirect
+syn_strong_aracne3_full_n400_fp_indirect_per_100_edges	41.2	synthetic strong, aracne3_full, n=400: mean fp_indirect_per_100_edges
+syn_strong_aracne3_full_n400_frac_fp_indirect	0.465	synthetic strong, aracne3_full, n=400: mean frac_fp_indirect
+syn_strong_B_k100_n30_precision	NA	synthetic strong, B_k100, n=30: mean precision
+syn_strong_B_k100_n30_recall_linear	0	synthetic strong, B_k100, n=30: mean recall_linear
+syn_strong_B_k100_n30_recall_monotone_nonlinear	0	synthetic strong, B_k100, n=30: mean recall_monotone_nonlinear
+syn_strong_B_k100_n30_recall_non_monotone	0	synthetic strong, B_k100, n=30: mean recall_non_monotone
+syn_strong_B_k100_n30_n_fp_indirect	0	synthetic strong, B_k100, n=30: mean n_fp_indirect
+syn_strong_B_k100_n30_fp_indirect_per_100_edges	NA	synthetic strong, B_k100, n=30: mean fp_indirect_per_100_edges
+syn_strong_B_k100_n30_frac_fp_indirect	NA	synthetic strong, B_k100, n=30: mean frac_fp_indirect
+syn_strong_B_k100_n60_precision	0.961	synthetic strong, B_k100, n=60: mean precision
+syn_strong_B_k100_n60_recall_linear	0.00181	synthetic strong, B_k100, n=60: mean recall_linear
+syn_strong_B_k100_n60_recall_monotone_nonlinear	0.000671	synthetic strong, B_k100, n=60: mean recall_monotone_nonlinear
+syn_strong_B_k100_n60_recall_non_monotone	9.9e-05	synthetic strong, B_k100, n=60: mean recall_non_monotone
+syn_strong_B_k100_n60_n_fp_indirect	0.2	synthetic strong, B_k100, n=60: mean n_fp_indirect
+syn_strong_B_k100_n60_fp_indirect_per_100_edges	1.54	synthetic strong, B_k100, n=60: mean fp_indirect_per_100_edges
+syn_strong_B_k100_n60_frac_fp_indirect	0.25	synthetic strong, B_k100, n=60: mean frac_fp_indirect
+syn_strong_B_k100_n100_precision	0.7	synthetic strong, B_k100, n=100: mean precision
+syn_strong_B_k100_n100_recall_linear	0.252	synthetic strong, B_k100, n=100: mean recall_linear
+syn_strong_B_k100_n100_recall_monotone_nonlinear	0.243	synthetic strong, B_k100, n=100: mean recall_monotone_nonlinear
+syn_strong_B_k100_n100_recall_non_monotone	0.0419	synthetic strong, B_k100, n=100: mean recall_non_monotone
+syn_strong_B_k100_n100_n_fp_indirect	367	synthetic strong, B_k100, n=100: mean n_fp_indirect
+syn_strong_B_k100_n100_fp_indirect_per_100_edges	12.4	synthetic strong, B_k100, n=100: mean fp_indirect_per_100_edges
+syn_strong_B_k100_n100_frac_fp_indirect	0.413	synthetic strong, B_k100, n=100: mean frac_fp_indirect
+syn_strong_B_k100_n200_precision	0.323	synthetic strong, B_k100, n=200: mean precision
+syn_strong_B_k100_n200_recall_linear	0.716	synthetic strong, B_k100, n=200: mean recall_linear
+syn_strong_B_k100_n200_recall_monotone_nonlinear	0.704	synthetic strong, B_k100, n=200: mean recall_monotone_nonlinear
+syn_strong_B_k100_n200_recall_non_monotone	0.312	synthetic strong, B_k100, n=200: mean recall_non_monotone
+syn_strong_B_k100_n200_n_fp_indirect	7820	synthetic strong, B_k100, n=200: mean n_fp_indirect
+syn_strong_B_k100_n200_fp_indirect_per_100_edges	40.1	synthetic strong, B_k100, n=200: mean fp_indirect_per_100_edges
+syn_strong_B_k100_n200_frac_fp_indirect	0.593	synthetic strong, B_k100, n=200: mean frac_fp_indirect
+syn_strong_B_k100_n400_precision	0.374	synthetic strong, B_k100, n=400: mean precision
+syn_strong_B_k100_n400_recall_linear	0.831	synthetic strong, B_k100, n=400: mean recall_linear
+syn_strong_B_k100_n400_recall_monotone_nonlinear	0.813	synthetic strong, B_k100, n=400: mean recall_monotone_nonlinear
+syn_strong_B_k100_n400_recall_non_monotone	0.437	synthetic strong, B_k100, n=400: mean recall_non_monotone
+syn_strong_B_k100_n400_n_fp_indirect	11000	synthetic strong, B_k100, n=400: mean n_fp_indirect
+syn_strong_B_k100_n400_fp_indirect_per_100_edges	55.1	synthetic strong, B_k100, n=400: mean fp_indirect_per_100_edges
+syn_strong_B_k100_n400_frac_fp_indirect	0.88	synthetic strong, B_k100, n=400: mean frac_fp_indirect
+syn_weak_current_n30_precision	0	synthetic weak, current, n=30: mean precision
+syn_weak_current_n30_recall_linear	0	synthetic weak, current, n=30: mean recall_linear
+syn_weak_current_n30_recall_monotone_nonlinear	0	synthetic weak, current, n=30: mean recall_monotone_nonlinear
+syn_weak_current_n30_recall_non_monotone	0	synthetic weak, current, n=30: mean recall_non_monotone
+syn_weak_current_n30_n_fp_indirect	0	synthetic weak, current, n=30: mean n_fp_indirect
+syn_weak_current_n30_fp_indirect_per_100_edges	0	synthetic weak, current, n=30: mean fp_indirect_per_100_edges
+syn_weak_current_n30_frac_fp_indirect	0	synthetic weak, current, n=30: mean frac_fp_indirect
+syn_weak_current_n60_precision	0.989	synthetic weak, current, n=60: mean precision
+syn_weak_current_n60_recall_linear	0.00349	synthetic weak, current, n=60: mean recall_linear
+syn_weak_current_n60_recall_monotone_nonlinear	0.000806	synthetic weak, current, n=60: mean recall_monotone_nonlinear
+syn_weak_current_n60_recall_non_monotone	0.000507	synthetic weak, current, n=60: mean recall_non_monotone
+syn_weak_current_n60_n_fp_indirect	0.2	synthetic weak, current, n=60: mean n_fp_indirect
+syn_weak_current_n60_fp_indirect_per_100_edges	1.11	synthetic weak, current, n=60: mean fp_indirect_per_100_edges
+syn_weak_current_n60_frac_fp_indirect	1	synthetic weak, current, n=60: mean frac_fp_indirect
+syn_weak_current_n100_precision	0.984	synthetic weak, current, n=100: mean precision
+syn_weak_current_n100_recall_linear	0.0419	synthetic weak, current, n=100: mean recall_linear
+syn_weak_current_n100_recall_monotone_nonlinear	0.0176	synthetic weak, current, n=100: mean recall_monotone_nonlinear
+syn_weak_current_n100_recall_non_monotone	0.00586	synthetic weak, current, n=100: mean recall_non_monotone
+syn_weak_current_n100_n_fp_indirect	4.8	synthetic weak, current, n=100: mean n_fp_indirect
+syn_weak_current_n100_fp_indirect_per_100_edges	1.65	synthetic weak, current, n=100: mean fp_indirect_per_100_edges
+syn_weak_current_n100_frac_fp_indirect	1	synthetic weak, current, n=100: mean frac_fp_indirect
+syn_weak_current_n200_precision	0.953	synthetic weak, current, n=200: mean precision
+syn_weak_current_n200_recall_linear	0.366	synthetic weak, current, n=200: mean recall_linear
+syn_weak_current_n200_recall_monotone_nonlinear	0.229	synthetic weak, current, n=200: mean recall_monotone_nonlinear
+syn_weak_current_n200_recall_non_monotone	0.0433	synthetic weak, current, n=200: mean recall_non_monotone
+syn_weak_current_n200_n_fp_indirect	127	synthetic weak, current, n=200: mean n_fp_indirect
+syn_weak_current_n200_fp_indirect_per_100_edges	4.67	synthetic weak, current, n=200: mean fp_indirect_per_100_edges
+syn_weak_current_n200_frac_fp_indirect	1	synthetic weak, current, n=200: mean frac_fp_indirect
+syn_weak_current_n400_precision	0.906	synthetic weak, current, n=400: mean precision
+syn_weak_current_n400_recall_linear	0.795	synthetic weak, current, n=400: mean recall_linear
+syn_weak_current_n400_recall_monotone_nonlinear	0.659	synthetic weak, current, n=400: mean recall_monotone_nonlinear
+syn_weak_current_n400_recall_non_monotone	0.0789	synthetic weak, current, n=400: mean recall_non_monotone
+syn_weak_current_n400_n_fp_indirect	639	synthetic weak, current, n=400: mean n_fp_indirect
+syn_weak_current_n400_fp_indirect_per_100_edges	9.43	synthetic weak, current, n=400: mean fp_indirect_per_100_edges
+syn_weak_current_n400_frac_fp_indirect	1	synthetic weak, current, n=400: mean frac_fp_indirect
+syn_weak_A_k100_n30_precision	0.101	synthetic weak, A_k100, n=30: mean precision
+syn_weak_A_k100_n30_recall_linear	0.255	synthetic weak, A_k100, n=30: mean recall_linear
+syn_weak_A_k100_n30_recall_monotone_nonlinear	0.216	synthetic weak, A_k100, n=30: mean recall_monotone_nonlinear
+syn_weak_A_k100_n30_recall_non_monotone	0.0449	synthetic weak, A_k100, n=30: mean recall_non_monotone
+syn_weak_A_k100_n30_n_fp_indirect	3395	synthetic weak, A_k100, n=30: mean n_fp_indirect
+syn_weak_A_k100_n30_fp_indirect_per_100_edges	17	synthetic weak, A_k100, n=30: mean fp_indirect_per_100_edges
+syn_weak_A_k100_n30_frac_fp_indirect	0.189	synthetic weak, A_k100, n=30: mean frac_fp_indirect
+syn_weak_A_k100_n60_precision	0.192	synthetic weak, A_k100, n=60: mean precision
+syn_weak_A_k100_n60_recall_linear	0.483	synthetic weak, A_k100, n=60: mean recall_linear
+syn_weak_A_k100_n60_recall_monotone_nonlinear	0.431	synthetic weak, A_k100, n=60: mean recall_monotone_nonlinear
+syn_weak_A_k100_n60_recall_non_monotone	0.0714	synthetic weak, A_k100, n=60: mean recall_non_monotone
+syn_weak_A_k100_n60_n_fp_indirect	4670	synthetic weak, A_k100, n=60: mean n_fp_indirect
+syn_weak_A_k100_n60_fp_indirect_per_100_edges	23.4	synthetic weak, A_k100, n=60: mean fp_indirect_per_100_edges
+syn_weak_A_k100_n60_frac_fp_indirect	0.289	synthetic weak, A_k100, n=60: mean frac_fp_indirect
+syn_weak_A_k100_n100_precision	0.262	synthetic weak, A_k100, n=100: mean precision
+syn_weak_A_k100_n100_recall_linear	0.659	synthetic weak, A_k100, n=100: mean recall_linear
+syn_weak_A_k100_n100_recall_monotone_nonlinear	0.601	synthetic weak, A_k100, n=100: mean recall_monotone_nonlinear
+syn_weak_A_k100_n100_recall_non_monotone	0.0755	synthetic weak, A_k100, n=100: mean recall_non_monotone
+syn_weak_A_k100_n100_n_fp_indirect	5340	synthetic weak, A_k100, n=100: mean n_fp_indirect
+syn_weak_A_k100_n100_fp_indirect_per_100_edges	26.7	synthetic weak, A_k100, n=100: mean fp_indirect_per_100_edges
+syn_weak_A_k100_n100_frac_fp_indirect	0.362	synthetic weak, A_k100, n=100: mean frac_fp_indirect
+syn_weak_A_k100_n200_precision	0.369	synthetic weak, A_k100, n=200: mean precision
+syn_weak_A_k100_n200_recall_linear	0.83	synthetic weak, A_k100, n=200: mean recall_linear
+syn_weak_A_k100_n200_recall_monotone_nonlinear	0.769	synthetic weak, A_k100, n=200: mean recall_monotone_nonlinear
+syn_weak_A_k100_n200_recall_non_monotone	0.0792	synthetic weak, A_k100, n=200: mean recall_non_monotone
+syn_weak_A_k100_n200_n_fp_indirect	8950	synthetic weak, A_k100, n=200: mean n_fp_indirect
+syn_weak_A_k100_n200_fp_indirect_per_100_edges	50.1	synthetic weak, A_k100, n=200: mean fp_indirect_per_100_edges
+syn_weak_A_k100_n200_frac_fp_indirect	0.795	synthetic weak, A_k100, n=200: mean frac_fp_indirect
+syn_weak_A_k100_n400_precision	0.652	synthetic weak, A_k100, n=400: mean precision
+syn_weak_A_k100_n400_recall_linear	0.843	synthetic weak, A_k100, n=400: mean recall_linear
+syn_weak_A_k100_n400_recall_monotone_nonlinear	0.785	synthetic weak, A_k100, n=400: mean recall_monotone_nonlinear
+syn_weak_A_k100_n400_recall_non_monotone	0.0767	synthetic weak, A_k100, n=400: mean recall_non_monotone
+syn_weak_A_k100_n400_n_fp_indirect	3570	synthetic weak, A_k100, n=400: mean n_fp_indirect
+syn_weak_A_k100_n400_fp_indirect_per_100_edges	34.6	synthetic weak, A_k100, n=400: mean fp_indirect_per_100_edges
+syn_weak_A_k100_n400_frac_fp_indirect	0.995	synthetic weak, A_k100, n=400: mean frac_fp_indirect
+syn_weak_aracne3_full_n30_precision	NA	synthetic weak, aracne3_full, n=30: mean precision
+syn_weak_aracne3_full_n30_recall_linear	0	synthetic weak, aracne3_full, n=30: mean recall_linear
+syn_weak_aracne3_full_n30_recall_monotone_nonlinear	0	synthetic weak, aracne3_full, n=30: mean recall_monotone_nonlinear
+syn_weak_aracne3_full_n30_recall_non_monotone	0	synthetic weak, aracne3_full, n=30: mean recall_non_monotone
+syn_weak_aracne3_full_n30_n_fp_indirect	0	synthetic weak, aracne3_full, n=30: mean n_fp_indirect
+syn_weak_aracne3_full_n30_fp_indirect_per_100_edges	NA	synthetic weak, aracne3_full, n=30: mean fp_indirect_per_100_edges
+syn_weak_aracne3_full_n30_frac_fp_indirect	NA	synthetic weak, aracne3_full, n=30: mean frac_fp_indirect
+syn_weak_aracne3_full_n60_precision	NA	synthetic weak, aracne3_full, n=60: mean precision
+syn_weak_aracne3_full_n60_recall_linear	0	synthetic weak, aracne3_full, n=60: mean recall_linear
+syn_weak_aracne3_full_n60_recall_monotone_nonlinear	0	synthetic weak, aracne3_full, n=60: mean recall_monotone_nonlinear
+syn_weak_aracne3_full_n60_recall_non_monotone	0	synthetic weak, aracne3_full, n=60: mean recall_non_monotone
+syn_weak_aracne3_full_n60_n_fp_indirect	0	synthetic weak, aracne3_full, n=60: mean n_fp_indirect
+syn_weak_aracne3_full_n60_fp_indirect_per_100_edges	NA	synthetic weak, aracne3_full, n=60: mean fp_indirect_per_100_edges
+syn_weak_aracne3_full_n60_frac_fp_indirect	NA	synthetic weak, aracne3_full, n=60: mean frac_fp_indirect
+syn_weak_aracne3_full_n100_precision	0.689	synthetic weak, aracne3_full, n=100: mean precision
+syn_weak_aracne3_full_n100_recall_linear	0.00012	synthetic weak, aracne3_full, n=100: mean recall_linear
+syn_weak_aracne3_full_n100_recall_monotone_nonlinear	0.000343	synthetic weak, aracne3_full, n=100: mean recall_monotone_nonlinear
+syn_weak_aracne3_full_n100_recall_non_monotone	9.88e-05	synthetic weak, aracne3_full, n=100: mean recall_non_monotone
+syn_weak_aracne3_full_n100_n_fp_indirect	0.4	synthetic weak, aracne3_full, n=100: mean n_fp_indirect
+syn_weak_aracne3_full_n100_fp_indirect_per_100_edges	17.8	synthetic weak, aracne3_full, n=100: mean fp_indirect_per_100_edges
+syn_weak_aracne3_full_n100_frac_fp_indirect	0.667	synthetic weak, aracne3_full, n=100: mean frac_fp_indirect
+syn_weak_aracne3_full_n200_precision	0.796	synthetic weak, aracne3_full, n=200: mean precision
+syn_weak_aracne3_full_n200_recall_linear	0.0723	synthetic weak, aracne3_full, n=200: mean recall_linear
+syn_weak_aracne3_full_n200_recall_monotone_nonlinear	0.0699	synthetic weak, aracne3_full, n=200: mean recall_monotone_nonlinear
+syn_weak_aracne3_full_n200_recall_non_monotone	0.0241	synthetic weak, aracne3_full, n=200: mean recall_non_monotone
+syn_weak_aracne3_full_n200_n_fp_indirect	46.8	synthetic weak, aracne3_full, n=200: mean n_fp_indirect
+syn_weak_aracne3_full_n200_fp_indirect_per_100_edges	5.86	synthetic weak, aracne3_full, n=200: mean fp_indirect_per_100_edges
+syn_weak_aracne3_full_n200_frac_fp_indirect	0.286	synthetic weak, aracne3_full, n=200: mean frac_fp_indirect
+syn_weak_aracne3_full_n400_precision	0.284	synthetic weak, aracne3_full, n=400: mean precision
+syn_weak_aracne3_full_n400_recall_linear	0.786	synthetic weak, aracne3_full, n=400: mean recall_linear
+syn_weak_aracne3_full_n400_recall_monotone_nonlinear	0.762	synthetic weak, aracne3_full, n=400: mean recall_monotone_nonlinear
+syn_weak_aracne3_full_n400_recall_non_monotone	0.395	synthetic weak, aracne3_full, n=400: mean recall_non_monotone
+syn_weak_aracne3_full_n400_n_fp_indirect	7950	synthetic weak, aracne3_full, n=400: mean n_fp_indirect
+syn_weak_aracne3_full_n400_fp_indirect_per_100_edges	32.1	synthetic weak, aracne3_full, n=400: mean fp_indirect_per_100_edges
+syn_weak_aracne3_full_n400_frac_fp_indirect	0.448	synthetic weak, aracne3_full, n=400: mean frac_fp_indirect
+syn_weak_B_k100_n30_precision	NA	synthetic weak, B_k100, n=30: mean precision
+syn_weak_B_k100_n30_recall_linear	0	synthetic weak, B_k100, n=30: mean recall_linear
+syn_weak_B_k100_n30_recall_monotone_nonlinear	0	synthetic weak, B_k100, n=30: mean recall_monotone_nonlinear
+syn_weak_B_k100_n30_recall_non_monotone	0	synthetic weak, B_k100, n=30: mean recall_non_monotone
+syn_weak_B_k100_n30_n_fp_indirect	0	synthetic weak, B_k100, n=30: mean n_fp_indirect
+syn_weak_B_k100_n30_fp_indirect_per_100_edges	NA	synthetic weak, B_k100, n=30: mean fp_indirect_per_100_edges
+syn_weak_B_k100_n30_frac_fp_indirect	NA	synthetic weak, B_k100, n=30: mean frac_fp_indirect
+syn_weak_B_k100_n60_precision	NA	synthetic weak, B_k100, n=60: mean precision
+syn_weak_B_k100_n60_recall_linear	0	synthetic weak, B_k100, n=60: mean recall_linear
+syn_weak_B_k100_n60_recall_monotone_nonlinear	0	synthetic weak, B_k100, n=60: mean recall_monotone_nonlinear
+syn_weak_B_k100_n60_recall_non_monotone	0	synthetic weak, B_k100, n=60: mean recall_non_monotone
+syn_weak_B_k100_n60_n_fp_indirect	0	synthetic weak, B_k100, n=60: mean n_fp_indirect
+syn_weak_B_k100_n60_fp_indirect_per_100_edges	NA	synthetic weak, B_k100, n=60: mean fp_indirect_per_100_edges
+syn_weak_B_k100_n60_frac_fp_indirect	NA	synthetic weak, B_k100, n=60: mean frac_fp_indirect
+syn_weak_B_k100_n100_precision	0.689	synthetic weak, B_k100, n=100: mean precision
+syn_weak_B_k100_n100_recall_linear	0.00012	synthetic weak, B_k100, n=100: mean recall_linear
+syn_weak_B_k100_n100_recall_monotone_nonlinear	0.000343	synthetic weak, B_k100, n=100: mean recall_monotone_nonlinear
+syn_weak_B_k100_n100_recall_non_monotone	9.88e-05	synthetic weak, B_k100, n=100: mean recall_non_monotone
+syn_weak_B_k100_n100_n_fp_indirect	0.4	synthetic weak, B_k100, n=100: mean n_fp_indirect
+syn_weak_B_k100_n100_fp_indirect_per_100_edges	17.8	synthetic weak, B_k100, n=100: mean fp_indirect_per_100_edges
+syn_weak_B_k100_n100_frac_fp_indirect	0.667	synthetic weak, B_k100, n=100: mean frac_fp_indirect
+syn_weak_B_k100_n200_precision	0.796	synthetic weak, B_k100, n=200: mean precision
+syn_weak_B_k100_n200_recall_linear	0.0723	synthetic weak, B_k100, n=200: mean recall_linear
+syn_weak_B_k100_n200_recall_monotone_nonlinear	0.0699	synthetic weak, B_k100, n=200: mean recall_monotone_nonlinear
+syn_weak_B_k100_n200_recall_non_monotone	0.0241	synthetic weak, B_k100, n=200: mean recall_non_monotone
+syn_weak_B_k100_n200_n_fp_indirect	46.8	synthetic weak, B_k100, n=200: mean n_fp_indirect
+syn_weak_B_k100_n200_fp_indirect_per_100_edges	5.86	synthetic weak, B_k100, n=200: mean fp_indirect_per_100_edges
+syn_weak_B_k100_n200_frac_fp_indirect	0.286	synthetic weak, B_k100, n=200: mean frac_fp_indirect
+syn_weak_B_k100_n400_precision	0.328	synthetic weak, B_k100, n=400: mean precision
+syn_weak_B_k100_n400_recall_linear	0.719	synthetic weak, B_k100, n=400: mean recall_linear
+syn_weak_B_k100_n400_recall_monotone_nonlinear	0.698	synthetic weak, B_k100, n=400: mean recall_monotone_nonlinear
+syn_weak_B_k100_n400_recall_non_monotone	0.295	synthetic weak, B_k100, n=400: mean recall_non_monotone
+syn_weak_B_k100_n400_n_fp_indirect	6420	synthetic weak, B_k100, n=400: mean n_fp_indirect
+syn_weak_B_k100_n400_fp_indirect_per_100_edges	33.5	synthetic weak, B_k100, n=400: mean fp_indirect_per_100_edges
+syn_weak_B_k100_n400_frac_fp_indirect	0.498	synthetic weak, B_k100, n=400: mean frac_fp_indirect
+syn_prec10_random_baseline	0.05	fraction of true MRs in a random top-10 (n_MR / n_TFs)
+syn_strong_B_matched_n30_precision	NA	synthetic strong, B_matched, n=30: mean precision
+syn_strong_B_matched_n30_recall_linear	0	synthetic strong, B_matched, n=30: mean recall_linear
+syn_strong_B_matched_n30_n_fp_indirect	0	synthetic strong, B_matched, n=30: mean n_fp_indirect
+syn_strong_B_matched_n30_fp_indirect_per_100_edges	NA	synthetic strong, B_matched, n=30: mean fp_indirect_per_100_edges
+syn_strong_B_matched_n30_n_edges	0	synthetic strong, B_matched, n=30: mean n_edges
+syn_strong_B_matched_n60_precision	0.961	synthetic strong, B_matched, n=60: mean precision
+syn_strong_B_matched_n60_recall_linear	0.00181	synthetic strong, B_matched, n=60: mean recall_linear
+syn_strong_B_matched_n60_n_fp_indirect	0.2	synthetic strong, B_matched, n=60: mean n_fp_indirect
+syn_strong_B_matched_n60_fp_indirect_per_100_edges	1.54	synthetic strong, B_matched, n=60: mean fp_indirect_per_100_edges
+syn_strong_B_matched_n60_n_edges	11.8	synthetic strong, B_matched, n=60: mean n_edges
+syn_strong_B_matched_n100_precision	0.7	synthetic strong, B_matched, n=100: mean precision
+syn_strong_B_matched_n100_recall_linear	0.252	synthetic strong, B_matched, n=100: mean recall_linear
+syn_strong_B_matched_n100_n_fp_indirect	367	synthetic strong, B_matched, n=100: mean n_fp_indirect
+syn_strong_B_matched_n100_fp_indirect_per_100_edges	12.4	synthetic strong, B_matched, n=100: mean fp_indirect_per_100_edges
+syn_strong_B_matched_n100_n_edges	2960	synthetic strong, B_matched, n=100: mean n_edges
+syn_strong_B_matched_n200_precision	0.49	synthetic strong, B_matched, n=200: mean precision
+syn_strong_B_matched_n200_recall_linear	0.713	synthetic strong, B_matched, n=200: mean recall_linear
+syn_strong_B_matched_n200_n_fp_indirect	5010	synthetic strong, B_matched, n=200: mean n_fp_indirect
+syn_strong_B_matched_n200_fp_indirect_per_100_edges	39.2	synthetic strong, B_matched, n=200: mean fp_indirect_per_100_edges
+syn_strong_B_matched_n200_n_edges	12800	synthetic strong, B_matched, n=200: mean n_edges
+syn_strong_B_matched_n400_precision	0.891	synthetic strong, B_matched, n=400: mean precision
+syn_strong_B_matched_n400_recall_linear	0.748	synthetic strong, B_matched, n=400: mean recall_linear
+syn_strong_B_matched_n400_n_fp_indirect	777	synthetic strong, B_matched, n=400: mean n_fp_indirect
+syn_strong_B_matched_n400_fp_indirect_per_100_edges	10.6	synthetic strong, B_matched, n=400: mean fp_indirect_per_100_edges
+syn_strong_B_matched_n400_n_edges	7288	synthetic strong, B_matched, n=400: mean n_edges
+syn_weak_B_matched_n30_precision	NA	synthetic weak, B_matched, n=30: mean precision
+syn_weak_B_matched_n30_recall_linear	0	synthetic weak, B_matched, n=30: mean recall_linear
+syn_weak_B_matched_n30_n_fp_indirect	0	synthetic weak, B_matched, n=30: mean n_fp_indirect
+syn_weak_B_matched_n30_fp_indirect_per_100_edges	NA	synthetic weak, B_matched, n=30: mean fp_indirect_per_100_edges
+syn_weak_B_matched_n30_n_edges	0	synthetic weak, B_matched, n=30: mean n_edges
+syn_weak_B_matched_n60_precision	NA	synthetic weak, B_matched, n=60: mean precision
+syn_weak_B_matched_n60_recall_linear	0	synthetic weak, B_matched, n=60: mean recall_linear
+syn_weak_B_matched_n60_n_fp_indirect	0	synthetic weak, B_matched, n=60: mean n_fp_indirect
+syn_weak_B_matched_n60_fp_indirect_per_100_edges	NA	synthetic weak, B_matched, n=60: mean fp_indirect_per_100_edges
+syn_weak_B_matched_n60_n_edges	0	synthetic weak, B_matched, n=60: mean n_edges
+syn_weak_B_matched_n100_precision	0.689	synthetic weak, B_matched, n=100: mean precision
+syn_weak_B_matched_n100_recall_linear	0.00012	synthetic weak, B_matched, n=100: mean recall_linear
+syn_weak_B_matched_n100_n_fp_indirect	0.4	synthetic weak, B_matched, n=100: mean n_fp_indirect
+syn_weak_B_matched_n100_fp_indirect_per_100_edges	17.8	synthetic weak, B_matched, n=100: mean fp_indirect_per_100_edges
+syn_weak_B_matched_n100_n_edges	2.6	synthetic weak, B_matched, n=100: mean n_edges
+syn_weak_B_matched_n200_precision	0.796	synthetic weak, B_matched, n=200: mean precision
+syn_weak_B_matched_n200_recall_linear	0.0723	synthetic weak, B_matched, n=200: mean recall_linear
+syn_weak_B_matched_n200_n_fp_indirect	46.8	synthetic weak, B_matched, n=200: mean n_fp_indirect
+syn_weak_B_matched_n200_fp_indirect_per_100_edges	5.86	synthetic weak, B_matched, n=200: mean fp_indirect_per_100_edges
+syn_weak_B_matched_n200_n_edges	775	synthetic weak, B_matched, n=200: mean n_edges
+syn_weak_B_matched_n400_precision	0.581	synthetic weak, B_matched, n=400: mean precision
+syn_weak_B_matched_n400_recall_linear	0.692	synthetic weak, B_matched, n=400: mean recall_linear
+syn_weak_B_matched_n400_n_fp_indirect	2600	synthetic weak, B_matched, n=400: mean n_fp_indirect
+syn_weak_B_matched_n400_fp_indirect_per_100_edges	25.1	synthetic weak, B_matched, n=400: mean fp_indirect_per_100_edges
+syn_weak_B_matched_n400_n_edges	10326	synthetic weak, B_matched, n=400: mean n_edges
+syn_truth_strong_n30_truth_full_prec10	0.8	synthetic strong, n=30, true regulon with non-monotone edges at mode 0: mean top-10 fraction
+syn_truth_strong_n60_truth_full_prec10	0.84	synthetic strong, n=60, true regulon with non-monotone edges at mode 0: mean top-10 fraction
+syn_truth_strong_n100_truth_full_prec10	0.9	synthetic strong, n=100, true regulon with non-monotone edges at mode 0: mean top-10 fraction
+syn_truth_strong_n200_truth_full_prec10	0.9	synthetic strong, n=200, true regulon with non-monotone edges at mode 0: mean top-10 fraction
+syn_truth_strong_n400_truth_full_prec10	0.86	synthetic strong, n=400, true regulon with non-monotone edges at mode 0: mean top-10 fraction
+syn_truth_weak_n30_truth_full_prec10	0.86	synthetic weak, n=30, true regulon with non-monotone edges at mode 0: mean top-10 fraction
+syn_truth_weak_n60_truth_full_prec10	0.86	synthetic weak, n=60, true regulon with non-monotone edges at mode 0: mean top-10 fraction
+syn_truth_weak_n100_truth_full_prec10	0.92	synthetic weak, n=100, true regulon with non-monotone edges at mode 0: mean top-10 fraction
+syn_truth_weak_n200_truth_full_prec10	0.92	synthetic weak, n=200, true regulon with non-monotone edges at mode 0: mean top-10 fraction
+syn_truth_weak_n400_truth_full_prec10	0.86	synthetic weak, n=400, true regulon with non-monotone edges at mode 0: mean top-10 fraction
+syn_strong_A_k100_n30_n_edges	20000	synthetic strong, A_k100, n=30: mean edges
+syn_strong_A_k100_n60_n_edges	20000	synthetic strong, A_k100, n=60: mean edges
+syn_strong_A_k100_n100_n_edges	20000	synthetic strong, A_k100, n=100: mean edges
+syn_strong_A_k100_n200_n_edges	12800	synthetic strong, A_k100, n=200: mean edges
+syn_strong_A_k100_n400_n_edges	7288	synthetic strong, A_k100, n=400: mean edges
+syn_strong_B_k100_n30_n_edges	0	synthetic strong, B_k100, n=30: mean edges
+syn_strong_B_k100_n60_n_edges	11.8	synthetic strong, B_k100, n=60: mean edges
+syn_strong_B_k100_n100_n_edges	2960	synthetic strong, B_k100, n=100: mean edges
+syn_strong_B_k100_n200_n_edges	19500	synthetic strong, B_k100, n=200: mean edges
+syn_strong_B_k100_n400_n_edges	20000	synthetic strong, B_k100, n=400: mean edges
+syn_strong_aracne3_full_n30_n_edges	0	synthetic strong, aracne3_full, n=30: mean edges
+syn_strong_aracne3_full_n60_n_edges	11.8	synthetic strong, aracne3_full, n=60: mean edges
+syn_strong_aracne3_full_n100_n_edges	2960	synthetic strong, aracne3_full, n=100: mean edges
+syn_strong_aracne3_full_n200_n_edges	27300	synthetic strong, aracne3_full, n=200: mean edges
+syn_strong_aracne3_full_n400_n_edges	83100	synthetic strong, aracne3_full, n=400: mean edges
+syn_weak_A_k100_n30_n_edges	20000	synthetic weak, A_k100, n=30: mean edges
+syn_weak_A_k100_n60_n_edges	20000	synthetic weak, A_k100, n=60: mean edges
+syn_weak_A_k100_n100_n_edges	20000	synthetic weak, A_k100, n=100: mean edges
+syn_weak_A_k100_n200_n_edges	17853	synthetic weak, A_k100, n=200: mean edges
+syn_weak_A_k100_n400_n_edges	10326	synthetic weak, A_k100, n=400: mean edges
+syn_weak_B_k100_n30_n_edges	0	synthetic weak, B_k100, n=30: mean edges
+syn_weak_B_k100_n60_n_edges	0	synthetic weak, B_k100, n=60: mean edges
+syn_weak_B_k100_n100_n_edges	2.6	synthetic weak, B_k100, n=100: mean edges
+syn_weak_B_k100_n200_n_edges	775	synthetic weak, B_k100, n=200: mean edges
+syn_weak_B_k100_n400_n_edges	19200	synthetic weak, B_k100, n=400: mean edges
+syn_weak_aracne3_full_n30_n_edges	0	synthetic weak, aracne3_full, n=30: mean edges
+syn_weak_aracne3_full_n60_n_edges	0	synthetic weak, aracne3_full, n=60: mean edges
+syn_weak_aracne3_full_n100_n_edges	2.6	synthetic weak, aracne3_full, n=100: mean edges
+syn_weak_aracne3_full_n200_n_edges	775	synthetic weak, aracne3_full, n=200: mean edges
+syn_weak_aracne3_full_n400_n_edges	24800	synthetic weak, aracne3_full, n=400: mean edges
+syn_strong_mt30_A_r0.0_n30_prec10	0.38	synthetic strong, min targets 30, A_r0.0, n=30: mean fraction of true MRs in top-10
+syn_strong_mt30_A_r0.0_n30_auroc	0.872	synthetic strong, min targets 30, A_r0.0, n=30: mean AUROC over all TFs
+syn_strong_mt30_A_r0.0_n60_prec10	0.76	synthetic strong, min targets 30, A_r0.0, n=60: mean fraction of true MRs in top-10
+syn_strong_mt30_A_r0.0_n60_auroc	0.98	synthetic strong, min targets 30, A_r0.0, n=60: mean AUROC over all TFs
+syn_strong_mt30_A_r0.0_n100_prec10	0.86	synthetic strong, min targets 30, A_r0.0, n=100: mean fraction of true MRs in top-10
+syn_strong_mt30_A_r0.0_n100_auroc	0.995	synthetic strong, min targets 30, A_r0.0, n=100: mean AUROC over all TFs
+syn_strong_mt30_A_r0.0_n200_prec10	0.86	synthetic strong, min targets 30, A_r0.0, n=200: mean fraction of true MRs in top-10
+syn_strong_mt30_A_r0.0_n200_auroc	0.997	synthetic strong, min targets 30, A_r0.0, n=200: mean AUROC over all TFs
+syn_strong_mt30_A_r0.0_n400_prec10	0.8	synthetic strong, min targets 30, A_r0.0, n=400: mean fraction of true MRs in top-10
+syn_strong_mt30_A_r0.0_n400_auroc	0.995	synthetic strong, min targets 30, A_r0.0, n=400: mean AUROC over all TFs
+syn_strong_A_r0.0_n30_precision	0.186	synthetic strong, A_r0.0, n=30: mean precision
+syn_strong_A_r0.0_n30_recall_linear	0.474	synthetic strong, A_r0.0, n=30: mean recall_linear
+syn_strong_A_r0.0_n30_recall_non_monotone	0.062	synthetic strong, A_r0.0, n=30: mean recall_non_monotone
+syn_strong_A_r0.0_n60_precision	0.279	synthetic strong, A_r0.0, n=60: mean precision
+syn_strong_A_r0.0_n60_recall_linear	0.705	synthetic strong, A_r0.0, n=60: mean recall_linear
+syn_strong_A_r0.0_n60_recall_non_monotone	0.0842	synthetic strong, A_r0.0, n=60: mean recall_non_monotone
+syn_strong_A_r0.0_n100_precision	0.319	synthetic strong, A_r0.0, n=100: mean precision
+syn_strong_A_r0.0_n100_recall_linear	0.797	synthetic strong, A_r0.0, n=100: mean recall_linear
+syn_strong_A_r0.0_n100_recall_non_monotone	0.0861	synthetic strong, A_r0.0, n=100: mean recall_non_monotone
+syn_strong_A_r0.0_n200_precision	0.34	synthetic strong, A_r0.0, n=200: mean precision
+syn_strong_A_r0.0_n200_recall_linear	0.848	synthetic strong, A_r0.0, n=200: mean recall_linear
+syn_strong_A_r0.0_n200_recall_non_monotone	0.102	synthetic strong, A_r0.0, n=200: mean recall_non_monotone
+syn_strong_A_r0.0_n400_precision	0.352	synthetic strong, A_r0.0, n=400: mean precision
+syn_strong_A_r0.0_n400_recall_linear	0.811	synthetic strong, A_r0.0, n=400: mean recall_linear
+syn_strong_A_r0.0_n400_recall_non_monotone	0.109	synthetic strong, A_r0.0, n=400: mean recall_non_monotone
+syn_strong_mt30_A_r0.1_n30_prec10	0.38	synthetic strong, min targets 30, A_r0.1, n=30: mean fraction of true MRs in top-10
+syn_strong_mt30_A_r0.1_n30_auroc	0.872	synthetic strong, min targets 30, A_r0.1, n=30: mean AUROC over all TFs
+syn_strong_mt30_A_r0.1_n60_prec10	0.76	synthetic strong, min targets 30, A_r0.1, n=60: mean fraction of true MRs in top-10
+syn_strong_mt30_A_r0.1_n60_auroc	0.98	synthetic strong, min targets 30, A_r0.1, n=60: mean AUROC over all TFs
+syn_strong_mt30_A_r0.1_n100_prec10	0.86	synthetic strong, min targets 30, A_r0.1, n=100: mean fraction of true MRs in top-10
+syn_strong_mt30_A_r0.1_n100_auroc	0.995	synthetic strong, min targets 30, A_r0.1, n=100: mean AUROC over all TFs
+syn_strong_mt30_A_r0.1_n200_prec10	0.86	synthetic strong, min targets 30, A_r0.1, n=200: mean fraction of true MRs in top-10
+syn_strong_mt30_A_r0.1_n200_auroc	0.997	synthetic strong, min targets 30, A_r0.1, n=200: mean AUROC over all TFs
+syn_strong_mt30_A_r0.1_n400_prec10	0.84	synthetic strong, min targets 30, A_r0.1, n=400: mean fraction of true MRs in top-10
+syn_strong_mt30_A_r0.1_n400_auroc	0.996	synthetic strong, min targets 30, A_r0.1, n=400: mean AUROC over all TFs
+syn_strong_A_r0.1_n30_precision	0.186	synthetic strong, A_r0.1, n=30: mean precision
+syn_strong_A_r0.1_n30_recall_linear	0.474	synthetic strong, A_r0.1, n=30: mean recall_linear
+syn_strong_A_r0.1_n30_recall_non_monotone	0.062	synthetic strong, A_r0.1, n=30: mean recall_non_monotone
+syn_strong_A_r0.1_n60_precision	0.279	synthetic strong, A_r0.1, n=60: mean precision
+syn_strong_A_r0.1_n60_recall_linear	0.704	synthetic strong, A_r0.1, n=60: mean recall_linear
+syn_strong_A_r0.1_n60_recall_non_monotone	0.084	synthetic strong, A_r0.1, n=60: mean recall_non_monotone
+syn_strong_A_r0.1_n100_precision	0.319	synthetic strong, A_r0.1, n=100: mean precision
+syn_strong_A_r0.1_n100_recall_linear	0.796	synthetic strong, A_r0.1, n=100: mean recall_linear
+syn_strong_A_r0.1_n100_recall_non_monotone	0.0864	synthetic strong, A_r0.1, n=100: mean recall_non_monotone
+syn_strong_A_r0.1_n200_precision	0.347	synthetic strong, A_r0.1, n=200: mean precision
+syn_strong_A_r0.1_n200_recall_linear	0.845	synthetic strong, A_r0.1, n=200: mean recall_linear
+syn_strong_A_r0.1_n200_recall_non_monotone	0.0995	synthetic strong, A_r0.1, n=200: mean recall_non_monotone
+syn_strong_A_r0.1_n400_precision	0.602	synthetic strong, A_r0.1, n=400: mean precision
+syn_strong_A_r0.1_n400_recall_linear	0.812	synthetic strong, A_r0.1, n=400: mean recall_linear
+syn_strong_A_r0.1_n400_recall_non_monotone	0.0894	synthetic strong, A_r0.1, n=400: mean recall_non_monotone
+syn_strong_mt30_A_r0.2_n30_prec10	0.38	synthetic strong, min targets 30, A_r0.2, n=30: mean fraction of true MRs in top-10
+syn_strong_mt30_A_r0.2_n30_auroc	0.871	synthetic strong, min targets 30, A_r0.2, n=30: mean AUROC over all TFs
+syn_strong_mt30_A_r0.2_n60_prec10	0.76	synthetic strong, min targets 30, A_r0.2, n=60: mean fraction of true MRs in top-10
+syn_strong_mt30_A_r0.2_n60_auroc	0.979	synthetic strong, min targets 30, A_r0.2, n=60: mean AUROC over all TFs
+syn_strong_mt30_A_r0.2_n100_prec10	0.84	synthetic strong, min targets 30, A_r0.2, n=100: mean fraction of true MRs in top-10
+syn_strong_mt30_A_r0.2_n100_auroc	0.995	synthetic strong, min targets 30, A_r0.2, n=100: mean AUROC over all TFs
+syn_strong_mt30_A_r0.2_n200_prec10	0.9	synthetic strong, min targets 30, A_r0.2, n=200: mean fraction of true MRs in top-10
+syn_strong_mt30_A_r0.2_n200_auroc	0.997	synthetic strong, min targets 30, A_r0.2, n=200: mean AUROC over all TFs
+syn_strong_mt30_A_r0.2_n400_prec10	0.82	synthetic strong, min targets 30, A_r0.2, n=400: mean fraction of true MRs in top-10
+syn_strong_mt30_A_r0.2_n400_auroc	0.882	synthetic strong, min targets 30, A_r0.2, n=400: mean AUROC over all TFs
+syn_strong_A_r0.2_n30_precision	0.186	synthetic strong, A_r0.2, n=30: mean precision
+syn_strong_A_r0.2_n30_recall_linear	0.475	synthetic strong, A_r0.2, n=30: mean recall_linear
+syn_strong_A_r0.2_n30_recall_non_monotone	0.062	synthetic strong, A_r0.2, n=30: mean recall_non_monotone
+syn_strong_A_r0.2_n60_precision	0.278	synthetic strong, A_r0.2, n=60: mean precision
+syn_strong_A_r0.2_n60_recall_linear	0.702	synthetic strong, A_r0.2, n=60: mean recall_linear
+syn_strong_A_r0.2_n60_recall_non_monotone	0.085	synthetic strong, A_r0.2, n=60: mean recall_non_monotone
+syn_strong_A_r0.2_n100_precision	0.318	synthetic strong, A_r0.2, n=100: mean precision
+syn_strong_A_r0.2_n100_recall_linear	0.795	synthetic strong, A_r0.2, n=100: mean recall_linear
+syn_strong_A_r0.2_n100_recall_non_monotone	0.0826	synthetic strong, A_r0.2, n=100: mean recall_non_monotone
+syn_strong_A_r0.2_n200_precision	0.538	synthetic strong, A_r0.2, n=200: mean precision
+syn_strong_A_r0.2_n200_recall_linear	0.861	synthetic strong, A_r0.2, n=200: mean recall_linear
+syn_strong_A_r0.2_n200_recall_non_monotone	0.0774	synthetic strong, A_r0.2, n=200: mean recall_non_monotone
+syn_strong_A_r0.2_n400_precision	0.903	synthetic strong, A_r0.2, n=400: mean precision
+syn_strong_A_r0.2_n400_recall_linear	0.823	synthetic strong, A_r0.2, n=400: mean recall_linear
+syn_strong_A_r0.2_n400_recall_non_monotone	0.0733	synthetic strong, A_r0.2, n=400: mean recall_non_monotone
+syn_strong_mt30_A_r0.3_n30_prec10	0.38	synthetic strong, min targets 30, A_r0.3, n=30: mean fraction of true MRs in top-10
+syn_strong_mt30_A_r0.3_n30_auroc	0.87	synthetic strong, min targets 30, A_r0.3, n=30: mean AUROC over all TFs
+syn_strong_mt30_A_r0.3_n60_prec10	0.74	synthetic strong, min targets 30, A_r0.3, n=60: mean fraction of true MRs in top-10
+syn_strong_mt30_A_r0.3_n60_auroc	0.982	synthetic strong, min targets 30, A_r0.3, n=60: mean AUROC over all TFs
+syn_strong_mt30_A_r0.3_n100_prec10	0.86	synthetic strong, min targets 30, A_r0.3, n=100: mean fraction of true MRs in top-10
+syn_strong_mt30_A_r0.3_n100_auroc	0.995	synthetic strong, min targets 30, A_r0.3, n=100: mean AUROC over all TFs
+syn_strong_mt30_A_r0.3_n200_prec10	0.88	synthetic strong, min targets 30, A_r0.3, n=200: mean fraction of true MRs in top-10
+syn_strong_mt30_A_r0.3_n200_auroc	0.967	synthetic strong, min targets 30, A_r0.3, n=200: mean AUROC over all TFs
+syn_strong_mt30_A_r0.3_n400_prec10	0.78	synthetic strong, min targets 30, A_r0.3, n=400: mean fraction of true MRs in top-10
+syn_strong_mt30_A_r0.3_n400_auroc	0.872	synthetic strong, min targets 30, A_r0.3, n=400: mean AUROC over all TFs
+syn_strong_A_r0.3_n30_precision	0.185	synthetic strong, A_r0.3, n=30: mean precision
+syn_strong_A_r0.3_n30_recall_linear	0.471	synthetic strong, A_r0.3, n=30: mean recall_linear
+syn_strong_A_r0.3_n30_recall_non_monotone	0.0649	synthetic strong, A_r0.3, n=30: mean recall_non_monotone
+syn_strong_A_r0.3_n60_precision	0.284	synthetic strong, A_r0.3, n=60: mean precision
+syn_strong_A_r0.3_n60_recall_linear	0.71	synthetic strong, A_r0.3, n=60: mean recall_linear
+syn_strong_A_r0.3_n60_recall_non_monotone	0.0804	synthetic strong, A_r0.3, n=60: mean recall_non_monotone
+syn_strong_A_r0.3_n100_precision	0.437	synthetic strong, A_r0.3, n=100: mean precision
+syn_strong_A_r0.3_n100_recall_linear	0.795	synthetic strong, A_r0.3, n=100: mean recall_linear
+syn_strong_A_r0.3_n100_recall_non_monotone	0.069	synthetic strong, A_r0.3, n=100: mean recall_non_monotone
+syn_strong_A_r0.3_n200_precision	0.729	synthetic strong, A_r0.3, n=200: mean precision
+syn_strong_A_r0.3_n200_recall_linear	0.836	synthetic strong, A_r0.3, n=200: mean recall_linear
+syn_strong_A_r0.3_n200_recall_non_monotone	0.07	synthetic strong, A_r0.3, n=200: mean recall_non_monotone
+syn_strong_A_r0.3_n400_precision	0.967	synthetic strong, A_r0.3, n=400: mean precision
+syn_strong_A_r0.3_n400_recall_linear	0.811	synthetic strong, A_r0.3, n=400: mean recall_linear
+syn_strong_A_r0.3_n400_recall_non_monotone	0.0727	synthetic strong, A_r0.3, n=400: mean recall_non_monotone
+syn_strong_mt30_A_r0.4_n30_prec10	0.38	synthetic strong, min targets 30, A_r0.4, n=30: mean fraction of true MRs in top-10
+syn_strong_mt30_A_r0.4_n30_auroc	0.878	synthetic strong, min targets 30, A_r0.4, n=30: mean AUROC over all TFs
+syn_strong_mt30_A_r0.4_n60_prec10	0.8	synthetic strong, min targets 30, A_r0.4, n=60: mean fraction of true MRs in top-10
+syn_strong_mt30_A_r0.4_n60_auroc	0.97	synthetic strong, min targets 30, A_r0.4, n=60: mean AUROC over all TFs
+syn_strong_mt30_A_r0.4_n100_prec10	0.66	synthetic strong, min targets 30, A_r0.4, n=100: mean fraction of true MRs in top-10
+syn_strong_mt30_A_r0.4_n100_auroc	0.747	synthetic strong, min targets 30, A_r0.4, n=100: mean AUROC over all TFs
+syn_strong_mt30_A_r0.4_n200_prec10	0.66	synthetic strong, min targets 30, A_r0.4, n=200: mean fraction of true MRs in top-10
+syn_strong_mt30_A_r0.4_n200_auroc	0.772	synthetic strong, min targets 30, A_r0.4, n=200: mean AUROC over all TFs
+syn_strong_mt30_A_r0.4_n400_prec10	0.6	synthetic strong, min targets 30, A_r0.4, n=400: mean fraction of true MRs in top-10
+syn_strong_mt30_A_r0.4_n400_auroc	0.736	synthetic strong, min targets 30, A_r0.4, n=400: mean AUROC over all TFs
+syn_strong_A_r0.4_n30_precision	0.189	synthetic strong, A_r0.4, n=30: mean precision
+syn_strong_A_r0.4_n30_recall_linear	0.479	synthetic strong, A_r0.4, n=30: mean recall_linear
+syn_strong_A_r0.4_n30_recall_non_monotone	0.0604	synthetic strong, A_r0.4, n=30: mean recall_non_monotone
+syn_strong_A_r0.4_n60_precision	0.442	synthetic strong, A_r0.4, n=60: mean precision
+syn_strong_A_r0.4_n60_recall_linear	0.63	synthetic strong, A_r0.4, n=60: mean recall_linear
+syn_strong_A_r0.4_n60_recall_non_monotone	0.0576	synthetic strong, A_r0.4, n=60: mean recall_non_monotone
+syn_strong_A_r0.4_n100_precision	0.723	synthetic strong, A_r0.4, n=100: mean precision
+syn_strong_A_r0.4_n100_recall_linear	0.646	synthetic strong, A_r0.4, n=100: mean recall_linear
+syn_strong_A_r0.4_n100_recall_non_monotone	0.0504	synthetic strong, A_r0.4, n=100: mean recall_non_monotone
+syn_strong_A_r0.4_n200_precision	0.943	synthetic strong, A_r0.4, n=200: mean precision
+syn_strong_A_r0.4_n200_recall_linear	0.663	synthetic strong, A_r0.4, n=200: mean recall_linear
+syn_strong_A_r0.4_n200_recall_non_monotone	0.0519	synthetic strong, A_r0.4, n=200: mean recall_non_monotone
+syn_strong_A_r0.4_n400_precision	0.998	synthetic strong, A_r0.4, n=400: mean precision
+syn_strong_A_r0.4_n400_recall_linear	0.661	synthetic strong, A_r0.4, n=400: mean recall_linear
+syn_strong_A_r0.4_n400_recall_non_monotone	0.0594	synthetic strong, A_r0.4, n=400: mean recall_non_monotone
+syn_weak_mt30_A_r0.0_n30_prec10	0.3	synthetic weak, min targets 30, A_r0.0, n=30: mean fraction of true MRs in top-10
+syn_weak_mt30_A_r0.0_n30_auroc	0.806	synthetic weak, min targets 30, A_r0.0, n=30: mean AUROC over all TFs
+syn_weak_mt30_A_r0.0_n60_prec10	0.7	synthetic weak, min targets 30, A_r0.0, n=60: mean fraction of true MRs in top-10
+syn_weak_mt30_A_r0.0_n60_auroc	0.961	synthetic weak, min targets 30, A_r0.0, n=60: mean AUROC over all TFs
+syn_weak_mt30_A_r0.0_n100_prec10	0.88	synthetic weak, min targets 30, A_r0.0, n=100: mean fraction of true MRs in top-10
+syn_weak_mt30_A_r0.0_n100_auroc	0.993	synthetic weak, min targets 30, A_r0.0, n=100: mean AUROC over all TFs
+syn_weak_mt30_A_r0.0_n200_prec10	0.9	synthetic weak, min targets 30, A_r0.0, n=200: mean fraction of true MRs in top-10
+syn_weak_mt30_A_r0.0_n200_auroc	0.997	synthetic weak, min targets 30, A_r0.0, n=200: mean AUROC over all TFs
+syn_weak_mt30_A_r0.0_n400_prec10	0.84	synthetic weak, min targets 30, A_r0.0, n=400: mean fraction of true MRs in top-10
+syn_weak_mt30_A_r0.0_n400_auroc	0.997	synthetic weak, min targets 30, A_r0.0, n=400: mean AUROC over all TFs
+syn_weak_A_r0.0_n30_precision	0.101	synthetic weak, A_r0.0, n=30: mean precision
+syn_weak_A_r0.0_n30_recall_linear	0.255	synthetic weak, A_r0.0, n=30: mean recall_linear
+syn_weak_A_r0.0_n30_recall_non_monotone	0.0454	synthetic weak, A_r0.0, n=30: mean recall_non_monotone
+syn_weak_A_r0.0_n60_precision	0.193	synthetic weak, A_r0.0, n=60: mean precision
+syn_weak_A_r0.0_n60_recall_linear	0.486	synthetic weak, A_r0.0, n=60: mean recall_linear
+syn_weak_A_r0.0_n60_recall_non_monotone	0.0714	synthetic weak, A_r0.0, n=60: mean recall_non_monotone
+syn_weak_A_r0.0_n100_precision	0.265	synthetic weak, A_r0.0, n=100: mean precision
+syn_weak_A_r0.0_n100_recall_linear	0.669	synthetic weak, A_r0.0, n=100: mean recall_linear
+syn_weak_A_r0.0_n100_recall_non_monotone	0.0757	synthetic weak, A_r0.0, n=100: mean recall_non_monotone
+syn_weak_A_r0.0_n200_precision	0.324	synthetic weak, A_r0.0, n=200: mean precision
+syn_weak_A_r0.0_n200_recall_linear	0.816	synthetic weak, A_r0.0, n=200: mean recall_linear
+syn_weak_A_r0.0_n200_recall_non_monotone	0.0863	synthetic weak, A_r0.0, n=200: mean recall_non_monotone
+syn_weak_A_r0.0_n400_precision	0.334	synthetic weak, A_r0.0, n=400: mean precision
+syn_weak_A_r0.0_n400_recall_linear	0.83	synthetic weak, A_r0.0, n=400: mean recall_linear
+syn_weak_A_r0.0_n400_recall_non_monotone	0.0962	synthetic weak, A_r0.0, n=400: mean recall_non_monotone
+syn_weak_mt30_A_r0.1_n30_prec10	0.3	synthetic weak, min targets 30, A_r0.1, n=30: mean fraction of true MRs in top-10
+syn_weak_mt30_A_r0.1_n30_auroc	0.803	synthetic weak, min targets 30, A_r0.1, n=30: mean AUROC over all TFs
+syn_weak_mt30_A_r0.1_n60_prec10	0.7	synthetic weak, min targets 30, A_r0.1, n=60: mean fraction of true MRs in top-10
+syn_weak_mt30_A_r0.1_n60_auroc	0.961	synthetic weak, min targets 30, A_r0.1, n=60: mean AUROC over all TFs
+syn_weak_mt30_A_r0.1_n100_prec10	0.88	synthetic weak, min targets 30, A_r0.1, n=100: mean fraction of true MRs in top-10
+syn_weak_mt30_A_r0.1_n100_auroc	0.993	synthetic weak, min targets 30, A_r0.1, n=100: mean AUROC over all TFs
+syn_weak_mt30_A_r0.1_n200_prec10	0.9	synthetic weak, min targets 30, A_r0.1, n=200: mean fraction of true MRs in top-10
+syn_weak_mt30_A_r0.1_n200_auroc	0.997	synthetic weak, min targets 30, A_r0.1, n=200: mean AUROC over all TFs
+syn_weak_mt30_A_r0.1_n400_prec10	0.86	synthetic weak, min targets 30, A_r0.1, n=400: mean fraction of true MRs in top-10
+syn_weak_mt30_A_r0.1_n400_auroc	0.998	synthetic weak, min targets 30, A_r0.1, n=400: mean AUROC over all TFs
+syn_weak_A_r0.1_n30_precision	0.101	synthetic weak, A_r0.1, n=30: mean precision
+syn_weak_A_r0.1_n30_recall_linear	0.255	synthetic weak, A_r0.1, n=30: mean recall_linear
+syn_weak_A_r0.1_n30_recall_non_monotone	0.0456	synthetic weak, A_r0.1, n=30: mean recall_non_monotone
+syn_weak_A_r0.1_n60_precision	0.193	synthetic weak, A_r0.1, n=60: mean precision
+syn_weak_A_r0.1_n60_recall_linear	0.485	synthetic weak, A_r0.1, n=60: mean recall_linear
+syn_weak_A_r0.1_n60_recall_non_monotone	0.0711	synthetic weak, A_r0.1, n=60: mean recall_non_monotone
+syn_weak_A_r0.1_n100_precision	0.265	synthetic weak, A_r0.1, n=100: mean precision
+syn_weak_A_r0.1_n100_recall_linear	0.667	synthetic weak, A_r0.1, n=100: mean recall_linear
+syn_weak_A_r0.1_n100_recall_non_monotone	0.0758	synthetic weak, A_r0.1, n=100: mean recall_non_monotone
+syn_weak_A_r0.1_n200_precision	0.323	synthetic weak, A_r0.1, n=200: mean precision
+syn_weak_A_r0.1_n200_recall_linear	0.811	synthetic weak, A_r0.1, n=200: mean recall_linear
+syn_weak_A_r0.1_n200_recall_non_monotone	0.0862	synthetic weak, A_r0.1, n=200: mean recall_non_monotone
+syn_weak_A_r0.1_n400_precision	0.409	synthetic weak, A_r0.1, n=400: mean precision
+syn_weak_A_r0.1_n400_recall_linear	0.832	synthetic weak, A_r0.1, n=400: mean recall_linear
+syn_weak_A_r0.1_n400_recall_non_monotone	0.0899	synthetic weak, A_r0.1, n=400: mean recall_non_monotone
+syn_weak_mt30_A_r0.2_n30_prec10	0.3	synthetic weak, min targets 30, A_r0.2, n=30: mean fraction of true MRs in top-10
+syn_weak_mt30_A_r0.2_n30_auroc	0.797	synthetic weak, min targets 30, A_r0.2, n=30: mean AUROC over all TFs
+syn_weak_mt30_A_r0.2_n60_prec10	0.74	synthetic weak, min targets 30, A_r0.2, n=60: mean fraction of true MRs in top-10
+syn_weak_mt30_A_r0.2_n60_auroc	0.962	synthetic weak, min targets 30, A_r0.2, n=60: mean AUROC over all TFs
+syn_weak_mt30_A_r0.2_n100_prec10	0.86	synthetic weak, min targets 30, A_r0.2, n=100: mean fraction of true MRs in top-10
+syn_weak_mt30_A_r0.2_n100_auroc	0.993	synthetic weak, min targets 30, A_r0.2, n=100: mean AUROC over all TFs
+syn_weak_mt30_A_r0.2_n200_prec10	0.88	synthetic weak, min targets 30, A_r0.2, n=200: mean fraction of true MRs in top-10
+syn_weak_mt30_A_r0.2_n200_auroc	0.997	synthetic weak, min targets 30, A_r0.2, n=200: mean AUROC over all TFs
+syn_weak_mt30_A_r0.2_n400_prec10	0.9	synthetic weak, min targets 30, A_r0.2, n=400: mean fraction of true MRs in top-10
+syn_weak_mt30_A_r0.2_n400_auroc	0.981	synthetic weak, min targets 30, A_r0.2, n=400: mean AUROC over all TFs
+syn_weak_A_r0.2_n30_precision	0.101	synthetic weak, A_r0.2, n=30: mean precision
+syn_weak_A_r0.2_n30_recall_linear	0.255	synthetic weak, A_r0.2, n=30: mean recall_linear
+syn_weak_A_r0.2_n30_recall_non_monotone	0.0449	synthetic weak, A_r0.2, n=30: mean recall_non_monotone
+syn_weak_A_r0.2_n60_precision	0.192	synthetic weak, A_r0.2, n=60: mean precision
+syn_weak_A_r0.2_n60_recall_linear	0.483	synthetic weak, A_r0.2, n=60: mean recall_linear
+syn_weak_A_r0.2_n60_recall_non_monotone	0.0714	synthetic weak, A_r0.2, n=60: mean recall_non_monotone
+syn_weak_A_r0.2_n100_precision	0.262	synthetic weak, A_r0.2, n=100: mean precision
+syn_weak_A_r0.2_n100_recall_linear	0.659	synthetic weak, A_r0.2, n=100: mean recall_linear
+syn_weak_A_r0.2_n100_recall_non_monotone	0.0755	synthetic weak, A_r0.2, n=100: mean recall_non_monotone
+syn_weak_A_r0.2_n200_precision	0.369	synthetic weak, A_r0.2, n=200: mean precision
+syn_weak_A_r0.2_n200_recall_linear	0.83	synthetic weak, A_r0.2, n=200: mean recall_linear
+syn_weak_A_r0.2_n200_recall_non_monotone	0.0792	synthetic weak, A_r0.2, n=200: mean recall_non_monotone
+syn_weak_A_r0.2_n400_precision	0.652	synthetic weak, A_r0.2, n=400: mean precision
+syn_weak_A_r0.2_n400_recall_linear	0.843	synthetic weak, A_r0.2, n=400: mean recall_linear
+syn_weak_A_r0.2_n400_recall_non_monotone	0.0767	synthetic weak, A_r0.2, n=400: mean recall_non_monotone
+syn_weak_mt30_A_r0.3_n30_prec10	0.3	synthetic weak, min targets 30, A_r0.3, n=30: mean fraction of true MRs in top-10
+syn_weak_mt30_A_r0.3_n30_auroc	0.791	synthetic weak, min targets 30, A_r0.3, n=30: mean AUROC over all TFs
+syn_weak_mt30_A_r0.3_n60_prec10	0.74	synthetic weak, min targets 30, A_r0.3, n=60: mean fraction of true MRs in top-10
+syn_weak_mt30_A_r0.3_n60_auroc	0.963	synthetic weak, min targets 30, A_r0.3, n=60: mean AUROC over all TFs
+syn_weak_mt30_A_r0.3_n100_prec10	0.88	synthetic weak, min targets 30, A_r0.3, n=100: mean fraction of true MRs in top-10
+syn_weak_mt30_A_r0.3_n100_auroc	0.994	synthetic weak, min targets 30, A_r0.3, n=100: mean AUROC over all TFs
+syn_weak_mt30_A_r0.3_n200_prec10	0.76	synthetic weak, min targets 30, A_r0.3, n=200: mean fraction of true MRs in top-10
+syn_weak_mt30_A_r0.3_n200_auroc	0.835	synthetic weak, min targets 30, A_r0.3, n=200: mean AUROC over all TFs
+syn_weak_mt30_A_r0.3_n400_prec10	0.68	synthetic weak, min targets 30, A_r0.3, n=400: mean fraction of true MRs in top-10
+syn_weak_mt30_A_r0.3_n400_auroc	0.784	synthetic weak, min targets 30, A_r0.3, n=400: mean AUROC over all TFs
+syn_weak_A_r0.3_n30_precision	0.0993	synthetic weak, A_r0.3, n=30: mean precision
+syn_weak_A_r0.3_n30_recall_linear	0.251	synthetic weak, A_r0.3, n=30: mean recall_linear
+syn_weak_A_r0.3_n30_recall_non_monotone	0.0441	synthetic weak, A_r0.3, n=30: mean recall_non_monotone
+syn_weak_A_r0.3_n60_precision	0.195	synthetic weak, A_r0.3, n=60: mean precision
+syn_weak_A_r0.3_n60_recall_linear	0.492	synthetic weak, A_r0.3, n=60: mean recall_linear
+syn_weak_A_r0.3_n60_recall_non_monotone	0.0695	synthetic weak, A_r0.3, n=60: mean recall_non_monotone
+syn_weak_A_r0.3_n100_precision	0.398	synthetic weak, A_r0.3, n=100: mean precision
+syn_weak_A_r0.3_n100_recall_linear	0.62	synthetic weak, A_r0.3, n=100: mean recall_linear
+syn_weak_A_r0.3_n100_recall_non_monotone	0.0591	synthetic weak, A_r0.3, n=100: mean recall_non_monotone
+syn_weak_A_r0.3_n200_precision	0.708	synthetic weak, A_r0.3, n=200: mean precision
+syn_weak_A_r0.3_n200_recall_linear	0.673	synthetic weak, A_r0.3, n=200: mean recall_linear
+syn_weak_A_r0.3_n200_recall_non_monotone	0.0618	synthetic weak, A_r0.3, n=200: mean recall_non_monotone
+syn_weak_A_r0.3_n400_precision	0.943	synthetic weak, A_r0.3, n=400: mean precision
+syn_weak_A_r0.3_n400_recall_linear	0.686	synthetic weak, A_r0.3, n=400: mean recall_linear
+syn_weak_A_r0.3_n400_recall_non_monotone	0.0688	synthetic weak, A_r0.3, n=400: mean recall_non_monotone
+syn_weak_mt30_A_r0.4_n30_prec10	0.26	synthetic weak, min targets 30, A_r0.4, n=30: mean fraction of true MRs in top-10
+syn_weak_mt30_A_r0.4_n30_auroc	0.804	synthetic weak, min targets 30, A_r0.4, n=30: mean AUROC over all TFs
+syn_weak_mt30_A_r0.4_n60_prec10	0.66	synthetic weak, min targets 30, A_r0.4, n=60: mean fraction of true MRs in top-10
+syn_weak_mt30_A_r0.4_n60_auroc	0.793	synthetic weak, min targets 30, A_r0.4, n=60: mean AUROC over all TFs
+syn_weak_mt30_A_r0.4_n100_prec10	0.24	synthetic weak, min targets 30, A_r0.4, n=100: mean fraction of true MRs in top-10
+syn_weak_mt30_A_r0.4_n100_auroc	0.576	synthetic weak, min targets 30, A_r0.4, n=100: mean AUROC over all TFs
+syn_weak_mt30_A_r0.4_n200_prec10	0.14	synthetic weak, min targets 30, A_r0.4, n=200: mean fraction of true MRs in top-10
+syn_weak_mt30_A_r0.4_n200_auroc	0.548	synthetic weak, min targets 30, A_r0.4, n=200: mean AUROC over all TFs
+syn_weak_mt30_A_r0.4_n400_prec10	0.2	synthetic weak, min targets 30, A_r0.4, n=400: mean fraction of true MRs in top-10
+syn_weak_mt30_A_r0.4_n400_auroc	0.582	synthetic weak, min targets 30, A_r0.4, n=400: mean AUROC over all TFs
+syn_weak_A_r0.4_n30_precision	0.102	synthetic weak, A_r0.4, n=30: mean precision
+syn_weak_A_r0.4_n30_recall_linear	0.258	synthetic weak, A_r0.4, n=30: mean recall_linear
+syn_weak_A_r0.4_n30_recall_non_monotone	0.0444	synthetic weak, A_r0.4, n=30: mean recall_non_monotone
+syn_weak_A_r0.4_n60_precision	0.399	synthetic weak, A_r0.4, n=60: mean precision
+syn_weak_A_r0.4_n60_recall_linear	0.331	synthetic weak, A_r0.4, n=60: mean recall_linear
+syn_weak_A_r0.4_n60_recall_non_monotone	0.0416	synthetic weak, A_r0.4, n=60: mean recall_non_monotone
+syn_weak_A_r0.4_n100_precision	0.794	synthetic weak, A_r0.4, n=100: mean precision
+syn_weak_A_r0.4_n100_recall_linear	0.309	synthetic weak, A_r0.4, n=100: mean recall_linear
+syn_weak_A_r0.4_n100_recall_non_monotone	0.0322	synthetic weak, A_r0.4, n=100: mean recall_non_monotone
+syn_weak_A_r0.4_n200_precision	0.967	synthetic weak, A_r0.4, n=200: mean precision
+syn_weak_A_r0.4_n200_recall_linear	0.28	synthetic weak, A_r0.4, n=200: mean recall_linear
+syn_weak_A_r0.4_n200_recall_non_monotone	0.0301	synthetic weak, A_r0.4, n=200: mean recall_non_monotone
+syn_weak_A_r0.4_n400_precision	0.997	synthetic weak, A_r0.4, n=400: mean precision
+syn_weak_A_r0.4_n400_recall_linear	0.253	synthetic weak, A_r0.4, n=400: mean recall_linear
+syn_weak_A_r0.4_n400_recall_non_monotone	0.0338	synthetic weak, A_r0.4, n=400: mean recall_non_monotone
+syn_strong_aracne3_full_n30_AP	0	average precision of the full edge ranking
+syn_strong_aracne3_full_n60_AP	0.0011	average precision of the full edge ranking
+syn_strong_aracne3_full_n100_AP	0.201	average precision of the full edge ranking
+syn_strong_aracne3_full_n200_AP	0.588	average precision of the full edge ranking
+syn_strong_aracne3_full_n400_AP	0.8	average precision of the full edge ranking
+syn_strong_corto_lenient_r0.0_n30_AP	0.256	average precision of the full edge ranking
+syn_strong_corto_lenient_r0.0_n60_AP	0.517	average precision of the full edge ranking
+syn_strong_corto_lenient_r0.0_n100_AP	0.645	average precision of the full edge ranking
+syn_strong_corto_lenient_r0.0_n200_AP	0.691	average precision of the full edge ranking
+syn_strong_corto_lenient_r0.0_n400_AP	0.666	average precision of the full edge ranking
+syn_strong_corto_lenient_r0.1_n30_AP	0.256	average precision of the full edge ranking
+syn_strong_corto_lenient_r0.1_n60_AP	0.517	average precision of the full edge ranking
+syn_strong_corto_lenient_r0.1_n100_AP	0.643	average precision of the full edge ranking
+syn_strong_corto_lenient_r0.1_n200_AP	0.685	average precision of the full edge ranking
+syn_strong_corto_lenient_r0.1_n400_AP	0.657	average precision of the full edge ranking
+syn_strong_corto_lenient_r0.2_n30_AP	0.255	average precision of the full edge ranking
+syn_strong_corto_lenient_r0.2_n60_AP	0.514	average precision of the full edge ranking
+syn_strong_corto_lenient_r0.2_n100_AP	0.63	average precision of the full edge ranking
+syn_strong_corto_lenient_r0.2_n200_AP	0.693	average precision of the full edge ranking
+syn_strong_corto_lenient_r0.2_n400_AP	0.689	average precision of the full edge ranking
+syn_strong_corto_lenient_r0.3_n30_AP	0.253	average precision of the full edge ranking
+syn_strong_corto_lenient_r0.3_n60_AP	0.494	average precision of the full edge ranking
+syn_strong_corto_lenient_r0.3_n100_AP	0.622	average precision of the full edge ranking
+syn_strong_corto_lenient_r0.3_n200_AP	0.681	average precision of the full edge ranking
+syn_strong_corto_lenient_r0.3_n400_AP	0.673	average precision of the full edge ranking
+syn_strong_corto_lenient_r0.4_n30_AP	0.236	average precision of the full edge ranking
+syn_strong_corto_lenient_r0.4_n60_AP	0.448	average precision of the full edge ranking
+syn_strong_corto_lenient_r0.4_n100_AP	0.505	average precision of the full edge ranking
+syn_strong_corto_lenient_r0.4_n200_AP	0.519	average precision of the full edge ranking
+syn_strong_corto_lenient_r0.4_n400_AP	0.52	average precision of the full edge ranking
+syn_weak_aracne3_full_n30_AP	0	average precision of the full edge ranking
+syn_weak_aracne3_full_n60_AP	0	average precision of the full edge ranking
+syn_weak_aracne3_full_n100_AP	0.00017	average precision of the full edge ranking
+syn_weak_aracne3_full_n200_AP	0.0578	average precision of the full edge ranking
+syn_weak_aracne3_full_n400_AP	0.56	average precision of the full edge ranking
+syn_weak_corto_lenient_r0.0_n30_AP	0.0671	average precision of the full edge ranking
+syn_weak_corto_lenient_r0.0_n60_AP	0.261	average precision of the full edge ranking
+syn_weak_corto_lenient_r0.0_n100_AP	0.471	average precision of the full edge ranking
+syn_weak_corto_lenient_r0.0_n200_AP	0.646	average precision of the full edge ranking
+syn_weak_corto_lenient_r0.0_n400_AP	0.685	average precision of the full edge ranking
+syn_weak_corto_lenient_r0.1_n30_AP	0.067	average precision of the full edge ranking
+syn_weak_corto_lenient_r0.1_n60_AP	0.26	average precision of the full edge ranking
+syn_weak_corto_lenient_r0.1_n100_AP	0.47	average precision of the full edge ranking
+syn_weak_corto_lenient_r0.1_n200_AP	0.641	average precision of the full edge ranking
+syn_weak_corto_lenient_r0.1_n400_AP	0.673	average precision of the full edge ranking
+syn_weak_corto_lenient_r0.2_n30_AP	0.0666	average precision of the full edge ranking
+syn_weak_corto_lenient_r0.2_n60_AP	0.257	average precision of the full edge ranking
+syn_weak_corto_lenient_r0.2_n100_AP	0.456	average precision of the full edge ranking
+syn_weak_corto_lenient_r0.2_n200_AP	0.629	average precision of the full edge ranking
+syn_weak_corto_lenient_r0.2_n400_AP	0.697	average precision of the full edge ranking
+syn_weak_corto_lenient_r0.3_n30_AP	0.0646	average precision of the full edge ranking
+syn_weak_corto_lenient_r0.3_n60_AP	0.226	average precision of the full edge ranking
+syn_weak_corto_lenient_r0.3_n100_AP	0.411	average precision of the full edge ranking
+syn_weak_corto_lenient_r0.3_n200_AP	0.517	average precision of the full edge ranking
+syn_weak_corto_lenient_r0.3_n400_AP	0.542	average precision of the full edge ranking
+syn_weak_corto_lenient_r0.4_n30_AP	0.0529	average precision of the full edge ranking
+syn_weak_corto_lenient_r0.4_n60_AP	0.18	average precision of the full edge ranking
+syn_weak_corto_lenient_r0.4_n100_AP	0.227	average precision of the full edge ranking
+syn_weak_corto_lenient_r0.4_n200_AP	0.208	average precision of the full edge ranking
+syn_weak_corto_lenient_r0.4_n400_AP	0.187	average precision of the full edge ranking

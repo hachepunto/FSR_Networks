@@ -14,6 +14,15 @@ dedup_one_per_patient <- function(se) {
   se[, !duplicated(se$patient)]
 }
 
+# Lee config/config.yaml, o el archivo indicado en la variable de entorno
+# MRA_CONFIG (p.ej. una copia con otras rutas de trabajo). Se lee con
+# readLines + yaml.load porque read_yaml trunca el archivo en el primer
+# carácter no ASCII cuando el locale no es UTF-8.
+read_config <- function() {
+  path <- Sys.getenv("MRA_CONFIG", "config/config.yaml")
+  yaml::yaml.load(readLines(path, warn = FALSE, encoding = "UTF-8"))
+}
+
 # Deriva el nombre corto del tumor ("brca") y el código de cáncer
 # ("BRCA") a partir de un project id de GDC ("TCGA-BRCA"). Se usa en
 # download_data.R, classify_subtypes.R, preprocess_expression.R,
@@ -24,15 +33,53 @@ dedup_one_per_patient <- function(se) {
 tumor_from_project <- function(project) tolower(sub("^TCGA-", "", project))
 cancer_from_project <- function(project) toupper(tumor_from_project(project))
 
-# Umbral de N real (Sección 5 del plan) que decide el método de
-# inferencia de red: por debajo de este valor, ARACNe3 pierde
-# estabilidad en el subsampling/bootstrap y se usa corto en su lugar.
-# Centralizado aquí porque classify_subtypes.R lo usa para calcular
-# network_method y preprocess_expression.R lo vuelve a evaluar sobre
-# el n_red final tras el filtrado de genes — ambos deben coincidir.
+# Método de inferencia de red. Desde octubre de 2026 es corto para TODA
+# cohorte, sin importar n (esquema A; justificación en
+# docs/supplementary_network_method.md). La regla anterior (ARACNe3 si
+# n >= 95, corto si no) se conserva en ARACNE3_MIN_N solo como referencia
+# histórica y para el módulo de benchmark; ningún script la usa para
+# decidir. classify_subtypes.R y preprocess_expression.R siguen
+# escribiendo la columna network_method por compatibilidad.
 ARACNE3_MIN_N <- 95
 
-network_method_for_n <- function(n) ifelse(n < ARACNE3_MIN_N, "corto", "ARACNe3")
+network_method_for_n <- function(n) rep("corto", length(n))
+
+# ── Esquema A: red con corto sobre rangos, umbral de efecto y top-k ──
+# Compartidas por run_corto.R (pipeline) y scripts/network_benchmark/.
+
+# |r| -> p bilateral para n muestras; inversa exacta de corto:::p2r, de
+# modo que corto(p = r2p(r, n)) equivale a exigir |r| >= r sea cual sea n.
+r2p <- function(r, n) {
+  t <- r * sqrt((n - 2) / (1 - r^2))
+  2 * pt(-abs(t), df = n - 2)
+}
+
+# Rangos por gen (fila): la Pearson que calcula corto pasa a ser Spearman.
+rank_rows <- function(m) {
+  r <- t(apply(m, 1, rank))
+  dimnames(r) <- dimnames(m)
+  r
+}
+
+# Recorta cada regulón a sus k targets de mayor likelihood (fracción de
+# bootstraps en que la arista ganó el DPI de corto). Empates por el campo
+# opcional `tiebreak` (el módulo de benchmark lo llena con la MI en
+# regulones de ARACNe3) o, si no existe, por |tfmode|. Iguala el tamaño de
+# los regulones entre cohortes de n distinta. Única definición: la usa
+# run_corto.R y scripts/network_benchmark/.
+tiebreak_of <- function(x) if (is.null(x$tiebreak)) abs(unname(x$tfmode)) else unname(x$tiebreak)
+
+topk_regulon <- function(reg, k) {
+  out <- lapply(reg, function(x) {
+    o <- order(x$likelihood, tiebreak_of(x), decreasing = TRUE)
+    o <- o[seq_len(min(k, length(o)))]
+    out <- list(tfmode = x$tfmode[o], likelihood = x$likelihood[o])
+    if (!is.null(x$tiebreak)) out$tiebreak <- x$tiebreak[o]
+    out
+  })
+  class(out) <- class(reg)
+  out
+}
 
 # Escribe una fila de manifiesto en formato TSV, agregando el
 # encabezado solo si el archivo todavía no existe. Usado por

@@ -1,0 +1,148 @@
+# Supplementary Note: choice of the gene regulatory network inference method
+
+## Summary
+
+Master regulator (MR) analysis needs a tumour-specific regulatory network (regulon) for each of the 34 cancer × subtype cohorts in this study, whose sizes range from 27 to 562 primary tumours. The previous design inferred networks with ARACNe3 (mutual information, MI) when n ≥ 95 and with corto (correlation) at a fixed p-value when n < 95. We compared that design with a single procedure for every cohort:
+
+- **scheme A**: corto on rank-transformed expression, |r| ≥ 0.2 before the data-processing inequality, and the 100 best-supported targets per regulator;
+- **scheme B**: ARACNe3 harmonised to the same 100 targets per regulator, for the 15 cohorts with n ≥ 95;
+- **corto at fixed p** (p < 10⁻⁸ on log2 TPM), the rule previously used for n < 95, here applied to every cohort for comparison.
+
+Evaluation used the pipeline's own DESeq2 signatures and NaRnEA on all real cohorts, and synthetic data with a known network. We adopt scheme A. In brief:
+
+- **Mixing methods would confound between-subtype comparisons.** Changing the inference method within a cohort (A vs B, same signature) turns over 30 % of the top-20 MRs. Changing only the network between two subtypes of the same cancer (same signature, scheme A network of the other subtype) turns over 45 %, and two subtypes analysed each with their own signature and network differ by 55 %. The method effect is smaller than the network component of the biological effect, and about half of the total. A single method removes it entirely.
+- **Where both methods can be run, A and B agree as closely as two filterings of the same ARACNe3 network.** Median top-20 overlap 70 % (A vs B) against 70 % (B vs the support-filtered ARACNe3 network); both far above a null in which the network comes from another cancer (median 30 %, maximum 60 %).
+- **corto at a fixed p-value does not give comparable regulons across cohort sizes**, which was the rule's weakness for n < 95: regulon size tracks n, and in cohorts with n < 95 a median of only 518 regulators reach the 30 targets NaRnEA needs, against 1,270 under scheme A.
+- **In synthetic data with known MRs, scheme A recovers them at every cohort size** (within 0.06 of the true-network upper bound from n = 100), whereas ARACNe3 and corto at fixed p recover none at n ≤ 60. Synthetic data are, however, uninformative about A versus B at the sizes where both apply in real data (Section 3.4).
+- **Non-monotonic dependencies**: ARACNe3 detects them in synthetic data at large n. In real tumours we cannot tell whether they are present; a positive control shows that our statistics would not distinguish the real networks from synthetic ones containing 20 % non-monotone edges. Their contribution to NaRnEA scores is bounded by design, because the association mode is a Spearman correlation.
+- **Computing cost**: 14.6 core-hours for scheme A against 107 for ARACNe3 on the same 15 cohorts.
+
+## 1. Background and question
+
+The pipeline infers one network per cohort from the tumour samples of that cohort, then scores MRs with NaRnEA, using the DESeq2 Wald statistic of tumour versus matched normal tissue as the signature. Results are compared across subtypes and cancers. Three questions:
+
+1. Does a fixed p-value threshold yield regulons that are comparable across cohort sizes?
+2. Does mixing two inference methods introduce method-driven differences between subtypes, and is anything lost by using a correlation-based method everywhere?
+3. MI can detect non-monotonic dependencies that a correlation cannot. Does this matter for the networks and MRs we infer?
+
+## 2. Methods
+
+### 2.1 Network schemes
+
+All schemes use the same tumour expression matrix as the pipeline (log2(TPM + 1), protein-coding genes, expression filters from `preprocess_expression.R`) and the same regulator list (Lambert et al. 2018).
+
+- **corto at fixed p.** corto 1.3.1 on log2(TPM + 1), 100 bootstraps, p < 10⁻⁸. The effective correlation threshold therefore depends on n: |r| ≥ 0.859 at n = 27, |r| ≥ 0.549 at n = 94, |r| ≥ 0.239 at n = 562.
+- **Scheme A.** corto 1.3.1 on per-gene ranks, so that Pearson correlation equals Spearman correlation; 100 bootstraps; a threshold |r| ≥ r_min applied before the data-processing inequality (DPI), with the p-value derived for each n so that the effect-size threshold is constant; then, per regulator, the k = 100 targets with the highest bootstrap likelihood (ties broken by |r|). corto's DPI differs from ARACNe's triplet-based DPI: for each target and bootstrap, among all regulators that pass the threshold only the one with the largest |r| survives ("winner takes all"), whether or not the competing regulators are co-expressed with each other, and the likelihood is the fraction of bootstraps in which an edge wins. It is therefore a measure of competition between regulators for a target, not of edge stability alone; a target with two independent true regulators keeps only the stronger one, which bounds recall. r_min = 0.2 was chosen after an initial run with 0.4, by a grid over {0, 0.1, 0.2, 0.3, 0.4} on the same data (Section 3.5). k was varied in {50, 100, 150}.
+- **ARACNe3** (commit b93095d of github.com/hachepunto/ARACNe3, which fixes data races in the MI computation): 100 subnetworks, seed 42, α = 0.05. Three versions were evaluated: the full consolidated network; edges supported by ≥ 10 of 100 subnetworks; and **scheme B**, the 100 best-supported targets per regulator (subnetwork count, then MI).
+
+In NaRnEA regulons, the association mode (`am`) is the correlation (Spearman for ARACNe3, rank-Pearson for corto), and the association weight (`aw`) is the within-regulator rank of edge support scaled to (0, 1]. As a sensitivity analysis, `aw` was also set to the raw bootstrap likelihood.
+
+### 2.2 Real data
+
+All 34 cohorts of the pipeline (10 TCGA projects; subtype definitions in `subtype_classification_methods.tsv`). Signatures are the DESeq2 Wald statistics from `run_deseq2.R`. MRs were scored with NaRnEA 0.2.0 (`matrixNaRnEA`, minimum 30 targets). Without a ground-truth network, we used four kinds of evidence:
+
+- **External reference.** CollecTRI (curated TF → target interactions, via OmniPath; the retrieved file is archived with the results). *CollecTRI enrichment* is the fraction of a regulon's edges found in CollecTRI, divided by the fraction expected if every regulator chose the same number of targets at random among expressed genes (1 = random). It depends on regulon size, so comparisons are made at equal k and over the same cohorts.
+- **Agreement of MR results between schemes.** Spearman correlation of NES over shared regulators and overlap of the top-20 and top-50 regulators by |NES|. Two references calibrate these numbers: a *within-method* baseline (scheme B vs the support-filtered ARACNe3 network, two filterings of the same network) and a *null* (NaRnEA with the cohort's own signature but the scheme-A network of a cohort from another cancer; 102 pairs).
+- **Biological effect size, decomposed.** The same agreement statistics between subtypes of the same cancer, each with its own signature and scheme-A network (43 pairs): the magnitude of the differences the pipeline is designed to detect. Because A vs B changes only the network while holding the signature fixed, the matched yardstick is the *network component* of that difference: own signature with the scheme-A network of another subtype of the same cancer (86 directed pairs). The complementary swap (own network, other subtype's signature) gives the signature component.
+- **Non-monotonic dependencies.** In ARACNe3 networks, the fraction of edges with |Spearman| < 0.2 (the same effect-size threshold as scheme A's r_min, i.e. edges that scheme A could never select) at each support level, and the number of top-quartile-MI edges with |Spearman| < 0.2. The same statistics were computed on the synthetic ARACNe3 networks, where 20 % of true edges are non-monotone, as a positive control.
+
+### 2.3 Synthetic data
+
+Expression was simulated from a known network (`05_simulate_synthetic.R`): 200 regulators in 20 modules with within-module latent correlation 0.5 (creating indirect dependencies the DPI should remove); 5,000 targets with 1–3 regulators each; edges linear (50 %), monotone non-linear (30 %, saturating sigmoid) or non-monotone (20 %, U-shaped, Spearman ≈ 0); negative-binomial counts with variable library sizes. Networks were inferred from a "tumour" group of n ∈ {30, 60, 100, 200, 400}. Ten true MRs, chosen among regulators with ≥ 30 true targets, were shifted by ±1 SD in the tumour group relative to a reference group (n = 50); the signature is the DESeq2 Wald statistic of tumour vs reference. Two noise levels gave a median |Spearman| of true linear edges of about 0.35 ("weak") and 0.46 ("strong"); the two regimes share networks and MRs (paired design), with 5 replicates per n and regime.
+
+Edge-level metrics: precision, recall by edge type, false positives that are *indirect* (regulator in the same module as a true regulator of the target), reported per 100 inferred edges, and average precision of each method's full edge ranking. MR recovery: the fraction of the 10 true MRs among the top 10 by |NES| (a true MR with too small a regulon to be evaluated counts as missed; a random top-10 scores 0.05), and the AUROC of |NES| over all 200 regulators, with non-evaluable regulators scored 0. The true network is included as an upper bound. With 5 replicates, the standard error of the top-10 fraction (scheme A) ranges from 0.02 to 0.0775, so differences below ~0.1 are not resolved.
+
+## 3. Results
+
+### 3.1 corto at a fixed p-value yields regulons whose size depends on cohort size (Fig. S1)
+
+Restricting to the 19 cohorts with n < 95, where this rule was in use: the median regulon size ranges from 2 to 102 targets and correlates with n (Spearman ρ = 0.779); a median of 518 regulators reach 30 targets; and in 17 of these cohorts fewer than 1 % of edges have negative mode (median 0.28 %), because only very strong, almost always positive, correlations pass the threshold.
+
+Under scheme A, 32 of 34 cohorts reach the 100-target cap, the minimum median is 53 targets (THCA BRAF-like, n = 358, and BRCA LumA, n = 562, where the DPI prunes more edges), and a median of 1,270 regulators can be evaluated in the small cohorts. Uniform size is, however, a property of the cap, not of the data: under scheme A the CollecTRI enrichment still increases with n (Spearman ρ = 0.756), from 1.62–1.82 in the three cohorts with n < 30 to a median of 2.52 in the cohorts with n ≥ 95. Comparable size does not mean comparable quality.
+
+**CollecTRI enrichment over the same 15 cohorts (n ≥ 95), at k = 100 where applicable:**
+
+| Network | Enrichment |
+|---|---|
+| corto at fixed p | 2.1 |
+| Scheme A | 2.52 |
+| Full ARACNe3 network | 1.14 |
+| ARACNe3, support ≥ 10 | 2.19 |
+| Scheme B | 2.53 |
+
+Schemes A and B are equivalent on this criterion. The full ARACNe3 network is barely above random, because most of its edges appear in a single subnetwork. (The expected fraction counts TF → TF interactions in CollecTRI, which corto cannot recover because it excludes regulators from the target set; the bias is against corto and small.) Enrichment also rises as k falls (scheme A: 2.8 at k = 50, 2.3 at k = 100, 2.07 at k = 150, all cohorts), so the value for corto at fixed p, whose regulons are smaller, is not directly comparable.
+
+### 3.2 Method effect versus biological effect (Fig. S2)
+
+Across the 15 cohorts with n ≥ 95:
+
+| Comparison | Median ρ of NES | Median top-20 overlap | Median top-50 overlap |
+|---|---|---|---|
+| Scheme A vs scheme B (between methods) | 0.926 (min 0.851) | 70 % (min 45 %) | 70 % |
+| Scheme B vs ARACNe3 support ≥ 10 (within method) | 0.985 | 70 % | 72 % |
+| Scheme B vs full ARACNe3 network (within method) | 0.928 | 55 % | 62 % |
+| Own signature, scheme-A network of another subtype of the same cancer (network component of the biological effect) | 0.707 | 55 % | 52 % |
+| Own network, signature of another subtype of the same cancer (signature component) | 0.822 | 60 % | 60 % |
+| Subtypes of the same cancer, each with own signature and network (total biological effect) | 0.575 | 45 % | 40 % |
+| Own signature, network from another cancer (null) | 0.526 | 30 % | 36 % |
+
+Three observations:
+
+- The top-k overlap between methods equals the overlap between two filterings of one ARACNe3 network, and exceeds that between scheme B and the full network. The genome-wide ρ of NES is systematically lower between methods than within ARACNe3 (in 15 of 15 cohorts), as expected when the two ARACNe3 versions share most edges.
+- Both are far above the null, which never exceeds a top-20 overlap of 60 % (within-cancer vs null, Wilcoxon p = 0.00679; interquartile ranges 22 %–50 % and 21 %–40 %). The null is a conservative "wrong tissue" baseline rather than a random one, because co-expression modules are partly shared across cancers.
+- **The method effect is smaller than, but not negligible against, the network component of the biological effect.** Switching method within a cohort (signature fixed) turns over 30 % of the top-20 MRs. Swapping only the network between two subtypes of the same cancer (signature fixed) turns over 45 %; swapping only the signature, 40 %; and the total difference between subtypes is 55 %. A design that infers networks with ARACNe3 for some subtypes and corto for others (as in COAD, where CMS2 and CMS4 have n ≥ 95 but CMS1 and CMS3 do not) would therefore add a method-driven turnover about two-thirds the size of the network differences it sets out to measure, and more than half of the total between-subtype difference.
+
+Agreement did not degrade near the n = 95 boundary (ρ = 0.933 at n = 96). Agreement with MR results from the curated CollecTRI regulons was low for every scheme (median ρ: corto at fixed p 0.24, scheme A 0.21, scheme B 0.182, full ARACNe3 0.173), reflecting how different data-driven and literature regulons are; it does not discriminate between schemes.
+
+### 3.3 Non-monotonic dependencies (Figs. S3, S4)
+
+**Synthetic data.** ARACNe3 recovered non-monotone edges at large n: recall 0.816 (strong signal) and 0.395 (weak) at n = 400, but only 0.0419 at n = 100 under strong signal and 0.0241 at n = 200 under weak signal. Scheme A did not (0.0733 at n = 400). Its average precision over the full edge ranking was higher than ARACNe3's at every n except n = 400 under strong signal (0.689 vs 0.8).
+
+**Real data, and why we cannot conclude that non-monotonic edges are absent.** Among ARACNe3 edges inferred from real tumours, the fraction with |Spearman| < 0.2 falls with support: 39 % over all edges, 4.4 % at support ≥ 10 (range 0.69 %–8.5 %), 0.05 % at support ≥ 50; and only 65 of 598,261 top-quartile-MI edges with support ≥ 10 have |Spearman| < 0.2. Taken alone, this would suggest that MI detects few well-supported non-monotonic edges in these cohorts. The positive control shows otherwise: on synthetic ARACNe3 networks with 20 % true non-monotone edges, the same fraction at support ≥ 10 is 5.8 % (strong signal, n = 400) and 1.9 % (weak, n = 400), and at the sizes of most real cohorts it is lower still (0.04 % and 2.8 % at n = 100 and 200, strong signal). True non-monotone edges have lower MI and lower support than linear ones (they make up 6.4 % of supported edges in the strong regime), so support-based statistics under-represent them even when they are abundant. The statistic is therefore nearly blind to non-monotone edges at n ≈ 100–200, and the real networks are compatible with a non-trivial fraction of them. (In scheme-B regulons the fraction with |Spearman| < 0.2 is 7.5 % in real cohorts and 9.7 %/37 % in synthetic data; the weak-signal value is dominated by false-positive edges, since the precision of scheme B there is only 0.328, and should not be read as non-monotone content.)
+
+What the evidence does establish is that such edges contribute little to MR scores, and it quantifies how little. The association mode of a non-monotone edge is close to zero, so it enters NaRnEA's directed enrichment with almost no weight and contributes only through the undirected component. We tested this directly with the *true* synthetic network, where no inference error intervenes: with the true regulons, the fraction of true MRs in the top 10 is 0.78 when the non-monotone edges are removed, versus 0.86 when they are present with mode 0 (as any correlation-based method would represent them) and 0.92 when they are given a perfect sign that no correlation can provide (strong signal, n = 400; weak signal: 0.8, 0.86, 0.96). Non-monotone edges thus carry some information for MR scoring (removing them costs 0.05–0.10), an unsigned representation recovers most of it, and the remainder, one to three standard errors, is the upper bound of what a scoring method able to use non-monotone dependencies could gain over the current one. Consistent with this, scheme A and scheme B agree on MRs as closely as two versions of ARACNe3 agree with each other (Section 3.2).
+
+### 3.4 Recovery of known master regulators in synthetic data (Fig. S5)
+
+Fraction of the 10 true MRs among the top 10 by |NES| (minimum 30 targets; random 0.05; true-network upper bound 0.8–0.92):
+
+| n | Strong: A | Strong: B | Strong: fixed p | Weak: A | Weak: B | Weak: fixed p |
+|---|---|---|---|---|---|---|
+| 30 | 0.38 | 0 | 0 | 0.3 | 0 | 0 |
+| 60 | 0.76 | 0 | 0 | 0.74 | 0 | 0 |
+| 100 | 0.84 | 0.14 | 0.12 | 0.86 | 0 | 0 |
+| 200 | 0.9 | 0.74 | 0.74 | 0.88 | 0 | 0.32 |
+| 400 | 0.82 | 0.74 | 0.8 | 0.9 | 0.76 | 0.74 |
+
+Scheme A recovered MRs at every n, within 0.06 of the upper bound from n = 100 (weak signal; strong: 0.06), and well above random but well below the bound at n = 30. ARACNe3 (scheme B) and corto at fixed p recovered none at n ≤ 60, and under weak signal none at n ≤ 200 (ARACNe3) or n ≤ 100 (fixed p): their networks were empty or their regulons too small to evaluate. At n = 400 the three schemes lie within 0.08 of each other under strong signal and within 0.16 under weak signal.
+
+**These synthetic comparisons do not inform the choice between A and B at n ≥ 95 in real data.** The synthetic ARACNe3 networks are far sparser than the real ones (at n = 100: 0.7 precision on 2,960 edges, against 2,506,128–4,142,445 edges and 1,204–1,317 evaluable regulators in real cohorts with 95 ≤ n ≤ 130), so the simulation reproduces ARACNe3's failure mode at small n but not its behaviour on real tumours with n ≥ 95. The A-vs-B comparison rests on the real-data evidence of Section 3.2, which measures consistency rather than correctness. What the synthetic data do establish is the comparison between scheme A and corto at fixed p for n < 95, where the latter was in use.
+
+Scheme A's edges are imprecise at small n (precision 0.186 at n = 30, 0.903 at n = 400, strong signal). Many false positives at intermediate n are indirect, that is, a regulator correlated with the true one: 33.1 per 100 edges at n = 100 (strong). Edge-level comparisons between schemes must be made at equal edge counts, because at n = 400 scheme A's DPI leaves 7,288 edges while scheme B is at its cap of 20,000: when ARACNe3 edges are ranked by support and cut to the same count as scheme A, their precision (0.891) and indirect false positives per 100 edges (10.6) are the same as scheme A's (0.903 and 9.64). The two methods rank edges comparably; they differ in how many they keep. NaRnEA tolerates imprecise edges better than missing regulons, because it aggregates evidence over 100 weighted targets per regulator.
+
+### 3.5 Sensitivity analyses (Fig. S6)
+
+**Correlation threshold (chosen post hoc).** The first run used r_min = 0.4. On synthetic data it degraded MR recovery at large n under weak signal (n = 400: 0.2 vs 0.9 with 0.2), because once n is large the threshold removes genuine moderate correlations before the top-k selection. r_min was then re-chosen from {0, 0.1, 0.2, 0.3, 0.4} on the same data. Values of 0, 0.1 and 0.2 gave indistinguishable MR recovery (all within one standard error of each other at every n and regime), but lower thresholds reduced edge precision at large n (0.352 at r_min = 0 vs 0.903 at 0.2, n = 400, strong). r_min = 0.2 is therefore the largest value that does not cost MR recovery under weak signal (0.3 costs nothing under strong signal), and not an edge of the grid. On real data the threshold had little effect on agreement with scheme B (median ρ 0.926, 0.937, 0.942 for 0.2, 0.3, 0.4; top-20 overlap 70 % in all three), while 0.4 shrank the regulons of the largest cohorts well below the cap (minimum median 32 targets). At n = 27, |r| ≥ 0.2 corresponds to p ≈ 0.3, and up to n ≈ 130 to p between 0.05 and 0.3: in most cohorts the threshold is effectively inactive, the three lowest values of the grid give identical networks, and the regulon is determined by the winner-takes-all DPI and the top-k selection. The insensitivity to r_min within {0, 0.1, 0.2} on real data is therefore largely trivial; the informative comparison is the synthetic one at large n.
+
+**Number of targets and edge weights.** MR results were robust to k (median ρ of NES against k = 100: 0.981 for k = 50, 0.994 for k = 150) and to using the raw bootstrap likelihood as `aw` (0.963).
+
+### 3.6 Computing cost
+
+On the 15 cohorts with n ≥ 95, ARACNe3 (100 subnetworks, 18 threads, two runs at a time) took 5.93 h of wall-clock time (107 core-hours; up to 1.32 h for one cohort). Scheme A (100 bootstraps, 8 threads, four or five runs at a time) took 1.83 h (14.6 core-hours). Both were measured under contention on a shared server; per-cohort values are in `network_benchmark_runtime.tsv`.
+
+## 4. Limitations
+
+- **No ground truth for real data.** Agreement between schemes measures consistency, not correctness; CollecTRI is incomplete and largely cell-type agnostic. The synthetic model supplies ground truth but omits features of real tumours (pervasive co-expression modules, tumour purity, copy-number effects), and its ARACNe3 networks are much sparser than real ones.
+- **Winner-takes-all DPI.** corto keeps, per target and bootstrap, only the regulator with the largest |r| among all that pass the threshold. Any target with more than one true regulator therefore loses all but the strongest, which caps recall (about 0.823 for linear edges at n = 400 in synthetic data with 1–3 regulators per target); regulators that are strongly co-expressed with each other (paralogues, co-regulated modules) are the case where the loss is systematic. ARACNe's DPI has a related tendency, mitigated by a tolerance parameter. MRs that belong to tightly co-expressed regulator families should be interpreted at the family level. corto's bootstrap likelihood reflects this competition and is not a stability estimate.
+- **Comparable size, not comparable quality.** Regulons of 100 targets are produced for every cohort, including the three with n < 30, where edge precision in synthetic data was only 0.101–0.186 and MR recovery was far below the upper bound. Results for STAD EBV, LUSC primitive and LIHC S1 should be interpreted with caution, and the two largest cohorts have regulons below the cap.
+- **Threshold chosen on the evaluation data.** r_min was selected after inspecting results (Section 3.5). The choice is insensitive within {0, 0.1, 0.2}, largely because the threshold is inactive at the sample sizes of most cohorts, and the grids for r_min and k were narrow.
+- **Non-monotonic dependencies.** Their frequency in these cohorts is unresolved (Section 3.3). Should MR scoring ever move to a method that does not weight targets by a signed correlation, the case for a correlation-based network would need to be revisited.
+- **Any co-expression regulon is a proxy.** Published benchmarks find that regulons inferred from co-expression, with either measure, underperform curated or ChIP-seq-derived regulons in perturbation assays; the choice of dependence measure is second-order relative to orthogonal validation of the MRs.
+
+## 5. Conclusion
+
+We use a single correlation-based procedure (scheme A: corto on ranks, |r| ≥ 0.2, 100 best-supported targets per regulator) for all 34 cohorts. It yields regulons of comparable size across cohort sizes from 27 to 562; where ARACNe3 can also be run, it reproduces ARACNe3's MR results as closely as alternative filterings of ARACNe3 reproduce each other, and far above a null; it recovers known MRs in synthetic data at every sample size, including sizes at which ARACNe3 yields no network; and it costs a fraction of the computing time. Its main justification, however, is comparability: the method effect on MR rankings is about two-thirds of the network component of the differences between subtypes that the study aims to characterise, and more than half of their total, so inferring networks with different methods for different subtypes would confound those comparisons. MI's capacity to capture non-monotonic dependencies is real, but it is neutralised downstream by the signed association mode that NaRnEA uses, and we found no evidence that it changes the MR results.
+
+## Reproducibility
+
+The analysis is `scripts/network_benchmark/` (steps 00–09, orchestrated by `run_all.sh`), with parameters in `config/config.yaml: network_benchmark` and the environment in `config/env_network_benchmark.yaml`. Every number in this note is taken from `results/final/tables/network_benchmark_key_numbers.tsv`; figures are `results/final/figures/network_benchmark_fig1`–`fig6`. The CollecTRI file used is archived as `network_benchmark_collectri_edges.tsv`. Software: R 4.5.3, corto 1.3.1, NaRnEA 0.2.0 (commit 36b8fdb), DESeq2 1.50.2, ARACNe3 commit b93095d.

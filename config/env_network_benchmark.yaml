@@ -1,0 +1,19 @@
+# Entorno del módulo scripts/network_benchmark/ (justificación del método
+# de red). corto y NaRnEA no están en conda: después de crear el entorno,
+# correr scripts/network_benchmark/00_install_r_packages.R dentro de él.
+name: mra_bench
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - r-base=4.5
+  - r-yaml
+  - r-ggplot2
+  - r-patchwork
+  - r-scales
+  - r-pbapply
+  - r-plotrix
+  - r-remotes
+  - bioconductor-deseq2=1.50
+  - bioconductor-summarizedexperiment
+  - curl

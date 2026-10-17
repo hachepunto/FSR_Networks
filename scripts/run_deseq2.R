@@ -64,7 +64,7 @@ if (length(args) != 1) {
 
 analysis_id <- args[1]
 
-config <- yaml::read_yaml("config/config.yaml")
+config <- read_config()  # scripts/lib_common.R; respeta MRA_CONFIG
 
 data_root   <- config$paths$data_root
 work_root   <- config$paths$work_root
@@ -161,6 +161,14 @@ message(analysis_id, ": ", length(tumor_samples), " muestras tumorales, ",
 
 se_file <- file.path(data_root, "processed", project, paste0(tumor, "_rnaseq_se.rds"))
 se <- readRDS(se_file)
+
+# El SE crudo puede tener varias columnas (alícuotas) con el mismo
+# sample_submitter_id. Se aplica la misma deduplicación que
+# preprocess_expression.R para quedarse con la misma columna que usó.
+se <- cbind(
+  dedup_one_per_patient(se[, se$sample_type == "Primary Tumor"]),
+  dedup_one_per_patient(se[, se$sample_type == "Solid Tissue Normal"])
+)
 
 se_sel <- se[, se$sample_submitter_id %in% target_samples]
 

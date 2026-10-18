@@ -313,6 +313,19 @@ stopifnot("Falta subsample.rds (12_subsample_real.R + 12b_evaluate_subsample.R)"
   write_tsv(sub_sum, "real_subsample_summary")
   for (i in seq_len(nrow(sub_sum))) for (v in c("top20_median", "top50_median", "rho_median", "edge_jaccard_per_tf_median", "n_evaluable_median"))
     add_key(sprintf("subsample_n%d_%s", sub_sum$n[i], v), sub_sum[[v]][i], sprintf("subsampled real cohorts, n = %d: %s over cohorts x replicates", sub_sum$n[i], v))
+  for (i in seq_len(nrow(sub_sum))) for (v in c("top20_q25", "top20_q75"))
+    add_key(sprintf("subsample_n%d_%s", sub_sum$n[i], v), sub_sum[[v]][i], sprintf("subsampled real cohorts, n = %d: %s over cohorts x replicates", sub_sum$n[i], v))
+  # mediana por cohorte (sobre réplicas); rango entre cohortes sin la peor
+  per_coh <- aggregate(top20 ~ analysis_id + n, sub, median)
+  for (i in seq_len(nrow(per_coh)))
+    add_key(sprintf("subsample_%s_n%d_top20_median", per_coh$analysis_id[i], per_coh$n[i]), per_coh$top20[i],
+            sprintf("subsampled %s, n = %d: median top-20 overlap over replicates", per_coh$analysis_id[i], per_coh$n[i]))
+  for (nn in unique(per_coh$n)) {
+    v <- sort(per_coh$top20[per_coh$n == nn])
+    add_key(sprintf("subsample_n%d_top20_cohort_min", nn), v[1], sprintf("n = %d: lowest per-cohort median top-20 overlap", nn))
+    add_key(sprintf("subsample_n%d_top20_cohort_second", nn), v[2], sprintf("n = %d: second-lowest per-cohort median top-20 overlap", nn))
+    add_key(sprintf("subsample_n%d_top20_cohort_max", nn), v[length(v)], sprintf("n = %d: highest per-cohort median top-20 overlap", nn))
+  }
   add_key("subsample_n_cohorts", length(unique(sub$analysis_id)), "cohorts subsampled")
   add_key("subsample_replicates", max(sub$replicate), "replicates per n")
   add_key("subsample_n_full_min", min(sub$n_full), "smallest full cohort subsampled")

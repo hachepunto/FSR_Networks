@@ -133,23 +133,23 @@ Median agreement between the MRs obtained with a subsampled network and those ob
 
 | n | Top-20 overlap | Top-50 overlap | ρ of NES | Per-regulator edge Jaccard | Evaluable regulators |
 |---|---|---|---|---|---|
-| 20 | 35 % | 44 % | 0.7 | 0.0363 | 1,299 |
-| 27 | 50 % | 48 % | 0.748 | 0.0526 | 1,299 |
-| 40 | 60 % | 58 % | 0.84 | 0.0886 | 1,299 |
-| 60 | 70 % | 68 % | 0.884 | 0.137 | 1,299 |
-| 80 | 70 % | 72 % | 0.906 | 0.183 | 1,299 |
-| 100 | 70 % | 74 % | 0.929 | 0.227 | 1,296 |
-| 150 | 80 % | 80 % | 0.954 | 0.342 | 1,267 |
+| 20 | 40 % | 42 % | 0.694 | 0.0355 | 1,299 |
+| 27 | 50 % | 52 % | 0.761 | 0.0561 | 1,299 |
+| 40 | 55 % | 58 % | 0.823 | 0.0925 | 1,299 |
+| 60 | 65 % | 66 % | 0.881 | 0.136 | 1,299 |
+| 80 | 70 % | 70 % | 0.909 | 0.183 | 1,299 |
+| 100 | 75 % | 76 % | 0.92 | 0.227 | 1,297 |
+| 150 | 80 % | 82 % | 0.954 | 0.342 | 1,266 |
 
-For reference, two methods on the same full cohort agree at 70 % (top-20), two subtypes of the same cancer at 45 %, and the null at 30 %. The smallest n at which the subsampled network reproduces the full-cohort MRs as well as scheme B does is 60. Values at n = 150 are inflated by the overlap between subset and reference in the smaller cohorts and are shown only for completeness.
+For reference, two methods on the same full cohort agree at 70 % (top-20), two subtypes of the same cancer at 45 %, and the null at 30 %. The smallest n whose median reaches the scheme-B agreement is 80, but this point estimate should not be over-read: the top-20 overlap moves in steps of 5 % (one regulator), and the interquartile ranges at n = 60 (60 %–70 %) and n = 80 (60 %–80 %) overlap almost entirely. Values at n = 150 are inflated by the overlap between subset and reference in the smaller cohorts and are shown only for completeness.
 
 Three features of the curve matter for the choice of a minimum cohort size:
 
-- **At n = 20–27 a subsampled network reproduces its own cohort's MRs no better than a different subtype of the same cancer does** (top-20 overlap 35 %–50 %, against 45 % between subtypes and 30 % for the null). Networks from cohorts of that size carry little subtype-specific information.
-- **From n = 60 the subsampled network reproduces the full-cohort MRs as well as a different inference method does on the full cohort** (70 % vs 70 %), and the agreement improves only slowly beyond that (n = 100: 70 %). n = 40 is intermediate (60 %).
-- **Edge-level stability is low throughout** (median per-regulator Jaccard with the full cohort 0.137 at n = 60, 0.227 at n = 100): the regulons change substantially with the sample while the top MRs do not. This is the direct, real-data counterpart of the synthetic result that NaRnEA tolerates imprecise edges, and it confirms that regulons from small cohorts should not be interpreted edge by edge.
+- **At n = 20–27 a subsampled network reproduces its own cohort's MRs no better than a different subtype of the same cancer does** (top-20 overlap 40 %–50 %, against 45 % between subtypes and 30 % for the null). Networks from cohorts of that size carry little subtype-specific information.
+- **Between n = 60 and n = 80 the subsampled network reaches the agreement that a different inference method achieves on the full cohort** (65 % and 70 % vs 70 %), and the agreement improves only slowly beyond that (n = 100: 75 %). n = 40 is intermediate (55 %).
+- **Edge-level stability is low throughout** (median per-regulator Jaccard with the full cohort 0.136 at n = 60, 0.227 at n = 100): the regulons change substantially with the sample while the top MRs do not. This is the direct, real-data counterpart of the synthetic result that NaRnEA tolerates imprecise edges, and it confirms that regulons from small cohorts should not be interpreted edge by edge.
 
-The cohorts differ. THCA BRAF-like, whose full-cohort regulons are the smallest (median 53 targets) and whose reference is therefore itself the least stable, reaches only 50 % at n = 100; the other four reach 70–80 %. We therefore propose n ≥ 60 as the inclusion criterion for subtype-specific networks, with 40 ≤ n < 60 reported as exploratory. For cohorts below the threshold, the MR analysis remains possible by interrogating the cohort's own signature with the network of a larger cohort of the same cancer (the design used for external validation, Section 4), at the cost of losing the subtype-specific network. This proposal is not yet applied in the pipeline configuration.
+The cohorts differ. THCA BRAF-like, whose full-cohort regulons are the smallest (median 53 targets) and whose reference is therefore itself the least stable, reaches only 60 % at n = 100; the other four reach 65 %–80 %. We adopt n ≥ 60 as the inclusion criterion for subtype-specific networks: it is the lower end of the range where the curve meets the method-to-method agreement, n = 40 falls short (55 %), and n ≤ 27 is no better than a different subtype. For cohorts below the threshold, the MR analysis remains possible by interrogating the cohort's own signature with the network of a larger cohort of the same cancer (the design used for external validation, Section 4), at the cost of losing the subtype-specific network. This criterion is not yet applied in the pipeline configuration.
 
 ### 3.7 Computing cost
 
@@ -170,4 +170,4 @@ We use a single correlation-based procedure (scheme A: corto on ranks, |r| ≥ 0
 
 ## Reproducibility
 
-The analysis is `scripts/network_benchmark/` (steps 00–09, orchestrated by `run_all.sh`), with parameters in `config/config.yaml: network_benchmark` and the environment in `config/env_network_benchmark.yaml`. Every number in this note is taken from `results/final/tables/network_benchmark_key_numbers.tsv`; figures are `results/final/figures/network_benchmark_fig1`–`fig7`. The CollecTRI file used is archived as `network_benchmark_collectri_edges.tsv`. Software: R 4.5.3, corto 1.3.1, NaRnEA 0.2.0 (commit 36b8fdb), DESeq2 1.50.2, ARACNe3 commit b93095d.
+The analysis is `scripts/network_benchmark/` (steps 00–12b, orchestrated by `run_all.sh`; the technical appendix steps 10–11 are run separately), with parameters in `config/config.yaml: network_benchmark` and the environment in `config/env_network_benchmark.yaml`. Every number in this note is taken from `results/final/tables/network_benchmark_key_numbers.tsv`; figures are `results/final/figures/network_benchmark_fig1`–`fig7`. The CollecTRI file used is archived as `network_benchmark_collectri_edges.tsv`. Software: R 4.5.3, corto 1.3.1, NaRnEA 0.2.0 (commit 36b8fdb), DESeq2 1.50.2, ARACNe3 commit b93095d.

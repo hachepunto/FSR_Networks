@@ -14,6 +14,7 @@ dependencies:
   - r-pbapply
   - r-plotrix
   - r-remotes
+  - r-glasso                 # 10_appendix_statistics.R
   - bioconductor-deseq2=1.50
   - bioconductor-summarizedexperiment
   - curl

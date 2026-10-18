@@ -4,13 +4,15 @@
 
 library(yaml)
 
-config <- yaml::read_yaml("config/config.yaml")
+source("scripts/lib_common.R")
+
+config <- read_config()  # scripts/lib_common.R; respeta MRA_CONFIG y lee UTF-8
 
 data_raw_dir <- file.path(config$paths$data_root, "raw", "tfs")
 aracne_input_dir <- file.path(config$paths$work_root, "networks", "input")
 
 lambert_raw_file <- file.path(data_raw_dir, "lambert2018_DatabaseExtract_v1.01.csv")
-tf_file <- file.path(aracne_input_dir, "TFs_Lambert2018.txt")
+tf_file <- file.path(aracne_input_dir, config$network_inference$tfs$file)
 lambert_url <- "https://humantfs.ccbr.utoronto.ca/download/v_1.01/DatabaseExtract_v_1.01.csv"
 
 # Crear unicamente los directorios donde se escribiran archivos
@@ -22,14 +24,14 @@ dir.create(aracne_input_dir, recursive = TRUE, showWarnings = FALSE)
 # Lambert et al. 2018
 #
 # Descarga la base de datos de Lambert si no existe y genera
-# la lista de factores de transcripcion utilizada por ARACNe-AP.
+# la lista de factores de transcripcion utilizada por corto (y ARACNe3).
 # ============================================================
 
 # ============================================================
 # ENTRADAS
 #
 # Archivo descargado desde Lambert et al. 2018:
-#   data/raw/lambert2018_DatabaseExtract_v1.01.csv
+#   <data_root>/raw/tfs/lambert2018_DatabaseExtract_v1.01.csv
 #
 # URL:
 #   https://humantfs.ccbr.utoronto.ca/download/v_1.01/DatabaseExtract_v_1.01.csv
@@ -39,7 +41,7 @@ dir.create(aracne_input_dir, recursive = TRUE, showWarnings = FALSE)
 # SALIDAS
 #
 # Lista de factores de transcripcion:
-#   networks/input/TFs_Lambert2018.txt
+#   <work_root>/networks/input/<network_inference.tfs.file>
 # ============================================================
 
 # ============================================================

@@ -3,9 +3,11 @@
 set -euo pipefail
 
 # ============================================================
-# Orquestador del módulo network_benchmark: corre los pasos 01–09 en
-# orden, con el paralelismo indicado y sin rehacer lo que ya existe
-# (cada script es idempotente). Se puede relanzar tras una interrupción.
+# Orquestador del módulo network_benchmark: corre los pasos 01–09 y 12/12b
+# en orden, con el paralelismo indicado. Los pasos de inferencia (01, 02, 03,
+# 06, 12) saltan lo que ya existe; las evaluaciones (04, 04b, 07, 12b) y el
+# resumen (08, 09) se recalculan siempre (son baratos). Se puede relanzar
+# tras una interrupción.
 # Los pasos 10–11 (apéndice técnico) se corren aparte, porque escriben en
 # una carpeta de manuscrito que no es parte del repo:
 #   Rscript scripts/network_benchmark/10_appendix_statistics.R <appendix_dir>
@@ -72,6 +74,12 @@ step "04 evaluación real"
 echo "$IDS" | awk '{print $1}' | xargs -P "$CORTO_JOBS" -I{} sh -c \
     'Rscript scripts/network_benchmark/04_evaluate_real.R {} > "'"$LOGS"'/04_eval_{}.log" 2>&1 || { echo "ERROR en 04 {}"; exit 255; }'
 Rscript scripts/network_benchmark/04b_cross_cohort_real.R > "$LOGS/04b_cross_cohort.log" 2>&1
+
+step "12 submuestreo de cohortes grandes ($CORTO_JOBS en paralelo)"
+Rscript -e 'source("scripts/network_benchmark/lib_benchmark.R"); ss <- bench_config()$network_benchmark$subsample; for (id in unlist(ss$cohorts)) for (n in unlist(ss$n_grid)) for (r in seq_len(ss$replicates)) cat(id, n, r, "\n")' \
+    | xargs -P "$CORTO_JOBS" -L 1 sh -c \
+    'Rscript scripts/network_benchmark/12_subsample_real.R $0 $1 $2 > "'"$LOGS"'/12_sub_$0_n$1_rep$2.log" 2>&1 || { echo "ERROR en 12 $0 $1 $2"; exit 255; }'
+Rscript scripts/network_benchmark/12b_evaluate_subsample.R > "$LOGS/12b_subsample.log" 2>&1
 
 step "05 datos sintéticos"
 Rscript scripts/network_benchmark/05_simulate_synthetic.R > "$LOGS/05_simulate.log" 2>&1

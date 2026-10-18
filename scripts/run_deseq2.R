@@ -17,9 +17,8 @@ source("scripts/lib_common.R")
 # las figuras de control de calidad sí: aquí se usa vst() en vez de
 # rlog() (ver Sección 5) porque varios analysis_id tienen cientos de
 # muestras, y la propia documentación de DESeq2 recomienda vst() sobre
-# rlog() por velocidad pasadas ~50-100 muestras. Lo demás que sí cambia,
-# para encajar con el resto de
-# este pipeline:
+# rlog() por velocidad pasadas ~50-100 muestras. Lo demás que cambia,
+# para encajar con el resto de este pipeline:
 #
 #   - Cuentas crudas: se leen directamente del SummarizedExperiment ya
 #     descargado (assay "unstranded"), no de un featureCounts.tsv +
@@ -334,12 +333,13 @@ message(volcano_figure_file, " guardado")
 # SECCIÓN 6: Info de sesión
 # ============================================================
 
+# cat(), no message(): sink() solo captura stdout y los títulos irían al log
 sink(session_info_file)
-message("Tabla de condiciones utilizada para el objeto dds de DESeq2")
+cat("Tabla de condiciones utilizada para el objeto dds de DESeq2\n")
 print(col_data)
-message("\nResumen del objeto results de DESeq2")
+cat("\nResumen del objeto results de DESeq2\n")
 summary(res)
-message("\nInformación de la sesión de R")
+cat("\nInformación de la sesión de R\n")
 print(sessionInfo())
 sink()
 

@@ -9,7 +9,7 @@ source("scripts/lib_common.R")
 # CONFIGURACIÓN Y RUTAS
 # ============================================================
 
-config <- yaml::read_yaml("config/config.yaml")
+config <- read_config()  # scripts/lib_common.R; respeta MRA_CONFIG y lee UTF-8
 
 data_root <- config$paths$data_root
 results_dir <- config$paths$results_dir

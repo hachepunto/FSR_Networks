@@ -24,12 +24,10 @@ read_config <- function() {
 }
 
 # Deriva el nombre corto del tumor ("brca") y el código de cáncer
-# ("BRCA") a partir de un project id de GDC ("TCGA-BRCA"). Se usa en
-# download_data.R, classify_subtypes.R, preprocess_expression.R,
-# run_mra.R y audit_tcga_cohorts.R — centralizado aquí para que un cambio en la
-# convención de nombres de proyecto no pueda desincronizarse entre
-# scripts que después necesitan coincidir exactamente (p.ej. al
-# indexar config$subtypes[[cancer]]).
+# ("BRCA") a partir de un project id de GDC ("TCGA-BRCA"). Centralizado
+# aquí para que un cambio en la convención de nombres de proyecto no pueda
+# desincronizarse entre los scripts que después necesitan coincidir
+# exactamente (p.ej. al indexar config$subtypes[[cancer]]).
 tumor_from_project <- function(project) tolower(sub("^TCGA-", "", project))
 cancer_from_project <- function(project) toupper(tumor_from_project(project))
 

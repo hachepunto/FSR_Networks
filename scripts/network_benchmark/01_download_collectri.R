@@ -12,8 +12,14 @@ dirs <- bench_dirs(config)
 
 out_file <- file.path(dirs$reference, "collectri.tsv")
 
+archived <- file.path(dirs$tables, "network_benchmark_collectri_edges.tsv")
 if (file.exists(out_file)) {
   message("CollecTRI ya existe: ", out_file, ". Se omite la descarga.")
+} else if (file.exists(archived)) {
+  # La API sirve la versión vigente; para reproducir la corrida publicada se
+  # reutiliza la copia archivada en results/final/tables.
+  file.copy(archived, out_file); file.copy(sub("_edges", "_provenance", archived), file.path(dirs$reference, "collectri_provenance.tsv"))
+  message("CollecTRI copiado del archivo versionado: ", archived)
 } else {
   download.file(config$network_benchmark$collectri_url, out_file, mode = "wb", quiet = TRUE)
   ct <- read.delim(out_file)

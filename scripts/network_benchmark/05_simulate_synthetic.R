@@ -19,6 +19,10 @@
 #     son los reguladores maestros verdaderos.
 #   - Firma: estadístico de Wald de DESeq2, tumor vs reference (igual que
 #     run_deseq2.R). Matriz de red: log2(CPM + 1) del grupo tumor.
+#   - La semilla depende de (n, réplica) y NO del régimen: weak y strong con
+#     el mismo (n, réplica) comparten red verdadera, latentes, MRs y draws de
+#     ruido (solo cambia la escala). Diseño pareado a propósito; las réplicas
+#     entre regímenes no son independientes.
 #
 # Uso: Rscript scripts/network_benchmark/05_simulate_synthetic.R [regime n rep]
 #   sin argumentos genera todos (regímenes x n_network x réplicas).

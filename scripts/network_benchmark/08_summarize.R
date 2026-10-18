@@ -9,11 +9,14 @@
 #   tables/network_benchmark_runtime.tsv
 #   tables/network_benchmark_synthetic_edges.tsv
 #   tables/network_benchmark_synthetic_master_regulators.tsv
+#   tables/network_benchmark_real_cross_cohort{,_decomposition}.tsv
+#   tables/network_benchmark_real_subsample{,_summary}.tsv
+#   tables/network_benchmark_synthetic_{average_precision,nonmonotonic,truth_regulon_nonmonotone}.tsv
 #   tables/network_benchmark_key_numbers.tsv   (cada cifra citada en el texto)
-#   tables/network_benchmark_collectri_edges.tsv (copia archivada de la referencia usada)
+#   tables/network_benchmark_collectri_{edges,provenance}.tsv (copia archivada de la referencia usada)
 #   tables/network_benchmark_real_cross_cohort.tsv
 #   tables/network_benchmark_synthetic_nonmonotonic.tsv
-#   figures/network_benchmark_fig{1..6}_*.pdf
+#   figures/network_benchmark_fig{1..7}_*.pdf
 #
 # Aborta si faltan evaluaciones (reales o sintéticas): el resumen debe ser
 # sobre el conjunto completo, no sobre lo que haya alcanzado a correr.
@@ -73,14 +76,14 @@ stopifnot("Falta cross_cohort.rds (04b_cross_cohort_real.R)" = file.exists(cross
 cross <- readRDS(cross_file)
 
 if (length(ev)) {
-  structure <- do.call(rbind, lapply(ev, function(x) cbind(x$structure, n = x$n, network_method = x$network_method)))
+  regulon_structure_tbl <- do.call(rbind, lapply(ev, function(x) cbind(x$structure, n = x$n, network_method = x$network_method)))
   concordance <- do.call(rbind, lapply(ev, function(x) cbind(x$concordance, n = x$n)))
   nonmono <- do.call(rbind, lapply(ev, function(x) x$nonmonotonic))
-  write_tsv(structure, "real_structure"); write_tsv(concordance, "real_concordance")
+  write_tsv(regulon_structure_tbl, "real_structure"); write_tsv(concordance, "real_concordance")
   if (!is.null(nonmono)) write_tsv(nonmono, "real_nonmonotonic")
 
   # ── Figura 1: estructura (current vs A) ──
-  s1 <- structure[structure$regulon %in% c("current", A), ]
+  s1 <- regulon_structure_tbl[regulon_structure_tbl$regulon %in% c("current", A), ]
   s1$regulon <- factor(regulon_labels[s1$regulon], levels = regulon_labels[c("current", A)])
   f1a <- ggplot(s1, aes(n, regulators_ge_min, colour = regulon)) + geom_point() + scale_x_log10() +
     labs(x = "Tumour samples (n, log scale)", y = paste0("Regulators with >= ", nb$narnea$min_targets, " targets"), colour = NULL)
@@ -88,7 +91,7 @@ if (length(ev)) {
     labs(x = "Tumour samples (n, log scale)", y = "Median targets per regulator (log scale)", colour = NULL)
   f1c <- ggplot(s1, aes(n, frac_negative, colour = regulon)) + geom_point() + scale_x_log10() +
     labs(x = "Tumour samples (n, log scale)", y = "Fraction of negative-mode edges", colour = NULL)
-  s1c <- structure[structure$regulon %in% c("current", A, "aracne3_full", C, B), ]
+  s1c <- regulon_structure_tbl[regulon_structure_tbl$regulon %in% c("current", A, "aracne3_full", C, B), ]
   s1c$regulon <- factor(regulon_labels[s1c$regulon], levels = regulon_labels[c("current", A, "aracne3_full", C, B)])
   f1d <- ggplot(s1c, aes(regulon, collectri_enrichment)) + geom_boxplot(outlier.shape = NA) +
     geom_jitter(width = 0.15, size = 0.8, alpha = 0.6) + geom_hline(yintercept = 1, linetype = 2) +
@@ -96,12 +99,13 @@ if (length(ev)) {
   save_fig((f1a | f1b) / (f1c | f1d) + plot_layout(guides = "collect") + plot_annotation(tag_levels = "A"),
            "fig1_regulon_structure", 10, 8)
 
-  cur <- structure[structure$regulon == "current", ]; a_s <- structure[structure$regulon == A, ]
-  small <- cur$n < 95
+  cur <- regulon_structure_tbl[regulon_structure_tbl$regulon == "current", ]; a_s <- regulon_structure_tbl[regulon_structure_tbl$regulon == A, ]
+  min_n_prev <- nb$previous_rule$aracne3_min_n
+  small <- cur$n < min_n_prev
   thr <- do.call(rbind, lapply(ev, function(x) data.frame(n = x$n, r = x$corto_params$current$r_threshold)))
   add_key("real_n_analysis", nrow(cur), "real analysis_ids evaluated")
-  add_key("current_small_n_median_regulators_ge_min", median(cur$regulators_ge_min[small]), "current corto, n<95: median regulators with >= min targets")
-  add_key("A_small_n_median_regulators_ge_min", median(a_s$regulators_ge_min[a_s$n < 95]), "scheme A, n<95: median regulators with >= min targets")
+  add_key("current_small_n_median_regulators_ge_min", median(cur$regulators_ge_min[small]), "current corto, n<previous threshold: median regulators with >= min targets")
+  add_key("A_small_n_median_regulators_ge_min", median(a_s$regulators_ge_min[a_s$n < 95]), "scheme A, n<previous threshold: median regulators with >= min targets")
   add_key("current_median_targets_range_low", min(cur$median_targets), "current corto: min over analysis_ids of median targets per regulator")
   add_key("current_median_targets_range_high", max(cur$median_targets), "current corto: max over analysis_ids of median targets per regulator")
   add_key("A_median_targets_range_low", min(a_s$median_targets), "scheme A: min over analysis_ids of median targets per regulator")
@@ -112,42 +116,42 @@ if (length(ev)) {
   add_key("n_max", max(thr$n), "largest cohort size")
   add_key("current_r_threshold_at_n_min", thr$r[which.min(thr$n)], "current corto: effective |r| threshold at the smallest n")
   add_key("current_r_threshold_at_n_max", thr$r[which.max(thr$n)], "current corto: effective |r| threshold at the largest n")
-  add_key("current_small_n_median_frac_negative", median(cur$frac_negative[small]), "current corto, n<95: median fraction of negative-mode edges")
-  add_key("current_small_n_count_frac_negative_lt_0.01", sum(cur$frac_negative[small] < 0.01), "current corto, n<95: cohorts with < 1% negative-mode edges")
-  add_key("n_small_cohorts", sum(small), "cohorts with n < 95")
+  add_key("current_small_n_median_frac_negative", median(cur$frac_negative[small]), "current corto, n<previous threshold: median fraction of negative-mode edges")
+  add_key("current_small_n_count_frac_negative_lt_0.01", sum(cur$frac_negative[small] < 0.01), "current corto, n<previous threshold: cohorts with < 1% negative-mode edges")
+  add_key("n_small_cohorts", sum(small), "cohorts below the previous ARACNe3 threshold")
   add_key("A_n_cohorts_lt30", sum(a_s$n < 30), "cohorts with n < 30")
   for (r in c("current", A, "aracne3_full", C, B)) {
-    v <- structure$collectri_enrichment[structure$regulon == r]
+    v <- regulon_structure_tbl$collectri_enrichment[regulon_structure_tbl$regulon == r]
     if (length(v)) add_key(paste0("collectri_enrichment_median_", r), median(v), paste("median CollecTRI enrichment, all cohorts where defined:", r))
   }
   # Sobre las MISMAS cohortes (las de ARACNe3) y al mismo k, que es lo comparable:
-  big <- unique(structure$analysis_id[structure$regulon == B])
+  big <- unique(regulon_structure_tbl$analysis_id[regulon_structure_tbl$regulon == B])
   for (r in c("current", A, "aracne3_full", C, B)) {
-    v <- structure$collectri_enrichment[structure$regulon == r & structure$analysis_id %in% big]
+    v <- regulon_structure_tbl$collectri_enrichment[regulon_structure_tbl$regulon == r & regulon_structure_tbl$analysis_id %in% big]
     add_key(paste0("collectri_enrichment_median_big_", r), median(v), paste("median CollecTRI enrichment over the ARACNe3 cohorts:", r))
   }
-  af <- structure[structure$regulon == "aracne3_full" & structure$n <= 130, ]
+  af <- regulon_structure_tbl[regulon_structure_tbl$regulon == "aracne3_full" & regulon_structure_tbl$n <= 130, ]
   add_key("aracne3_full_n_le130_edges_min", min(af$n_edges), "full ARACNe3 network, cohorts with 95 <= n <= 130: min edges")
   add_key("aracne3_full_n_le130_edges_max", max(af$n_edges), "full ARACNe3 network, cohorts with 95 <= n <= 130: max edges")
-  bf <- structure[structure$regulon == B & structure$n <= 130, ]
+  bf <- regulon_structure_tbl[regulon_structure_tbl$regulon == B & regulon_structure_tbl$n <= 130, ]
   add_key("B_n_le130_regulators_ge_min_min", min(bf$regulators_ge_min), "scheme B, cohorts with 95 <= n <= 130: min evaluable regulators")
   add_key("B_n_le130_regulators_ge_min_max", max(bf$regulators_ge_min), "scheme B, cohorts with 95 <= n <= 130: max evaluable regulators")
-  smallc <- unique(structure$analysis_id[!structure$analysis_id %in% big])
+  smallc <- unique(regulon_structure_tbl$analysis_id[!regulon_structure_tbl$analysis_id %in% big])
   for (r in c("current", A)) {
-    v <- structure$collectri_enrichment[structure$regulon == r & structure$analysis_id %in% smallc]
-    add_key(paste0("collectri_enrichment_median_small_", r), median(v), paste("median CollecTRI enrichment over the n<95 cohorts:", r))
+    v <- regulon_structure_tbl$collectri_enrichment[regulon_structure_tbl$regulon == r & regulon_structure_tbl$analysis_id %in% smallc]
+    add_key(paste0("collectri_enrichment_median_small_", r), median(v), paste("median CollecTRI enrichment over the cohorts below the previous threshold:", r))
   }
   add_key("A_collectri_enrichment_cor_n", cor(a_s$n, a_s$collectri_enrichment, method = "spearman"), "scheme A: Spearman(n, CollecTRI enrichment)")
   add_key("A_collectri_enrichment_min_n_lt30", min(a_s$collectri_enrichment[a_s$n < 30]), "scheme A, n<30: min CollecTRI enrichment")
   add_key("A_collectri_enrichment_max_n_lt30", max(a_s$collectri_enrichment[a_s$n < 30]), "scheme A, n<30: max CollecTRI enrichment")
-  for (k in setdiff(unlist(nb$top_k), k_main)) add_key(paste0("collectri_enrichment_median_A_k", k), median(structure$collectri_enrichment[structure$regulon == paste0("A_k", k)]), paste0("median CollecTRI enrichment, scheme A with k = ", k))
+  for (k in setdiff(unlist(nb$top_k), k_main)) add_key(paste0("collectri_enrichment_median_A_k", k), median(regulon_structure_tbl$collectri_enrichment[regulon_structure_tbl$regulon == paste0("A_k", k)]), paste0("median CollecTRI enrichment, scheme A with k = ", k))
   # "current rule" en su dominio real (n < 95)
-  add_key("current_small_n_median_targets_low", min(cur$median_targets[small]), "corto fixed p, n<95: min median targets")
-  add_key("current_small_n_median_targets_high", max(cur$median_targets[small]), "corto fixed p, n<95: max median targets")
-  add_key("current_small_n_cor_n_vs_median_targets", cor(cur$n[small], cur$median_targets[small], method = "spearman"), "corto fixed p, n<95: Spearman(n, median targets)")
-  thr_small <- thr[thr$n < 95, ]
+  add_key("current_small_n_median_targets_low", min(cur$median_targets[small]), "corto fixed p, n<previous threshold: min median targets")
+  add_key("current_small_n_median_targets_high", max(cur$median_targets[small]), "corto fixed p, n<previous threshold: max median targets")
+  add_key("current_small_n_cor_n_vs_median_targets", cor(cur$n[small], cur$median_targets[small], method = "spearman"), "corto fixed p, n<previous threshold: Spearman(n, median targets)")
+  thr_small <- thr[thr$n < min_n_prev, ]
   add_key("current_r_threshold_at_n95", max(thr_small$r[thr_small$n == max(thr_small$n)]), "corto fixed p: effective |r| threshold at the largest n < 95")
-  add_key("n_max_small", max(thr_small$n), "largest cohort size below 95")
+  add_key("n_max_small", max(thr_small$n), "largest cohort size below the previous ARACNe3 threshold")
 
   # ── Figura 2: A vs B frente a la variabilidad interna de ARACNe3 ──
   c2 <- concordance[(concordance$x == A & concordance$y == B) | (concordance$x == B & concordance$y == C), ]
@@ -241,7 +245,7 @@ if (length(ev)) {
   }
 
   # ── Figura 6A-B: sensibilidad al umbral |r| en datos reales ──
-  s6 <- structure[structure$regulon %in% Ar, ]
+  s6 <- regulon_structure_tbl[regulon_structure_tbl$regulon %in% Ar, ]
   s6$threshold <- factor(sub("A_r", "|r| >= ", s6$regulon), levels = sub("A_r", "|r| >= ", Ar))
   f6a <- ggplot(s6, aes(n, median_targets, colour = threshold)) + geom_point() + scale_x_log10() +
     labs(x = "Tumour samples (n, log scale)", y = "Median targets per regulator", colour = NULL)
@@ -257,7 +261,7 @@ if (length(ev)) {
     ca <- concordance[concordance$x == a & concordance$y == B, ]
     if (nrow(ca)) for (m in c("rho", "top20", "top50"))
       add_key(paste0(a, "_vsB_median_", m), median(ca[[m]], na.rm = TRUE), paste(a, "vs scheme B, median:", m))
-    add_key(paste0(a, "_collectri_enrichment_median"), median(structure$collectri_enrichment[structure$regulon == a]),
+    add_key(paste0(a, "_collectri_enrichment_median"), median(regulon_structure_tbl$collectri_enrichment[regulon_structure_tbl$regulon == a]),
             paste(a, ": median CollecTRI enrichment"))
   }
   fig6_real <- list(f6a, f6b)
@@ -291,6 +295,44 @@ if (length(ev)) {
     add_key("runtime_aracne3_threads", unique(rt$aracne3_threads)[1], "ARACNe3 threads per run")
     add_key("runtime_corto_threads", nb$threads, "corto threads per run")
   }
+}
+
+# ============================================================
+# SUBMUESTREO DE COHORTES REALES (12, 12b)
+# ============================================================
+sub_file <- file.path(dirs$real_eval, "subsample.rds")
+stopifnot("Falta subsample.rds (12_subsample_real.R + 12b_evaluate_subsample.R)" = file.exists(sub_file))
+{
+  sub <- readRDS(sub_file)
+  write_tsv(sub, "real_subsample")
+  sub_sum <- do.call(rbind, lapply(split(sub, sub$n), function(d) data.frame(
+    n = d$n[1], n_runs = nrow(d),
+    top20_median = median(d$top20, na.rm = TRUE), top20_q25 = quantile(d$top20, 0.25, na.rm = TRUE), top20_q75 = quantile(d$top20, 0.75, na.rm = TRUE),
+    top50_median = median(d$top50, na.rm = TRUE), rho_median = median(d$rho, na.rm = TRUE),
+    edge_jaccard_per_tf_median = median(d$edge_jaccard_per_tf_median), n_evaluable_median = median(d$n_evaluable))))
+  write_tsv(sub_sum, "real_subsample_summary")
+  for (i in seq_len(nrow(sub_sum))) for (v in c("top20_median", "top50_median", "rho_median", "edge_jaccard_per_tf_median", "n_evaluable_median"))
+    add_key(sprintf("subsample_n%d_%s", sub_sum$n[i], v), sub_sum[[v]][i], sprintf("subsampled real cohorts, n = %d: %s over cohorts x replicates", sub_sum$n[i], v))
+  add_key("subsample_n_cohorts", length(unique(sub$analysis_id)), "cohorts subsampled")
+  add_key("subsample_replicates", max(sub$replicate), "replicates per n")
+  add_key("subsample_n_full_min", min(sub$n_full), "smallest full cohort subsampled")
+  add_key("subsample_n_full_max", max(sub$n_full), "largest full cohort subsampled")
+  # n mínimo cuyo top-20 mediano alcanza el yardstick A vs B
+  ab_med <- median(concordance$top20[concordance$x == A & concordance$y == B], na.rm = TRUE)
+  reach <- sub_sum$n[sub_sum$top20_median >= ab_med]
+  add_key("subsample_min_n_reaching_AvsB_top20", if (length(reach)) min(reach) else NA, "smallest n whose median top-20 overlap with the full cohort reaches the A-vs-B median")
+  sub$cohort_lab <- paste0(sub$analysis_id, " (n = ", sub$n_full, ")")
+  yard <- data.frame(y = c(ab_med, median(cross$within$top20, na.rm = TRUE), median(cross$null$top20, na.rm = TRUE)),
+                     lab = c("Scheme A vs B (same cohort)", "Subtypes of the same cancer", "Null (network from another cancer)"))
+  f7a <- ggplot(sub, aes(n, top20, colour = cohort_lab)) + stat_summary(fun = median, geom = "line") + geom_point(size = 0.8, alpha = 0.6, position = position_jitter(width = 0.02, height = 0)) +
+    geom_hline(data = yard, aes(yintercept = y, linetype = lab), colour = "grey40") + scale_x_log10(breaks = unlist(nb$subsample$n_grid)) +
+    labs(x = "Subsampled tumours (n, log scale)", y = "Top-20 MR overlap with the full cohort", colour = NULL, linetype = NULL)
+  f7b <- ggplot(sub, aes(n, edge_jaccard_per_tf_median, colour = cohort_lab)) + stat_summary(fun = median, geom = "line") + geom_point(size = 0.8, alpha = 0.6) +
+    scale_x_log10(breaks = unlist(nb$subsample$n_grid)) + labs(x = "Subsampled tumours (n, log scale)", y = "Median per-regulator edge Jaccard vs full cohort", colour = NULL)
+  f7c <- ggplot(sub, aes(n, n_evaluable, colour = cohort_lab)) + stat_summary(fun = median, geom = "line") + geom_point(size = 0.8, alpha = 0.6) +
+    scale_x_log10(breaks = unlist(nb$subsample$n_grid)) + labs(x = "Subsampled tumours (n, log scale)", y = paste0("Regulators with >= ", nb$narnea$min_targets, " targets"), colour = NULL)
+  f7a <- f7a + guides(colour = guide_legend(nrow = 2), linetype = guide_legend(nrow = 3))
+  save_fig((f7a / (f7b | f7c)) + plot_layout(guides = "collect") + plot_annotation(tag_levels = "A"), "fig7_subsampling_real", 11, 10)
 }
 
 # ============================================================

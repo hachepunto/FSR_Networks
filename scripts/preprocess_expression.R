@@ -8,7 +8,7 @@ source("scripts/lib_common.R")
 # CONFIGURACIÓN Y RUTAS
 # ============================================================
 
-config <- yaml::read_yaml("config/config.yaml")
+config <- read_config()  # scripts/lib_common.R; respeta MRA_CONFIG y lee UTF-8
 
 data_root <- config$paths$data_root
 work_root <- config$paths$work_root
@@ -32,7 +32,7 @@ manifest_file <- file.path(results_dir, "preprocess_manifest.tsv")
 #     todos los subtipos de ese proyecto.
 #
 # Para cada analysis_id = <CANCER>_<standardized_label> (uno por
-# subtipo con included=TRUE en config$subtypes):
+# subtipo de config$subtypes.<CANCER>.labels):
 #   - se seleccionan las muestras tumorales de ese subtipo (según
 #     results/subtype_assignments_by_sample.tsv, ya congelado por
 #     classify_subtypes.R — este script NO vuelve a clasificar nada);

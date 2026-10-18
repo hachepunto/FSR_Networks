@@ -55,11 +55,14 @@ within <- do.call(rbind, lapply(split(at$analysis_id, at$cancer), function(ids) 
 # ── null: firma propia, red A de una cohorte de otro cáncer ──
 # Para cada cohorte se eligen n_null cohortes de otros cánceres con
 # semilla fija; la comparación es contra el resultado propio (firma + red propias).
+# Las cohortes nulas se eligen todas ANTES de llamar a NaRnEA, que fija su
+# propia semilla internamente y alteraría el estado del RNG entre cohortes.
 set.seed(nb$narnea$seed)
 n_null <- nb$null_networks_per_cohort
+null_choice <- lapply(setNames(at$analysis_id, at$analysis_id), function(id)
+  sample(at$analysis_id[at$cancer != at$cancer[at$analysis_id == id]], n_null))
 null <- do.call(rbind, lapply(at$analysis_id, function(id) {
-  cancer <- at$cancer[at$analysis_id == id]
-  others <- sample(at$analysis_id[at$cancer != cancer], n_null)
+  others <- null_choice[[id]]
   do.call(rbind, lapply(others, function(o) {
     res <- run_narnea(regA[[o]], ges[[id]], nb$narnea$min_targets, nb$narnea$seed)
     cc <- mr_concordance(own[[id]], res)

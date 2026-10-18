@@ -5,7 +5,7 @@
 
 source("scripts/lib_common.R")
 
-bench_config <- read_config
+bench_config <- function() read_config()   # alias: el módulo lee el mismo config que el pipeline
 
 # create = FALSE solo resuelve rutas (para leer sin efectos colaterales).
 bench_dirs <- function(config, create = TRUE) {
@@ -79,6 +79,7 @@ run_corto_or_empty <- function(mat, tfs, nbootstraps, p, nthreads) {
 }
 
 # Nombre de la red laxa de corto para un umbral |r| dado (p.ej. "lenient_r0.4").
+# Formatea a un decimal: r_min_grid debe usar valores con un decimal.
 lenient_name <- function(r) sprintf("lenient_r%.1f", r)
 
 # ── Regulones ──────────────────────────────────────────────

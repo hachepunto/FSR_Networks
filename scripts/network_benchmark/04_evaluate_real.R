@@ -62,7 +62,7 @@ if (has_aracne3) {
 }
 
 # ── Estructura ──
-structure <- do.call(rbind, lapply(names(regs), function(nm) {
+regulon_structure_tbl <- do.call(rbind, lapply(names(regs), function(nm) {
   s <- regulon_structure(regs[[nm]], universe, ct, nb$narnea$min_targets, names(ges))
   if (is.null(s)) return(NULL)
   cbind(analysis_id = analysis_id, regulon = nm, s)
@@ -77,10 +77,8 @@ narnea$CollecTRI <- run_narnea(collectri_regulon(ct), ges, nb$narnea$min_targets
 
 # ── Concordancia entre esquemas ──
 A <- paste0("A_k", k_main); B <- paste0("B_k", k_main); C <- paste0("aracne3_c", min_count)
-pairs <- list(
-  c(A, "current"), c(A, awlik), c(A, "CollecTRI"), c("current", "CollecTRI"),
-  c(A, paste0("A_k", setdiff(unlist(nb$top_k), k_main)[1])),
-  c(A, paste0("A_k", setdiff(unlist(nb$top_k), k_main)[2])))
+pairs <- c(list(c(A, "current"), c(A, awlik), c(A, "CollecTRI"), c("current", "CollecTRI")),
+           lapply(setdiff(unlist(nb$top_k), k_main), function(k) c(A, paste0("A_k", k))))
 Ar <- sprintf("A_r%.1f", unlist(nb$corto$r_min_grid))
 pairs <- c(pairs, lapply(Ar, function(a) c(a, "CollecTRI")), lapply(Ar, function(a) c(a, "current")))
 if (has_aracne3) pairs <- c(pairs, list(c(A, B), c(B, C), c(B, "aracne3_full"), c(A, C),
@@ -113,7 +111,7 @@ if (has_aracne3) {
 }
 
 saveRDS(list(analysis_id = analysis_id, n = row$n_red, network_method = row$network_method,
-             structure = structure, narnea = narnea, concordance = concordance, nonmonotonic = nonmono,
+             structure = regulon_structure_tbl, narnea = narnea, concordance = concordance, nonmonotonic = nonmono,
              corto_params = c(list(current = attr(current, "params")), lapply(lenients, attr, "params"))),
         file.path(dirs$real_eval, paste0(analysis_id, ".rds")))
 

@@ -1,7 +1,7 @@
 # Dos referencias para interpretar la concordancia A vs B (04_evaluate_real.R):
 #
 #   null   — línea base nula: NaRnEA con la firma de una cohorte y el regulón
-#            del esquema A de una cohorte de OTRO cáncer. Mide cuánta
+#            de FSR de una cohorte de OTRO cáncer. Mide cuánta
 #            concordancia se obtiene con una red que no corresponde a la
 #            cohorte (la firma domina parte del NES).
 #   within — efecto biológico: NaRnEA con el regulón A de cada cohorte,

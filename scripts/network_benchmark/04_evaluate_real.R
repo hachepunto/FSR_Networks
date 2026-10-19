@@ -4,13 +4,13 @@
 #
 # Regulones evaluados:
 #   current      corto como está hoy en el pipeline (p fijo sobre log2TPM)
-#   A_k<k>       esquema A: corto laxo sobre rangos (|r| >= r_min), top-k
-#   A_r<r>       esquema A con cada umbral de r_min_grid, top-k_main
+#   A_k<k>       FSR: corto laxo sobre rangos (|r| >= r_min), top-k
+#   A_r<r>       FSR con cada umbral de r_min_grid, top-k_main
 #   A_k<main>_awlik  igual que A_k<main> pero aw = likelihood cruda
 #   ARACNe3 (solo si network_method == ARACNe3):
 #     aracne3_full   red consolidada completa
 #     aracne3_c<m>   aristas con soporte >= m subredes
-#     B_k<main>      esquema B: ARACNe3 recortado a top-k (soporte, luego MI)
+#     B_k<main>      ARACNe3-top100: ARACNe3 recortado a top-k (soporte, luego MI)
 #   CollecTRI      regulón de referencia (curado)
 #
 # La comparación central es A_k<main> vs B_k<main>, contrastada con la

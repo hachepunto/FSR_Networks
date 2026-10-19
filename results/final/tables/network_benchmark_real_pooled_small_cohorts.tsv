@@ -1,0 +1,6 @@
+analysis_id	cancer	n_red	n_pooled	n_evaluable_own	n_evaluable_pooled	rho_own_vs_pooled	top20_own_vs_pooled
+LUSC_basal	LUSC	43	178	1299	1196	0.721513845241351	0.65
+LUSC_primitive	LUSC	27	178	1381	1196	0.653057695765548	0.45
+LUSC_secretory	LUSC	43	178	1317	1196	0.724673490839665	0.75
+STAD_ebv	STAD	27	379	1228	980	0.711540523378394	0.5
+LIHC_s1	LIHC	28	193	1037	1042	0.81165919993012	0.4

@@ -86,9 +86,9 @@ within_cancer_n_pairs	43	pairs of subtypes of the same cancer
 null_n_pairs	102	null pairs
 method_effect_top20_turnover	0.3	top-20 turnover when changing method (1 - median overlap A vs B)
 subtype_effect_top20_turnover	0.55	top-20 turnover between subtypes of the same cancer (1 - median overlap)
-within_net_median_rho	0.707	own signature, scheme-A network of another subtype of the same cancer , median: rho
-within_net_median_top20	0.55	own signature, scheme-A network of another subtype of the same cancer , median: top20
-within_net_median_top50	0.52	own signature, scheme-A network of another subtype of the same cancer , median: top50
+within_net_median_rho	0.707	own signature, FSR network of another subtype of the same cancer , median: rho
+within_net_median_top20	0.55	own signature, FSR network of another subtype of the same cancer , median: top20
+within_net_median_top50	0.52	own signature, FSR network of another subtype of the same cancer , median: top50
 within_net_n_pairs	86	within_net directed pairs
 within_sig_median_rho	0.822	own network, signature of another subtype of the same cancer , median: rho
 within_sig_median_top20	0.6	own network, signature of another subtype of the same cancer , median: top20
@@ -274,6 +274,24 @@ subsample_replicates	5	replicates per n
 subsample_n_full_min	190	smallest full cohort subsampled
 subsample_n_full_max	562	largest full cohort subsampled
 subsample_min_n_reaching_AvsB_top20	80	smallest n whose median top-20 overlap with the full cohort reaches the A-vs-B median
+pooled_n_cohorts	11	pooled test: cohorts
+pooled_replicates	3	pooled test: replicates per cohort
+pooled_small_n	30	pooled test: tumours kept from the cohort
+pooled_top20_median_pooled	0.6	pooled test: median top-20 overlap with truth, cancer-wide network
+pooled_top20_median_own	0.55	pooled test: median top-20 overlap with truth, own small network
+pooled_top20_median_swap	0.433	pooled test: median top-20 overlap with truth, network of another subtype
+pooled_n_better_than_own	7	pooled test: cohorts where cancer-wide beats own small network
+pooled_median_diff_vs_own	0.0833	pooled test: median per-cohort difference, cancer-wide minus own
+pooled_wilcoxon_p_vs_own	0.0828	pooled test: paired Wilcoxon p, cancer-wide vs own
+pooled_n_better_than_swap	10	pooled test: cohorts where cancer-wide beats another subtype's network
+pooled_wilcoxon_p_vs_swap	0.00506	pooled test: paired Wilcoxon p, cancer-wide vs another subtype
+pooled_wilcoxon_p_own_vs_swap	0.0828	pooled test: paired Wilcoxon p, own small vs another subtype
+pooled_real_small_top20_min	0.4	real cohorts n < min_n: top-20 overlap own vs cancer-wide network, min
+pooled_real_small_top20_max	0.75	real cohorts n < min_n: top-20 overlap own vs cancer-wide network, max
+pooled_LUSC_between_own_min	0.25	LUSC subtype pairs: top-20 overlap with own networks, min
+pooled_LUSC_between_own_max	0.6	LUSC subtype pairs: top-20 overlap with own networks, max
+pooled_LUSC_between_pooled_min	0.7	LUSC subtype pairs: top-20 overlap with cancer-wide network, min
+pooled_LUSC_between_pooled_max	0.85	LUSC subtype pairs: top-20 overlap with cancer-wide network, max
 syn_nonmono_strong_n100_c10_frac_low_scc	0.000366	synthetic strong, n=100, support >= 10: mean fraction of edges with |Spearman| < 0.2
 syn_nonmono_strong_n200_c10_frac_low_scc	0.028	synthetic strong, n=200, support >= 10: mean fraction of edges with |Spearman| < 0.2
 syn_nonmono_weak_n200_c10_frac_low_scc	0	synthetic weak, n=200, support >= 10: mean fraction of edges with |Spearman| < 0.2

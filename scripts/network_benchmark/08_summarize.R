@@ -11,12 +11,13 @@
 #   tables/network_benchmark_synthetic_master_regulators.tsv
 #   tables/network_benchmark_real_cross_cohort{,_decomposition}.tsv
 #   tables/network_benchmark_real_subsample{,_summary}.tsv
+#   tables/network_benchmark_real_pooled_{surrogate,small_cohorts,specificity}.tsv
 #   tables/network_benchmark_synthetic_{average_precision,nonmonotonic,truth_regulon_nonmonotone}.tsv
 #   tables/network_benchmark_key_numbers.tsv   (cada cifra citada en el texto)
 #   tables/network_benchmark_collectri_{edges,provenance}.tsv (copia archivada de la referencia usada)
 #   tables/network_benchmark_real_cross_cohort.tsv
 #   tables/network_benchmark_synthetic_nonmonotonic.tsv
-#   figures/network_benchmark_fig{1..7}_*.pdf
+#   figures/network_benchmark_fig{1..8}_*.pdf
 #
 # Aborta si faltan evaluaciones (reales o sintéticas): el resumen debe ser
 # sobre el conjunto completo, no sobre lo que haya alcanzado a correr.
@@ -56,11 +57,11 @@ r_grid <- unlist(nb$corto$r_min_grid)
 Ar <- sprintf("A_r%.1f", r_grid)
 regulon_labels <- c(current = "corto, fixed p = 1e-8 (log2TPM)",
                     setNames(sprintf("corto, ranks, |r| >= %.1f, top-%d", r_grid, k_main), Ar),
-                    setNames(sprintf("Scheme A: corto, ranks, |r| >= %.1f, top-%d", nb$corto$r_min, unlist(nb$top_k)), paste0("A_k", unlist(nb$top_k))),
+                    setNames(sprintf("FSR: corto, ranks, |r| >= %.1f, top-%d", nb$corto$r_min, unlist(nb$top_k)), paste0("A_k", unlist(nb$top_k))),
                     aracne3_full = "ARACNe3, full consolidated",
                     setNames(paste0("ARACNe3, support >= ", nb$aracne3_count_filter), C),
-                    setNames(paste0("Scheme B: ARACNe3, top-", k_main), B),
-                    B_matched = "ARACNe3 by support, same edge count as scheme A",
+                    setNames(paste0("ARACNe3-top", k_main), B),
+                    B_matched = "ARACNe3 by support, same edge count as FSR",
                     truth = "True network (upper bound)")
 
 # ============================================================
@@ -156,8 +157,8 @@ if (length(ev)) {
   # ── Figura 2: A vs B frente a la variabilidad interna de ARACNe3 ──
   c2 <- concordance[(concordance$x == A & concordance$y == B) | (concordance$x == B & concordance$y == C), ]
   if (nrow(c2)) {
-    c2$comparison <- ifelse(c2$x == A, "Scheme A vs scheme B (between methods)",
-                            paste0("Scheme B vs ARACNe3 support >= ", nb$aracne3_count_filter, " (within ARACNe3)"))
+    c2$comparison <- ifelse(c2$x == A, "FSR vs ARACNe3-top100 (between methods)",
+                            paste0("ARACNe3-top100 vs ARACNe3 support >= ", nb$aracne3_count_filter, " (within ARACNe3)"))
     long <- do.call(rbind, lapply(c("rho", "top20", "top50"), function(m)
       data.frame(analysis_id = c2$analysis_id, n = c2$n, comparison = c2$comparison, metric = m, value = c2[[m]])))
     long$metric <- factor(long$metric, c("rho", "top20", "top50"),
@@ -208,7 +209,7 @@ if (length(ev)) {
     for (cmp in c("within_net", "within_sig")) {
       d <- cross$decomp[cross$decomp$comparison == cmp, ]
       for (m in c("rho", "top20", "top50")) add_key(paste0(cmp, "_median_", m), median(d[[m]], na.rm = TRUE),
-        paste(if (cmp == "within_net") "own signature, scheme-A network of another subtype of the same cancer" else "own network, signature of another subtype of the same cancer", ", median:", m))
+        paste(if (cmp == "within_net") "own signature, FSR network of another subtype of the same cancer" else "own network, signature of another subtype of the same cancer", ", median:", m))
       add_key(paste0(cmp, "_n_pairs"), nrow(d), paste(cmp, "directed pairs"))
     }
     add_key("network_effect_between_subtypes_top20_turnover", 1 - median(cross$decomp$top20[cross$decomp$comparison == "within_net"], na.rm = TRUE), "top-20 turnover when swapping only the network between subtypes of the same cancer")
@@ -252,7 +253,7 @@ if (length(ev)) {
   c6 <- concordance[concordance$x %in% Ar & concordance$y == B, ]
   c6$threshold <- factor(sub("A_r", "|r| >= ", c6$x), levels = sub("A_r", "|r| >= ", Ar))
   f6b <- ggplot(c6, aes(n, top20, colour = threshold)) + geom_point(position = position_dodge(width = 0.03)) + scale_x_log10() +
-    labs(x = "Tumour samples (n, log scale)", y = "Top-20 overlap with scheme B", colour = NULL)
+    labs(x = "Tumour samples (n, log scale)", y = "Top-20 overlap with ARACNe3-top100", colour = NULL)
   for (a in Ar) {
     sa <- s6[s6$regulon == a, ]
     add_key(paste0(a, "_median_targets_min"), min(sa$median_targets), paste(a, ": min over analysis_ids of median targets per regulator"))
@@ -336,7 +337,7 @@ stopifnot("Falta subsample.rds (12_subsample_real.R + 12b_evaluate_subsample.R)"
   add_key("subsample_min_n_reaching_AvsB_top20", if (length(reach)) min(reach) else NA, "smallest n whose median top-20 overlap with the full cohort reaches the A-vs-B median")
   sub$cohort_lab <- paste0(sub$analysis_id, " (n = ", sub$n_full, ")")
   yard <- data.frame(y = c(ab_med, median(cross$within$top20, na.rm = TRUE), median(cross$null$top20, na.rm = TRUE)),
-                     lab = c("Scheme A vs B (same cohort)", "Subtypes of the same cancer", "Null (network from another cancer)"))
+                     lab = c("FSR vs ARACNe3-top100 (same cohort)", "Subtypes of the same cancer", "Null (network from another cancer)"))
   f7a <- ggplot(sub, aes(n, top20, colour = cohort_lab)) + stat_summary(fun = median, geom = "line") + geom_point(size = 0.8, alpha = 0.6, position = position_jitter(width = 0.02, height = 0)) +
     geom_hline(data = yard, aes(yintercept = y, linetype = lab), colour = "grey40") + scale_x_log10(breaks = unlist(nb$subsample$n_grid)) +
     labs(x = "Subsampled tumours (n, log scale)", y = "Top-20 MR overlap with the full cohort", colour = NULL, linetype = NULL)
@@ -346,6 +347,53 @@ stopifnot("Falta subsample.rds (12_subsample_real.R + 12b_evaluate_subsample.R)"
     scale_x_log10(breaks = unlist(nb$subsample$n_grid)) + labs(x = "Subsampled tumours (n, log scale)", y = paste0("Regulators with >= ", nb$narnea$min_targets, " targets"), colour = NULL)
   f7a <- f7a + guides(colour = guide_legend(nrow = 2), linetype = guide_legend(nrow = 3))
   save_fig((f7a / (f7b | f7c)) + plot_layout(guides = "collect") + plot_annotation(tag_levels = "A"), "fig7_subsampling_real", 11, 10)
+}
+
+# ============================================================
+# RED DEL CÁNCER COMPLETO PARA COHORTES CHICAS (13, 13b)
+# ============================================================
+pool_file <- file.path(dirs$real_eval, "pooled.rds")
+stopifnot("Falta pooled.rds (13_pooled_networks.R + 13b_evaluate_pooled.R)" = file.exists(pool_file))
+{
+  pe <- readRDS(pool_file)
+  sur <- pe$surrogate
+  write_tsv(sur, "real_pooled_surrogate"); write_tsv(pe$production, "real_pooled_small_cohorts")
+  write_tsv(pe$specificity, "real_pooled_specificity")
+  # Media por cohorte sobre réplicas; la unidad de las pruebas pareadas es la cohorte
+  w <- aggregate(cbind(top20, swap_top20_mean) ~ analysis_id + network, sur, mean)
+  po <- w[w$network == "pooled", ]; ow <- w[w$network == "own", ]
+  stopifnot(identical(po$analysis_id, ow$analysis_id))
+  pw <- function(x, y) wilcox.test(x, y, paired = TRUE, exact = FALSE)$p.value
+  add_key("pooled_n_cohorts", nrow(po), "pooled test: cohorts")
+  add_key("pooled_replicates", max(sur$replicate), "pooled test: replicates per cohort")
+  add_key("pooled_small_n", nb$pooled$small_n, "pooled test: tumours kept from the cohort")
+  add_key("pooled_top20_median_pooled", median(sur$top20[sur$network == "pooled"]), "pooled test: median top-20 overlap with truth, cancer-wide network")
+  add_key("pooled_top20_median_own", median(sur$top20[sur$network == "own"]), "pooled test: median top-20 overlap with truth, own small network")
+  add_key("pooled_top20_median_swap", median(po$swap_top20_mean), "pooled test: median top-20 overlap with truth, network of another subtype")
+  add_key("pooled_n_better_than_own", sum(po$top20 > ow$top20), "pooled test: cohorts where cancer-wide beats own small network")
+  add_key("pooled_median_diff_vs_own", median(po$top20 - ow$top20), "pooled test: median per-cohort difference, cancer-wide minus own")
+  add_key("pooled_wilcoxon_p_vs_own", pw(po$top20, ow$top20), "pooled test: paired Wilcoxon p, cancer-wide vs own")
+  add_key("pooled_n_better_than_swap", sum(po$top20 > po$swap_top20_mean), "pooled test: cohorts where cancer-wide beats another subtype's network")
+  add_key("pooled_wilcoxon_p_vs_swap", pw(po$top20, po$swap_top20_mean), "pooled test: paired Wilcoxon p, cancer-wide vs another subtype")
+  add_key("pooled_wilcoxon_p_own_vs_swap", pw(ow$top20, ow$swap_top20_mean), "pooled test: paired Wilcoxon p, own small vs another subtype")
+  pr <- pe$production
+  add_key("pooled_real_small_top20_min", min(pr$top20_own_vs_pooled), "real cohorts n < min_n: top-20 overlap own vs cancer-wide network, min")
+  add_key("pooled_real_small_top20_max", max(pr$top20_own_vs_pooled), "real cohorts n < min_n: top-20 overlap own vs cancer-wide network, max")
+  sp <- pe$specificity[pe$specificity$cancer == "LUSC", ]
+  add_key("pooled_LUSC_between_own_min", min(sp$top20_own_networks), "LUSC subtype pairs: top-20 overlap with own networks, min")
+  add_key("pooled_LUSC_between_own_max", max(sp$top20_own_networks), "LUSC subtype pairs: top-20 overlap with own networks, max")
+  add_key("pooled_LUSC_between_pooled_min", min(sp$top20_pooled_network), "LUSC subtype pairs: top-20 overlap with cancer-wide network, min")
+  add_key("pooled_LUSC_between_pooled_max", max(sp$top20_pooled_network), "LUSC subtype pairs: top-20 overlap with cancer-wide network, max")
+  d8 <- rbind(data.frame(analysis_id = ow$analysis_id, network = paste0("Own network, ", nb$pooled$small_n, " tumours"), top20 = ow$top20),
+              data.frame(analysis_id = po$analysis_id, network = paste0("Cancer-wide network (other subtypes + ", nb$pooled$small_n, ")"), top20 = po$top20),
+              data.frame(analysis_id = po$analysis_id, network = "Network of another subtype", top20 = po$swap_top20_mean))
+  d8$network <- factor(d8$network, unique(d8$network))
+  d8$analysis_id <- factor(d8$analysis_id, po$analysis_id[order(po$top20)])
+  f8 <- ggplot(d8, aes(top20, analysis_id, colour = network)) + geom_line(aes(group = analysis_id), colour = "grey80") +
+    geom_point(size = 2.5) + scale_x_continuous(labels = scales::percent) +
+    labs(x = "Top-20 MR overlap with the full-cohort network (mean over replicates)", y = NULL, colour = NULL) +
+    theme(legend.position = "bottom") + guides(colour = guide_legend(nrow = 3))
+  save_fig(f8, "fig8_cancer_wide_network", 8, 6)
 }
 
 # ============================================================

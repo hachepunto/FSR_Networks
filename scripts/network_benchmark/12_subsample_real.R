@@ -1,4 +1,4 @@
-# Submuestreo de cohortes grandes reales: infiere la red del esquema A sobre
+# Submuestreo de cohortes grandes reales: infiere la red de FSR sobre
 # n muestras elegidas al azar (sin reemplazo) de la matriz tumoral, con los
 # mismos parámetros que el pipeline. La firma NO se recalcula: el efecto que
 # se aísla es el de n sobre la RED. Una corrida = una (cohorte, n, réplica);
@@ -35,7 +35,7 @@ set.seed(nb$subsample$seed + 1e6 * match(analysis_id, unlist(nb$subsample$cohort
 samples <- sort(sample(colnames(expr), n_sub))
 sub <- expr[, samples, drop = FALSE]
 
-# Mismo procedimiento que run_corto.R (esquema A)
+# Mismo procedimiento que run_corto.R (FSR)
 t0 <- Sys.time()
 reg_full <- run_corto_or_empty(rank_rows(sub), tfs, nb$corto$nbootstraps, r2p(nb$corto$r_min, n_sub), nb$threads)
 reg <- topk_regulon(reg_full, nb$top_k_main)

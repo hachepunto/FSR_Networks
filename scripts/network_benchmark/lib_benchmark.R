@@ -55,6 +55,13 @@ read_tumor_expr <- function(config, analysis_id, cancer) {
                     paste0(analysis_id, "_tumor_expr.rds")))
 }
 
+# Matriz tumoral del cáncer completo (preprocess_expression.R, <CANCER>_pooled).
+read_pooled_expr <- function(config, cancer) {
+  root <- config$network_benchmark$pooled$expr_root
+  if (is.null(root)) root <- file.path(config$paths$work_root, "preprocessed")
+  readRDS(file.path(root, cancer, paste0(cancer, "_pooled_tumor_expr.rds")))
+}
+
 # Firma de NaRnEA del pipeline: estadístico de Wald de DESeq2 (run_deseq2.R).
 read_deseq2_stat <- function(config, analysis_id) {
   s <- readRDS(file.path(config$paths$work_root, "deseq2", analysis_id, "stat_vector.rds"))

@@ -1,0 +1,16 @@
+cancer	x	y	any_small	top20_own_networks	top20_pooled_network
+LUSC	LUSC_basal	LUSC_classical	TRUE	0.6	0.85
+LUSC	LUSC_basal	LUSC_primitive	TRUE	0.35	0.7
+LUSC	LUSC_basal	LUSC_secretory	TRUE	0.5	0.7
+LUSC	LUSC_classical	LUSC_primitive	TRUE	0.3	0.75
+LUSC	LUSC_classical	LUSC_secretory	TRUE	0.5	0.8
+LUSC	LUSC_primitive	LUSC_secretory	TRUE	0.25	0.75
+STAD	STAD_cin	STAD_ebv	TRUE	0.4	0.55
+STAD	STAD_cin	STAD_gs	FALSE	0	0
+STAD	STAD_cin	STAD_msi	FALSE	0.4	0.6
+STAD	STAD_ebv	STAD_gs	TRUE	0	0.05
+STAD	STAD_ebv	STAD_msi	TRUE	0.55	0.65
+STAD	STAD_gs	STAD_msi	FALSE	0	0
+LIHC	LIHC_s1	LIHC_s2	TRUE	0.2	0.6
+LIHC	LIHC_s1	LIHC_s3	TRUE	0.05	0
+LIHC	LIHC_s2	LIHC_s3	FALSE	0.2	0.1

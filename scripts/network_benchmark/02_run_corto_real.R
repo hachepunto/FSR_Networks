@@ -3,7 +3,7 @@
 #   current — la regla anterior del pipeline: log2(TPM+1), p fijo
 #             (network_benchmark.previous_rule.fixed_p; el |r| efectivo
 #             depende de n).
-#   lenient_r<r> — la propuesta (esquema A) antes del recorte top-k: rangos
+#   lenient_r<r> — la propuesta (FSR) antes del recorte top-k: rangos
 #             por gen (Pearson sobre rangos = Spearman) y |r| >= r, mismo
 #             umbral de efecto para cualquier n; una red por cada r de
 #             corto.r_min_grid. El top-k se aplica después, en la evaluación.

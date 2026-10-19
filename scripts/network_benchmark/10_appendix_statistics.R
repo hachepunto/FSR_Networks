@@ -196,12 +196,14 @@ pc_eval <- function(ds_name) {
   eBf$tb <- unlist(lapply(regB_full[unique(eBf$tf)], tiebreak_of), use.names = FALSE)[match(paste(eBf$tf, eBf$target), unlist(lapply(unique(eBf$tf), function(t) paste(t, names(regB_full[[t]]$tfmode)))))]
   Bm <- eBf[order(eBf$likelihood, eBf$tb, decreasing = TRUE), ][seq_len(min(m, nrow(eBf))), ]
   cand$B_matched <- cand$key %in% paste(Bm$tf, Bm$target)
-  summ <- function(sel, name) data.frame(dataset = ds_name, n = n, method = name, n_selected = sum(sel),
+  # key fija los nombres de las macros de numbers.tex; method es la etiqueta que se muestra
+  summ <- function(sel, name, key = name) data.frame(dataset = ds_name, n = n, method = name, key = key, n_selected = sum(sel),
                                          precision = mean(cand$true[sel]), recall = sum(cand$true & sel) / sum(cand$true),
                                          indirect_per_100 = 100 * sum(cand$indirect & sel) / sum(sel))
-  rbind(summ(cand$A, "corto, ranks, |r|>=0.2, top-100 (scheme A)"),
-        summ(cand$B, "ARACNe3 top-100 (scheme B)"),
-        summ(cand$B_matched, sprintf("ARACNe3 by support, top-%d (B matched)", m)),
+  rbind(summ(cand$A, "FSR (corto, ranks, |r|>=0.2, top-100)", "corto, ranks, |r|>=0.2, top-100 (scheme A)"),
+        summ(cand$B, "ARACNe3-top100", "ARACNe3 top-100 (scheme B)"),
+        summ(cand$B_matched, sprintf("ARACNe3 by support, top-%d (same edge count as FSR)", m),
+             sprintf("ARACNe3 by support, top-%d (B matched)", m)),
         summ(rank(-cand$rho) <= m, sprintf("marginal |rho|, top-%d", m)),
         summ(rank(-cand$pc_0.05) <= m, sprintf("glasso partial corr. (lambda 0.05), top-%d", m)),
         summ(rank(-cand$pc_0.1) <= m, sprintf("glasso partial corr. (lambda 0.1), top-%d", m)),
@@ -210,7 +212,7 @@ pc_eval <- function(ds_name) {
 pc <- rbind(pc_eval("strong_n400_rep1"), pc_eval("strong_n100_rep1"))
 write.table(pc, file.path(out, "appendix_A3_partial_correlation.tsv"), sep = "\t", quote = FALSE, row.names = FALSE)
 for (i in seq_len(nrow(pc))) {
-  tag <- gsub("[^A-Za-z0-9]+", "_", pc$method[i])
+  tag <- gsub("[^A-Za-z0-9]+", "_", pc$key[i])
   add_num(sprintf("A3_n%d_%s_precision", pc$n[i], tag), pc$precision[i], "A3 precision"); add_num(sprintf("A3_n%d_%s_recall", pc$n[i], tag), pc$recall[i], "A3 recall")
   add_num(sprintf("A3_n%d_%s_indirect100", pc$n[i], tag), pc$indirect_per_100[i], "A3 indirect FP per 100 edges")
 }

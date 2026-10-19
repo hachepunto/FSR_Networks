@@ -32,7 +32,7 @@ tumor_from_project <- function(project) tolower(sub("^TCGA-", "", project))
 cancer_from_project <- function(project) toupper(tumor_from_project(project))
 
 # Método de inferencia de red. Desde octubre de 2026 es corto para TODA
-# cohorte, sin importar n (esquema A; justificación en
+# cohorte, sin importar n (FSR; justificación en
 # docs/supplementary_network_method.md). La regla anterior (ARACNe3 si
 # n >= 95, corto si no) se conserva en ARACNE3_MIN_N solo como referencia
 # histórica y para el módulo de benchmark; ningún script la usa para
@@ -42,7 +42,38 @@ ARACNE3_MIN_N <- 95
 
 network_method_for_n <- function(n) rep("corto", length(n))
 
-# ── Esquema A: red con corto sobre rangos, umbral de efecto y top-k ──
+# ── Cohortes chicas ──
+# n_red < network_inference.min_n: red propia, resultados exploratorios
+# (suplementario §3.6). Decisión de 2026-10-18.
+network_min_n <- function(config) {
+  m <- config$network_inference$min_n
+  if (is.null(m)) 0L else as.integer(m)
+}
+
+analysis_tier <- function(n_red, config) ifelse(n_red >= network_min_n(config), "main", "exploratory")
+
+# Matrices del cáncer completo (<CANCER>_pooled): solo para el paso 13 del
+# benchmark, que evaluó usarlas con las cohortes chicas (no pasó). El pipeline
+# no las escribe salvo network_benchmark.pooled.write_matrices: true.
+pooled_cancers <- function(config) {
+  if (isTRUE(config$network_benchmark$pooled$write_matrices)) names(config$subtypes) else character(0)
+}
+
+# Filtros de genes de preprocess_expression.R, aplicados a una matriz tumoral
+# (y a su control, para que ambos conserven los mismos genes): sin NA, con
+# varianza en el tumor, y log2TPM > 1 en >= 20 % de las muestras tumorales.
+filter_tumor_genes <- function(tumor_expr, normal_expr) {
+  complete <- rowSums(is.na(tumor_expr)) == 0 & rowSums(is.na(normal_expr)) == 0
+  tumor_expr <- tumor_expr[complete, , drop = FALSE]
+  zero_var <- matrixStats::rowSds(tumor_expr) == 0
+  tumor_expr <- tumor_expr[!zero_var, , drop = FALSE]
+  expressed <- rowSums(tumor_expr > 1) >= ceiling(0.2 * ncol(tumor_expr))
+  tumor_expr <- tumor_expr[expressed, , drop = FALSE]
+  list(tumor = tumor_expr, normal = normal_expr[rownames(tumor_expr), , drop = FALSE],
+       n_na = sum(!complete), n_zero_var = sum(zero_var, na.rm = TRUE), n_low_expr = sum(!expressed))
+}
+
+# ── FSR: red con corto sobre rangos, umbral de efecto y top-k ──
 # Compartidas por run_corto.R (pipeline) y scripts/network_benchmark/.
 
 # |r| -> p bilateral para n muestras; inversa exacta de corto:::p2r, de

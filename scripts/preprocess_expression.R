@@ -60,6 +60,8 @@ manifest_file <- file.path(results_dir, "preprocess_manifest.tsv")
 #   <work_root>/preprocessed/<CANCER>/<analysis_id>_tumor_expr.rds
 #   <work_root>/preprocessed/<CANCER>/<analysis_id>_normal_expr.rds
 #   <work_root>/networks/input/<analysis_id>_matrix.txt
+#   <work_root>/preprocessed/<CANCER>/<CANCER>_pooled_tumor_expr.rds  (solo con
+#   <work_root>/networks/input/<CANCER>_pooled_matrix.txt  network_benchmark.pooled.write_matrices)
 #   results/preprocess_manifest.tsv
 # ============================================================
 
@@ -207,26 +209,12 @@ for (project in config$projects) {
       next
     }
 
-    tumor_expr <- tumor_log2_all[, sample_ids, drop = FALSE]
-    normal_expr <- normal_log2
-
-    # -- Genes con NA en tumor o control --
-    complete_genes <- rowSums(is.na(tumor_expr)) == 0 & rowSums(is.na(normal_expr)) == 0
-    n_na_removed <- sum(!complete_genes)
-    tumor_expr <- tumor_expr[complete_genes, , drop = FALSE]
-    normal_expr <- normal_expr[rownames(tumor_expr), , drop = FALSE]
-
-    # -- Genes sin varianza en el tumor --
-    zero_var <- matrixStats::rowSds(tumor_expr) == 0
-    n_zero_var_removed <- sum(zero_var, na.rm = TRUE)
-    tumor_expr <- tumor_expr[!zero_var, , drop = FALSE]
-    normal_expr <- normal_expr[rownames(tumor_expr), , drop = FALSE]
-
-    # -- Filtro de expresión: log2TPM > 1 en >= 20% de las muestras tumorales --
-    expressed <- rowSums(tumor_expr > 1) >= ceiling(0.2 * ncol(tumor_expr))
-    n_low_expr_removed <- sum(!expressed)
-    tumor_expr <- tumor_expr[expressed, , drop = FALSE]
-    normal_expr <- normal_expr[rownames(tumor_expr), , drop = FALSE]
+    filtered <- filter_tumor_genes(tumor_log2_all[, sample_ids, drop = FALSE], normal_log2)  # lib_common.R
+    tumor_expr <- filtered$tumor
+    normal_expr <- filtered$normal
+    n_na_removed <- filtered$n_na
+    n_zero_var_removed <- filtered$n_zero_var
+    n_low_expr_removed <- filtered$n_low_expr
 
     if (nrow(tumor_expr) == 0) {
       warning(analysis_id, ": ningún gen pasó los filtros. Se omite.", call. = FALSE)
@@ -277,6 +265,20 @@ for (project in config$projects) {
 
     message(analysis_id, ": ", nrow(tumor_expr), " genes x ", n_red_final,
             " tumor / ", ncol(normal_expr), " control -> ", network_method)
+  }
+
+  # -- Matriz del cáncer completo (<CANCER>_pooled), solo para el benchmark --
+  # Todos los tumores con subtipo asignado de este proyecto, mismos filtros.
+  if (cancer %in% pooled_cancers(config)) {
+    pooled_id <- paste0(cancer, "_pooled")
+    pooled_ids <- intersect(
+      project_assignments$sample_submitter_id[project_assignments$subtype_label %in% names(spec$labels)],
+      colnames(tumor_log2_all))
+    pooled <- filter_tumor_genes(tumor_log2_all[, pooled_ids, drop = FALSE], normal_log2)
+    saveRDS(pooled$tumor, file.path(cancer_dir, paste0(pooled_id, "_tumor_expr.rds")))
+    write_aracne_matrix(pooled$tumor, file.path(network_input_dir, paste0(pooled_id, "_matrix.txt")))
+    message(pooled_id, ": ", nrow(pooled$tumor), " genes x ", ncol(pooled$tumor),
+            " tumores (matriz del cáncer completo, benchmark paso 13)")
   }
 }
 

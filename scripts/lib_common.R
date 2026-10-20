@@ -52,11 +52,12 @@ network_min_n <- function(config) {
 
 analysis_tier <- function(n_red, config) ifelse(n_red >= network_min_n(config), "main", "exploratory")
 
-# Matrices del cáncer completo (<CANCER>_pooled): solo para el paso 13 del
-# benchmark, que evaluó usarlas con las cohortes chicas (no pasó). El pipeline
-# no las escribe salvo network_benchmark.pooled.write_matrices: true.
+# Matrices del cáncer completo (<CANCER>_pooled): todos los cánceres si
+# network_inference.cancer_wide_network (red de sensibilidad, suplementario §3.8)
+# o network_benchmark.pooled.write_matrices (paso 13 del benchmark).
 pooled_cancers <- function(config) {
-  if (isTRUE(config$network_benchmark$pooled$write_matrices)) names(config$subtypes) else character(0)
+  if (isTRUE(config$network_inference$cancer_wide_network) ||
+      isTRUE(config$network_benchmark$pooled$write_matrices)) names(config$subtypes) else character(0)
 }
 
 # Filtros de genes de preprocess_expression.R, aplicados a una matriz tumoral

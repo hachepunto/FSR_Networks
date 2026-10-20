@@ -60,8 +60,8 @@ manifest_file <- file.path(results_dir, "preprocess_manifest.tsv")
 #   <work_root>/preprocessed/<CANCER>/<analysis_id>_tumor_expr.rds
 #   <work_root>/preprocessed/<CANCER>/<analysis_id>_normal_expr.rds
 #   <work_root>/networks/input/<analysis_id>_matrix.txt
-#   <work_root>/preprocessed/<CANCER>/<CANCER>_pooled_tumor_expr.rds  (solo con
-#   <work_root>/networks/input/<CANCER>_pooled_matrix.txt  network_benchmark.pooled.write_matrices)
+#   <work_root>/preprocessed/<CANCER>/<CANCER>_pooled_tumor_expr.rds  (con
+#   <work_root>/networks/input/<CANCER>_pooled_matrix.txt  network_inference.cancer_wide_network)
 #   results/preprocess_manifest.tsv
 # ============================================================
 
@@ -267,7 +267,7 @@ for (project in config$projects) {
             " tumor / ", ncol(normal_expr), " control -> ", network_method)
   }
 
-  # -- Matriz del cáncer completo (<CANCER>_pooled), solo para el benchmark --
+  # -- Matriz del cáncer completo (<CANCER>_pooled): red de sensibilidad --
   # Todos los tumores con subtipo asignado de este proyecto, mismos filtros.
   if (cancer %in% pooled_cancers(config)) {
     pooled_id <- paste0(cancer, "_pooled")
@@ -278,7 +278,7 @@ for (project in config$projects) {
     saveRDS(pooled$tumor, file.path(cancer_dir, paste0(pooled_id, "_tumor_expr.rds")))
     write_aracne_matrix(pooled$tumor, file.path(network_input_dir, paste0(pooled_id, "_matrix.txt")))
     message(pooled_id, ": ", nrow(pooled$tumor), " genes x ", ncol(pooled$tumor),
-            " tumores (matriz del cáncer completo, benchmark paso 13)")
+            " tumores (matriz del cáncer completo)")
   }
 }
 

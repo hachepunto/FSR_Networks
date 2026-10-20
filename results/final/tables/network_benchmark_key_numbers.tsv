@@ -274,6 +274,19 @@ subsample_replicates	5	replicates per n
 subsample_n_full_min	190	smallest full cohort subsampled
 subsample_n_full_max	562	largest full cohort subsampled
 subsample_min_n_reaching_AvsB_top20	80	smallest n whose median top-20 overlap with the full cohort reaches the A-vs-B median
+cw_n_cohorts	29	own vs cancer-wide network: cohorts with n >= min_n
+cw_top20_median	0.65	own vs cancer-wide network: median top-20 TMR overlap
+cw_top20_q25	0.55	own vs cancer-wide network: top-20 overlap, 25th percentile
+cw_top20_q75	0.75	own vs cancer-wide network: top-20 overlap, 75th percentile
+cw_top20_min	0.45	own vs cancer-wide network: top-20 overlap, min
+cw_top20_max	0.8	own vs cancer-wide network: top-20 overlap, max
+cw_rho_median	0.872	own vs cancer-wide network: median Spearman rho of NES
+cw_cor_top20_frac_of_pool	0.144	own vs cancer-wide network: Spearman rho between top-20 overlap and the cohort's share of the cancer
+cw_evaluable_own_median	1233	evaluable regulators, own network, median
+cw_evaluable_pooled_median	975	evaluable regulators, cancer-wide network, median
+cw_between_n_pairs	32	subtype pairs, both n >= min_n
+cw_between_own_median	0.45	between-subtype top-20 overlap, each with its own network, median
+cw_between_pooled_median	0.475	between-subtype top-20 overlap, both with the cancer-wide network, median
 pooled_n_cohorts	11	pooled test: cohorts
 pooled_replicates	3	pooled test: replicates per cohort
 pooled_small_n	30	pooled test: tumours kept from the cohort
@@ -292,6 +305,26 @@ pooled_LUSC_between_own_min	0.25	LUSC subtype pairs: top-20 overlap with own net
 pooled_LUSC_between_own_max	0.6	LUSC subtype pairs: top-20 overlap with own networks, max
 pooled_LUSC_between_pooled_min	0.7	LUSC subtype pairs: top-20 overlap with cancer-wide network, min
 pooled_LUSC_between_pooled_max	0.85	LUSC subtype pairs: top-20 overlap with cancer-wide network, max
+tri_mr_diff_mean	-0.008	triangle - target: true MRs in top 10, mean over synthetic datasets
+tri_mr_diff_max	0.06	triangle - target: true MRs in top 10, largest regime x n mean
+tri_mr_diff_min	-0.06	triangle - target: true MRs in top 10, smallest regime x n mean
+tri_indirect_diff_n60	-6.1	triangle - target: indirect FP per 100 edges, n = 60
+tri_indirect_diff_n100	-13.9	triangle - target: indirect FP per 100 edges, n = 100
+tri_precision_diff_n400_strong	-0.527	triangle - target: edge precision, n = 400, strong
+tri_precision_diff_n400_weak	-0.211	triangle - target: edge precision, n = 400, weak
+tri_real_n_cohorts	5	triangle: real cohorts
+tri_real_top20_min	0.6	triangle vs target, real: top-20 TMR overlap, min
+tri_real_top20_max	0.9	triangle vs target, real: top-20 TMR overlap, max
+tri_real_vsB_target_min	0.5	target vs ARACNe3-top100, real: top-20, min
+tri_real_vsB_target_max	0.8	target vs ARACNe3-top100, real: top-20, max
+tri_real_vsB_triangle_min	0.7	triangle vs ARACNe3-top100, real: top-20, min
+tri_real_vsB_triangle_max	0.85	triangle vs ARACNe3-top100, real: top-20, max
+tri_real_edges_ratio_min	2.82	triangle / target, untruncated edges, min
+tri_real_edges_ratio_max	4	triangle / target, untruncated edges, max
+tri_real_minutes_min	31.8	triangle: run time per cohort (min), min
+tri_real_minutes_max	46.5	triangle: run time per cohort (min), max
+tri_real_target_minutes_min	5.65	target (FSR as used): run time per cohort (min), same cohorts, min
+tri_real_target_minutes_max	7.98	target (FSR as used): run time per cohort (min), same cohorts, max
 syn_nonmono_strong_n100_c10_frac_low_scc	0.000366	synthetic strong, n=100, support >= 10: mean fraction of edges with |Spearman| < 0.2
 syn_nonmono_strong_n200_c10_frac_low_scc	0.028	synthetic strong, n=200, support >= 10: mean fraction of edges with |Spearman| < 0.2
 syn_nonmono_weak_n200_c10_frac_low_scc	0	synthetic weak, n=200, support >= 10: mean fraction of edges with |Spearman| < 0.2

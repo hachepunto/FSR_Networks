@@ -12,6 +12,7 @@
 #   tables/network_benchmark_real_cross_cohort{,_decomposition}.tsv
 #   tables/network_benchmark_real_subsample{,_summary}.tsv
 #   tables/network_benchmark_real_pooled_{surrogate,small_cohorts,all_cohorts,specificity}.tsv
+#   tables/network_benchmark_dpi_triangle_{synthetic,real}.tsv
 #   tables/network_benchmark_synthetic_{average_precision,nonmonotonic,truth_regulon_nonmonotone}.tsv
 #   tables/network_benchmark_key_numbers.tsv   (cada cifra citada en el texto)
 #   tables/network_benchmark_collectri_{edges,provenance}.tsv (copia archivada de la referencia usada)
@@ -360,6 +361,26 @@ stopifnot("Falta pooled.rds (13_pooled_networks.R + 13b_evaluate_pooled.R)" = fi
   write_tsv(sur, "real_pooled_surrogate"); write_tsv(pe$production, "real_pooled_small_cohorts")
   write_tsv(pe$specificity, "real_pooled_specificity")
   if (!is.null(pe$all_cohorts)) write_tsv(pe$all_cohorts, "real_pooled_all_cohorts")
+  # Sensibilidad: TMRs con la red propia vs con la red del cáncer completo, cohortes main
+  if (!is.null(pe$all_cohorts)) {
+    ac <- pe$all_cohorts[pe$all_cohorts$tier == "main", ]
+    q <- quantile(ac$top20_own_vs_pooled, c(0.25, 0.75))
+    add_key("cw_n_cohorts", nrow(ac), "own vs cancer-wide network: cohorts with n >= min_n")
+    add_key("cw_top20_median", median(ac$top20_own_vs_pooled), "own vs cancer-wide network: median top-20 TMR overlap")
+    add_key("cw_top20_q25", q[[1]], "own vs cancer-wide network: top-20 overlap, 25th percentile")
+    add_key("cw_top20_q75", q[[2]], "own vs cancer-wide network: top-20 overlap, 75th percentile")
+    add_key("cw_top20_min", min(ac$top20_own_vs_pooled), "own vs cancer-wide network: top-20 overlap, min")
+    add_key("cw_top20_max", max(ac$top20_own_vs_pooled), "own vs cancer-wide network: top-20 overlap, max")
+    add_key("cw_rho_median", median(ac$rho_own_vs_pooled), "own vs cancer-wide network: median Spearman rho of NES")
+    add_key("cw_cor_top20_frac_of_pool", cor(ac$top20_own_vs_pooled, ac$frac_of_pool, method = "spearman"),
+            "own vs cancer-wide network: Spearman rho between top-20 overlap and the cohort's share of the cancer")
+    add_key("cw_evaluable_own_median", median(ac$n_evaluable_own), "evaluable regulators, own network, median")
+    add_key("cw_evaluable_pooled_median", median(ac$n_evaluable_pooled), "evaluable regulators, cancer-wide network, median")
+    sm_ <- pe$specificity[!pe$specificity$any_small, ]
+    add_key("cw_between_n_pairs", nrow(sm_), "subtype pairs, both n >= min_n")
+    add_key("cw_between_own_median", median(sm_$top20_own_networks), "between-subtype top-20 overlap, each with its own network, median")
+    add_key("cw_between_pooled_median", median(sm_$top20_pooled_network), "between-subtype top-20 overlap, both with the cancer-wide network, median")
+  }
   # Media por cohorte sobre réplicas; la unidad de las pruebas pareadas es la cohorte
   w <- aggregate(cbind(top20, swap_top20_mean) ~ analysis_id + network, sur, mean)
   po <- w[w$network == "pooled", ]; ow <- w[w$network == "own", ]
@@ -395,6 +416,37 @@ stopifnot("Falta pooled.rds (13_pooled_networks.R + 13b_evaluate_pooled.R)" = fi
     labs(x = "Top-20 MR overlap with the full-cohort network (mean over replicates)", y = NULL, colour = NULL) +
     theme(legend.position = "bottom") + guides(colour = guide_legend(nrow = 3))
   save_fig(f8, "fig8_cancer_wide_network", 8, 6)
+}
+
+# ============================================================
+# DPI POR TRIÁNGULOS (14, 14b)
+# ============================================================
+tri_file <- file.path(dirs$real_eval, "dpi_triangle.rds")
+if (file.exists(tri_file)) {
+  tr <- readRDS(tri_file)
+  write_tsv(tr$synthetic_summary, "dpi_triangle_synthetic"); write_tsv(tr$real, "dpi_triangle_real")
+  ss <- tr$synthetic_summary; rl <- tr$real
+  add_key("tri_mr_diff_mean", mean(tr$synthetic_paired$mr$diff), "triangle - target: true MRs in top 10, mean over synthetic datasets")
+  add_key("tri_mr_diff_max", max(ss$mr_diff), "triangle - target: true MRs in top 10, largest regime x n mean")
+  add_key("tri_mr_diff_min", min(ss$mr_diff), "triangle - target: true MRs in top 10, smallest regime x n mean")
+  add_key("tri_indirect_diff_n60", mean(ss$indirect100_diff[ss$n == 60]), "triangle - target: indirect FP per 100 edges, n = 60")
+  add_key("tri_indirect_diff_n100", mean(ss$indirect100_diff[ss$n == 100]), "triangle - target: indirect FP per 100 edges, n = 100")
+  add_key("tri_precision_diff_n400_strong", ss$precision_diff[ss$n == 400 & ss$regime == "strong"], "triangle - target: edge precision, n = 400, strong")
+  add_key("tri_precision_diff_n400_weak", ss$precision_diff[ss$n == 400 & ss$regime == "weak"], "triangle - target: edge precision, n = 400, weak")
+  add_key("tri_real_n_cohorts", nrow(rl), "triangle: real cohorts")
+  add_key("tri_real_top20_min", min(rl$top20_target_vs_triangle), "triangle vs target, real: top-20 TMR overlap, min")
+  add_key("tri_real_top20_max", max(rl$top20_target_vs_triangle), "triangle vs target, real: top-20 TMR overlap, max")
+  add_key("tri_real_vsB_target_min", min(rl$top20_target_vs_B, na.rm = TRUE), "target vs ARACNe3-top100, real: top-20, min")
+  add_key("tri_real_vsB_target_max", max(rl$top20_target_vs_B, na.rm = TRUE), "target vs ARACNe3-top100, real: top-20, max")
+  add_key("tri_real_vsB_triangle_min", min(rl$top20_triangle_vs_B, na.rm = TRUE), "triangle vs ARACNe3-top100, real: top-20, min")
+  add_key("tri_real_vsB_triangle_max", max(rl$top20_triangle_vs_B, na.rm = TRUE), "triangle vs ARACNe3-top100, real: top-20, max")
+  add_key("tri_real_edges_ratio_min", min(rl$edges_full_triangle / rl$edges_full_target), "triangle / target, untruncated edges, min")
+  add_key("tri_real_edges_ratio_max", max(rl$edges_full_triangle / rl$edges_full_target), "triangle / target, untruncated edges, max")
+  add_key("tri_real_minutes_min", min(rl$minutes_triangle), "triangle: run time per cohort (min), min")
+  add_key("tri_real_minutes_max", max(rl$minutes_triangle), "triangle: run time per cohort (min), max")
+  tm <- runtime$corto_lenient_minutes[match(rl$analysis_id, runtime$analysis_id)]
+  add_key("tri_real_target_minutes_min", min(tm), "target (FSR as used): run time per cohort (min), same cohorts, min")
+  add_key("tri_real_target_minutes_max", max(tm), "target (FSR as used): run time per cohort (min), same cohorts, max")
 }
 
 # ============================================================

@@ -111,6 +111,67 @@ topk_regulon <- function(reg, k) {
   out
 }
 
+# ── Regulón de corto -> NaRnEA ──
+# Compartidas por run_narnea.R (pipeline) y scripts/network_benchmark/: el
+# benchmark que justifica FSR corre NaRnEA exactamente así.
+
+# aw por rango escalado a (0, 1] (receta de crc_mra / viñeta COAD de
+# NaRnEA): el target con más soporte recibe 1, el último 1/n.
+rank_aw <- function(likelihood, tiebreak) {
+  n <- length(likelihood)
+  o <- order(likelihood, tiebreak, decreasing = TRUE)
+  aw <- numeric(n)
+  aw[o] <- seq(n, 1) / n
+  aw
+}
+
+to_narnea <- function(reg, aw = c("rank", "likelihood")) {
+  aw <- match.arg(aw)
+  lapply(reg, function(x) {
+    w <- if (aw == "rank") rank_aw(x$likelihood, tiebreak_of(x)) else pmin(unname(x$likelihood), 1)
+    list(aw = setNames(w, names(x$tfmode)), am = setNames(unname(x$tfmode), names(x$tfmode)))
+  })
+}
+
+# ── NaRnEA ─────────────────────────────────────────────────
+
+# NaRnEA::nes_covariance() calcula R * R con R entero (rangos): con más de
+# 46 341 genes se desborda a NA. Se fuerza a double; nada más cambia. Con
+# las firmas de este pipeline (~18 000 genes) no se dispara y el resultado
+# es idéntico con y sin parche; se aplica por seguridad ante universos
+# mayores (p.ej. incluir genes no codificantes).
+apply_narnea_overflow_patch <- function() {
+  fixed <- function(R, S, AW.AM.prod, AW.AM.abs.prod, E.r, E.rs, D.v, U.v, g) {
+    storage.mode(R) <- "double"
+    cov.prod.mat <- as.matrix(colSums(AW.AM.prod * AW.AM.abs.prod))
+    E.r2s <- as.matrix((1 / g) * colSums(R * R * S))
+    E.du <- cov.prod.mat %*% t(E.r2s)
+    E.d.u <- cov.prod.mat %*% E.rs * E.r
+    (E.du - E.d.u) / sqrt(D.v * U.v)
+  }
+  assignInNamespace("nes_covariance", fixed, ns = "NaRnEA")
+}
+
+# Una firma (vector nombrado) contra un regulón en formato NaRnEA. Targets
+# fuera de la firma se descartan antes de aplicar min_targets.
+run_narnea <- function(narnea_reg, ges, min_targets, seed) {
+  narnea_reg <- lapply(narnea_reg, function(x) {
+    keep <- names(x$aw) %in% names(ges)
+    list(aw = x$aw[keep], am = x$am[keep])
+  })
+  narnea_reg <- narnea_reg[vapply(narnea_reg, function(x) length(x$aw), integer(1)) >= min_targets]
+  if (length(narnea_reg) == 0) return(NULL)
+  res <- NaRnEA::matrixNaRnEA(
+    ges.mat = matrix(ges, ncol = 1, dimnames = list(names(ges), "signature")),
+    regulon.list = narnea_reg, seed.val = seed, min.targets = min_targets)
+  # Nombres desde rownames: con un solo regulador, [, "signature"] da un
+  # escalar sin nombre.
+  nes <- setNames(res$NES[, "signature"], rownames(res$NES))
+  stopifnot("NaRnEA devolvió NES con NA" = !anyNA(nes))
+  data.frame(tf = names(nes), nes = unname(nes), pes = unname(res$PES[rownames(res$NES), "signature"]),
+             p = 2 * pnorm(-abs(unname(nes))), stringsAsFactors = FALSE)
+}
+
 # Escribe una fila de manifiesto en formato TSV, agregando el
 # encabezado solo si el archivo todavía no existe. Usado por
 # download_data.R y preprocess_expression.R para no reimplementar el

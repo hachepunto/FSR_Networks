@@ -51,8 +51,10 @@ for (id in unlist(pp$cohorts)) {
       sur[[length(sur) + 1]] <- data.frame(
         analysis_id = id, cancer = cancer, n_full = at$n_red[at$analysis_id == id], replicate = r,
         network = kind, n_network = attr(reg, "params")$n, n_regulators = length(reg), n_evaluable = n_eval(res),
-        rho = cc["rho"], top20 = cc["top20"], top50 = cc["top50"],
-        swap_top20_mean = mean(swap["top20", ], na.rm = TRUE), swap_rho_mean = mean(swap["rho", ], na.rm = TRUE),
+        rho = cc["rho"], as.list(cc[grepl("^top", names(cc))]),
+        setNames(as.list(rowMeans(swap[grepl("^top", rownames(swap)), , drop = FALSE], na.rm = TRUE)),
+                 paste0("swap_", grep("^top", rownames(swap), value = TRUE), "_mean")),
+        swap_rho_mean = mean(swap["rho", ], na.rm = TRUE),
         n_swap = length(others))
     }
   }
@@ -80,15 +82,18 @@ for (cancer in cancers) {
       analysis_id = id, cancer = cancer, n_red = n_red, n_pooled = attr(preg, "params")$n,
       frac_of_pool = n_red / attr(preg, "params")$n, tier = analysis_tier(n_red, config),
       n_evaluable_own = n_eval(res_own[[id]]), n_evaluable_pooled = n_eval(res_pool[[id]]),
-      rho_own_vs_pooled = cc["rho"], top20_own_vs_pooled = cc["top20"], top50_own_vs_pooled = cc["top50"])
+      rho_own_vs_pooled = cc["rho"],
+      setNames(as.list(cc[grepl("^top", names(cc))]), paste0(grep("^top", names(cc), value = TRUE), "_own_vs_pooled")))
     tops[[id]] <- list(own = top_tfs(res_own[[id]]), pooled = top_tfs(res_pool[[id]]))
   }
   for (pair in combn(ids, 2, simplify = FALSE)) {
     spec[[length(spec) + 1]] <- data.frame(
       cancer = cancer, x = pair[1], y = pair[2],
       any_small = any(pair %in% small),
-      top20_own_networks = mr_concordance(res_own[[pair[1]]], res_own[[pair[2]]])["top20"],
-      top20_pooled_network = mr_concordance(res_pool[[pair[1]]], res_pool[[pair[2]]])["top20"])
+      { a <- mr_concordance(res_own[[pair[1]]], res_own[[pair[2]]]); a <- a[grepl("^top", names(a))]
+        setNames(as.list(a), paste0(names(a), "_own_networks")) },
+      { b <- mr_concordance(res_pool[[pair[1]]], res_pool[[pair[2]]]); b <- b[grepl("^top", names(b))]
+        setNames(as.list(b), paste0(names(b), "_pooled_network")) })
   }
 }
 allc <- do.call(rbind, allc); spec <- do.call(rbind, spec)

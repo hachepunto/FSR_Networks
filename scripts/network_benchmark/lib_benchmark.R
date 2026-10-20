@@ -126,7 +126,10 @@ regulon_edges <- function(reg) {
 # Concordancia entre dos resultados de NaRnEA sobre los reguladores comunes:
 # Spearman de NES y fracción del top-k por |NES| compartida. Si hay menos
 # de 2k reguladores comunes el top-k no discrimina y se devuelve NA.
-mr_concordance <- function(x, y, tops = c(20, 50)) {
+# tops: barrido de k (propuesta de Daniel); el texto cita k = 20 y la figura de
+# barrido muestra que las conclusiones no dependen de ese valor.
+K_SWEEP <- c(5, 10, 15, 20, 30, 40, 50)
+mr_concordance <- function(x, y, tops = K_SWEEP) {
   if (is.null(x) || is.null(y)) return(c(n_shared = NA, rho = NA, setNames(rep(NA, length(tops)), paste0("top", tops))))
   m <- merge(x[, c("tf", "nes")], y[, c("tf", "nes")], by = "tf")
   top_overlap <- function(k) {

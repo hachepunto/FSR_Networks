@@ -13,12 +13,13 @@
 #   tables/network_benchmark_real_subsample{,_summary}.tsv
 #   tables/network_benchmark_real_pooled_{surrogate,small_cohorts,all_cohorts,specificity}.tsv
 #   tables/network_benchmark_dpi_triangle_{synthetic,real}.tsv
+#   tables/network_benchmark_k_sweep{,_subsample}.tsv
 #   tables/network_benchmark_synthetic_{average_precision,nonmonotonic,truth_regulon_nonmonotone}.tsv
 #   tables/network_benchmark_key_numbers.tsv   (cada cifra citada en el texto)
 #   tables/network_benchmark_collectri_{edges,provenance}.tsv (copia archivada de la referencia usada)
 #   tables/network_benchmark_real_cross_cohort.tsv
 #   tables/network_benchmark_synthetic_nonmonotonic.tsv
-#   figures/network_benchmark_fig{1..8}_*.pdf
+#   figures/network_benchmark_fig{1..9}_*.pdf
 #
 # Aborta si faltan evaluaciones (reales o sintéticas): el resumen debe ser
 # sobre el conjunto completo, no sobre lo que haya alcanzado a correr.
@@ -448,6 +449,75 @@ if (file.exists(tri_file)) {
   add_key("tri_real_target_minutes_min", min(tm), "target (FSR as used): run time per cohort (min), same cohorts, min")
   add_key("tri_real_target_minutes_max", max(tm), "target (FSR as used): run time per cohort (min), same cohorts, max")
 }
+
+# ============================================================
+# BARRIDO DE k (solapamiento del top-k para k = 5..50)
+# ============================================================
+# Mediana del solapamiento por comparación y k, con IC 95 % por bootstrap
+# sobre unidades independientes (cluster): la cohorte, o el cáncer para los
+# pares de subtipos. Responde si las conclusiones dependen de elegir k = 20.
+kcols <- paste0("top", K_SWEEP)
+boot_median <- function(d, cluster, B = 2000, seed = 1) {
+  set.seed(seed)
+  cl <- split(seq_len(nrow(d)), d[[cluster]])
+  est <- vapply(kcols, function(k) median(d[[k]], na.rm = TRUE), numeric(1))
+  bt <- replicate(B, { i <- unlist(cl[sample(length(cl), replace = TRUE)], use.names = FALSE)
+                       vapply(kcols, function(k) median(d[[k]][i], na.rm = TRUE), numeric(1)) })
+  data.frame(k = K_SWEEP, median = est, lo = apply(bt, 1, quantile, 0.025, na.rm = TRUE),
+             hi = apply(bt, 1, quantile, 0.975, na.rm = TRUE), n_units = length(cl), row.names = NULL)
+}
+pe_k <- readRDS(file.path(dirs$real_eval, "pooled.rds"))$all_cohorts
+pe_k <- pe_k[pe_k$tier == "main", ]
+names(pe_k) <- sub("_own_vs_pooled$", "", names(pe_k))
+sweep_sets <- list(
+  "FSR vs ARACNe3-top100 (same cohort)" = list(concordance[concordance$x == A & concordance$y == B, ], "analysis_id"),
+  "ARACNe3-top100 vs ARACNe3 support >= 10" = list(concordance[concordance$x == B & concordance$y == C, ], "analysis_id"),
+  "Own vs cancer-wide network (n >= 60)" = list(pe_k, "analysis_id"),
+  "Network of another subtype (same signature)" = list(cross$decomp[cross$decomp$comparison == "within_net", ], "cancer"),
+  "Subtypes of the same cancer" = list(cross$within, "cancer"),
+  "Null (network from another cancer)" = list(cross$null, "analysis_id"))
+ksw <- do.call(rbind, lapply(names(sweep_sets), function(nm)
+  cbind(comparison = nm, boot_median(sweep_sets[[nm]][[1]], sweep_sets[[nm]][[2]]))))
+n_shared_med <- median(concordance$n_shared[concordance$x == A & concordance$y == B])
+ksw_chance <- data.frame(k = K_SWEEP, overlap = K_SWEEP / n_shared_med)
+write_tsv(ksw, "k_sweep")
+# Orden de las comparaciones en cada k: métodos > subtipos > nulo, por medianas y por IC
+med <- function(nm) ksw[ksw$comparison == nm, ]
+m_meth <- med("FSR vs ARACNe3-top100 (same cohort)"); m_sub <- med("Subtypes of the same cancer"); m_null <- med("Null (network from another cancer)")
+add_key("ksweep_n_k", length(K_SWEEP), "k sweep: number of k values")
+add_key("ksweep_k_min", min(K_SWEEP), "k sweep: smallest k"); add_key("ksweep_k_max", max(K_SWEEP), "k sweep: largest k")
+ord_ok <- m_meth$median > m_sub$median & m_sub$median > m_null$median
+ci_ok <- m_meth$lo > m_sub$hi
+# El texto dice que el orden solo falla en los k más chicos: se verifica aquí
+stopifnot("El orden métodos > subtipos > nulo falla en un k que no es de los más chicos; reescribir §3.11" =
+            all(cummax(ord_ok) == ord_ok), all(cummax(ci_ok) == ci_ok))
+add_key("ksweep_order_median_n", sum(ord_ok), "k values where median overlap orders methods > subtypes > null")
+add_key("ksweep_order_fail_kmax", if (any(!ord_ok)) max(K_SWEEP[!ord_ok]) else 0, "largest k where the ordering methods > subtypes > null fails (0 = none)")
+add_key("ksweep_methods_ci_above_subtypes_n", sum(m_meth$lo > m_sub$hi), "k values where the 95 % CI of method agreement lies above that of between-subtype agreement")
+add_key("ksweep_subtypes_ci_above_null_n", sum(m_sub$lo > m_null$hi), "k values where the 95 % CI of between-subtype agreement lies above that of the null")
+add_key("ksweep_chance_k20", 20 / n_shared_med, "expected top-20 overlap by chance (20 / median shared regulators)")
+add_key("ksweep_methods_median_min", min(m_meth$median), "k sweep: method agreement, smallest median over k")
+add_key("ksweep_methods_median_max", max(m_meth$median), "k sweep: method agreement, largest median over k")
+# Submuestreo: n mínimo que alcanza la concordancia entre métodos, para cada k
+sub_k <- readRDS(file.path(dirs$real_eval, "subsample.rds"))
+ksub <- do.call(rbind, lapply(sort(unique(sub_k$n)), function(nn) cbind(n = nn, boot_median(sub_k[sub_k$n == nn, ], "analysis_id"))))
+ksub$ratio_to_methods <- ksub$median / m_meth$median[match(ksub$k, m_meth$k)]
+write_tsv(ksub, "k_sweep_subsample")
+min_n_k <- vapply(K_SWEEP, function(k) { d <- ksub[ksub$k == k & ksub$ratio_to_methods >= 1, ]; if (nrow(d)) min(d$n) else NA_real_ }, numeric(1))
+for (i in seq_along(K_SWEEP)) add_key(sprintf("ksweep_min_n_k%d", K_SWEEP[i]), min_n_k[i], sprintf("smallest subsample n whose median top-%d overlap reaches method agreement", K_SWEEP[i]))
+add_key("ksweep_min_n_lowest", min(min_n_k, na.rm = TRUE), "k sweep: lowest of the per-k minimum n"); add_key("ksweep_min_n_highest", max(min_n_k, na.rm = TRUE), "k sweep: highest of the per-k minimum n")
+ksw$comparison <- factor(ksw$comparison, names(sweep_sets))
+f9a <- ggplot(ksw, aes(k, median, colour = comparison, fill = comparison)) +
+  geom_ribbon(aes(ymin = lo, ymax = hi), alpha = 0.15, colour = NA) + geom_line() + geom_point(size = 1.5) +
+  geom_line(data = ksw_chance, aes(k, overlap), inherit.aes = FALSE, linetype = 2, colour = "grey40") +
+  scale_x_continuous(breaks = K_SWEEP) + scale_y_continuous(labels = scales::percent, limits = c(0, 1)) +
+  labs(x = "k (top-k master regulators by |NES|)", y = "Median top-k overlap (95 % bootstrap CI)", colour = NULL, fill = NULL) +
+  guides(colour = guide_legend(ncol = 1), fill = guide_legend(ncol = 1))
+f9b <- ggplot(ksub, aes(n, ratio_to_methods, colour = factor(k))) + geom_hline(yintercept = 1, linetype = 2, colour = "grey40") +
+  geom_line() + geom_point(size = 1.5) + scale_x_log10(breaks = sort(unique(ksub$n))) +
+  scale_colour_viridis_d(end = 0.9) +
+  labs(x = "Subsampled tumours (n, log scale)", y = "Subsample overlap / method agreement", colour = "k")
+save_fig(f9a / f9b + plot_annotation(tag_levels = "A"), "fig9_k_sweep", 9, 10)
 
 # ============================================================
 # DATOS SINTÉTICOS

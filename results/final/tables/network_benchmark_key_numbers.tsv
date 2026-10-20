@@ -74,14 +74,14 @@ A_r0.4_vs_CollecTRI_median_rho	0.219	A_r0.4 vs CollecTRI: median Spearman rho of
 B_k100_vs_CollecTRI_median_rho	0.182	B_k100 vs CollecTRI: median Spearman rho of NES
 aracne3_full_vs_CollecTRI_median_rho	0.173	aracne3_full vs CollecTRI: median Spearman rho of NES
 within_cancer_median_rho	0.575	subtypes of the same cancer, scheme A, median: rho
-null_median_rho	0.526	null (own signature, scheme A network from another cancer), median: rho
-null_max_rho	0.749	null, max: rho
+null_median_rho	0.54	null (own signature, scheme A network from another cancer), median: rho
+null_max_rho	0.753	null, max: rho
 within_cancer_median_top20	0.45	subtypes of the same cancer, scheme A, median: top20
-null_median_top20	0.3	null (own signature, scheme A network from another cancer), median: top20
+null_median_top20	0.35	null (own signature, scheme A network from another cancer), median: top20
 null_max_top20	0.6	null, max: top20
 within_cancer_median_top50	0.4	subtypes of the same cancer, scheme A, median: top50
-null_median_top50	0.36	null (own signature, scheme A network from another cancer), median: top50
-null_max_top50	0.64	null, max: top50
+null_median_top50	0.35	null (own signature, scheme A network from another cancer), median: top50
+null_max_top50	0.56	null, max: top50
 within_cancer_n_pairs	43	pairs of subtypes of the same cancer
 null_n_pairs	102	null pairs
 method_effect_top20_turnover	0.3	top-20 turnover when changing method (1 - median overlap A vs B)
@@ -96,10 +96,10 @@ within_sig_median_top50	0.6	own network, signature of another subtype of the sam
 within_sig_n_pairs	86	within_sig directed pairs
 network_effect_between_subtypes_top20_turnover	0.45	top-20 turnover when swapping only the network between subtypes of the same cancer
 signature_effect_between_subtypes_top20_turnover	0.4	top-20 turnover when swapping only the signature between subtypes of the same cancer
-within_vs_null_top20_wilcoxon_p	0.00679	Wilcoxon p, top-20 overlap within-cancer vs null
+within_vs_null_top20_wilcoxon_p	0.0211	Wilcoxon p, top-20 overlap within-cancer vs null
 within_cancer_top20_q25	0.225	within-cancer top-20 overlap, 25th percentile
 within_cancer_top20_q75	0.5	within-cancer top-20 overlap, 75th percentile
-null_top20_q25	0.213	null top-20 overlap, 25th percentile
+null_top20_q25	0.25	null top-20 overlap, 25th percentile
 null_top20_q75	0.4	null top-20 overlap, 75th percentile
 nonmono_frac_low_scc_min_c1	0.14	support >= 1: min fraction of edges with |Spearman| < 0.2
 nonmono_frac_low_scc_max_c1	0.531	support >= 1: max fraction of edges with |Spearman| < 0.2
@@ -325,6 +325,25 @@ tri_real_minutes_min	31.8	triangle: run time per cohort (min), min
 tri_real_minutes_max	46.5	triangle: run time per cohort (min), max
 tri_real_target_minutes_min	5.65	target (FSR as used): run time per cohort (min), same cohorts, min
 tri_real_target_minutes_max	7.98	target (FSR as used): run time per cohort (min), same cohorts, max
+ksweep_n_k	7	k sweep: number of k values
+ksweep_k_min	5	k sweep: smallest k
+ksweep_k_max	50	k sweep: largest k
+ksweep_order_median_n	6	k values where median overlap orders methods > subtypes > null
+ksweep_order_fail_kmax	5	largest k where the ordering methods > subtypes > null fails (0 = none)
+ksweep_methods_ci_above_subtypes_n	6	k values where the 95 % CI of method agreement lies above that of between-subtype agreement
+ksweep_subtypes_ci_above_null_n	0	k values where the 95 % CI of between-subtype agreement lies above that of the null
+ksweep_chance_k20	0.0164	expected top-20 overlap by chance (20 / median shared regulators)
+ksweep_methods_median_min	0.6	k sweep: method agreement, smallest median over k
+ksweep_methods_median_max	0.7	k sweep: method agreement, largest median over k
+ksweep_min_n_k5	60	smallest subsample n whose median top-5 overlap reaches method agreement
+ksweep_min_n_k10	100	smallest subsample n whose median top-10 overlap reaches method agreement
+ksweep_min_n_k15	60	smallest subsample n whose median top-15 overlap reaches method agreement
+ksweep_min_n_k20	80	smallest subsample n whose median top-20 overlap reaches method agreement
+ksweep_min_n_k30	80	smallest subsample n whose median top-30 overlap reaches method agreement
+ksweep_min_n_k40	80	smallest subsample n whose median top-40 overlap reaches method agreement
+ksweep_min_n_k50	80	smallest subsample n whose median top-50 overlap reaches method agreement
+ksweep_min_n_lowest	60	k sweep: lowest of the per-k minimum n
+ksweep_min_n_highest	100	k sweep: highest of the per-k minimum n
 syn_nonmono_strong_n100_c10_frac_low_scc	0.000366	synthetic strong, n=100, support >= 10: mean fraction of edges with |Spearman| < 0.2
 syn_nonmono_strong_n200_c10_frac_low_scc	0.028	synthetic strong, n=200, support >= 10: mean fraction of edges with |Spearman| < 0.2
 syn_nonmono_weak_n200_c10_frac_low_scc	0	synthetic weak, n=200, support >= 10: mean fraction of edges with |Spearman| < 0.2

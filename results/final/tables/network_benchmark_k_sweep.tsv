@@ -1,0 +1,43 @@
+comparison	k	median	lo	hi	n_units
+FSR vs ARACNe3-top100 (same cohort)	5	0.6	0.4	0.8	15
+FSR vs ARACNe3-top100 (same cohort)	10	0.7	0.6	0.7	15
+FSR vs ARACNe3-top100 (same cohort)	15	0.666666666666667	0.6	0.666666666666667	15
+FSR vs ARACNe3-top100 (same cohort)	20	0.7	0.65	0.7	15
+FSR vs ARACNe3-top100 (same cohort)	30	0.7	0.666666666666667	0.733333333333333	15
+FSR vs ARACNe3-top100 (same cohort)	40	0.7	0.65	0.75	15
+FSR vs ARACNe3-top100 (same cohort)	50	0.7	0.66	0.72	15
+ARACNe3-top100 vs ARACNe3 support >= 10	5	0.4	0.4	0.604999999999973	15
+ARACNe3-top100 vs ARACNe3 support >= 10	10	0.6	0.6	0.7	15
+ARACNe3-top100 vs ARACNe3 support >= 10	15	0.666666666666667	0.6	0.733333333333333	15
+ARACNe3-top100 vs ARACNe3 support >= 10	20	0.7	0.65	0.8	15
+ARACNe3-top100 vs ARACNe3 support >= 10	30	0.733333333333333	0.666666666666667	0.8	15
+ARACNe3-top100 vs ARACNe3 support >= 10	40	0.725	0.675	0.8	15
+ARACNe3-top100 vs ARACNe3 support >= 10	50	0.72	0.66	0.76	15
+Own vs cancer-wide network (n >= 60)	5	0.6	0.4	0.6	29
+Own vs cancer-wide network (n >= 60)	10	0.6	0.6	0.7	29
+Own vs cancer-wide network (n >= 60)	15	0.666666666666667	0.6	0.733333333333333	29
+Own vs cancer-wide network (n >= 60)	20	0.65	0.6	0.75	29
+Own vs cancer-wide network (n >= 60)	30	0.666666666666667	0.6	0.666666666666667	29
+Own vs cancer-wide network (n >= 60)	40	0.625	0.575	0.675	29
+Own vs cancer-wide network (n >= 60)	50	0.64	0.62	0.68	29
+Network of another subtype (same signature)	5	0.4	0.2	0.6	10
+Network of another subtype (same signature)	10	0.5	0.5	0.6	10
+Network of another subtype (same signature)	15	0.533333333333333	0.466666666666667	0.6	10
+Network of another subtype (same signature)	20	0.55	0.45	0.6	10
+Network of another subtype (same signature)	30	0.533333333333333	0.466666666666667	0.566666666666667	10
+Network of another subtype (same signature)	40	0.5	0.475	0.55	10
+Network of another subtype (same signature)	50	0.52	0.46	0.56	10
+Subtypes of the same cancer	5	0.2	0	0.4	10
+Subtypes of the same cancer	10	0.4	0.2	0.5	10
+Subtypes of the same cancer	15	0.466666666666667	0.233333333333333	0.533333333333333	10
+Subtypes of the same cancer	20	0.45	0.3	0.5	10
+Subtypes of the same cancer	30	0.433333333333333	0.333333333333333	0.5	10
+Subtypes of the same cancer	40	0.425	0.325	0.475	10
+Subtypes of the same cancer	50	0.4	0.34	0.48	10
+Null (network from another cancer)	5	0.2	0.2	0.4	34
+Null (network from another cancer)	10	0.3	0.3	0.4	34
+Null (network from another cancer)	15	0.333333333333333	0.266666666666667	0.4	34
+Null (network from another cancer)	20	0.35	0.3	0.35	34
+Null (network from another cancer)	30	0.333333333333333	0.3	0.4	34
+Null (network from another cancer)	40	0.35	0.325	0.375	34
+Null (network from another cancer)	50	0.35	0.32	0.38	34

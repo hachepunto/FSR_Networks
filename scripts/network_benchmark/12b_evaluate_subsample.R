@@ -41,7 +41,7 @@ for (id in unlist(ss$cohorts)) {
     rows[[length(rows) + 1]] <- data.frame(
       analysis_id = id, n_full = n_full, n = n_sub, replicate = r,
       n_regulators = length(reg), n_evaluable = if (is.null(res)) 0 else nrow(res),
-      n_shared = cc["n_shared"], rho = cc["rho"], top20 = cc["top20"], top50 = cc["top50"],
+      n_shared = cc["n_shared"], rho = cc["rho"], as.list(cc[grepl("^top", names(cc))]),
       edge_jaccard_global = length(intersect(keys, ref_keys)) / length(union(keys, ref_keys)),
       edge_jaccard_per_tf_median = median(per_tf),
       minutes = attr(reg, "params")$minutes)

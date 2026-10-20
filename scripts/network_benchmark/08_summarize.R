@@ -11,7 +11,7 @@
 #   tables/network_benchmark_synthetic_master_regulators.tsv
 #   tables/network_benchmark_real_cross_cohort{,_decomposition}.tsv
 #   tables/network_benchmark_real_subsample{,_summary}.tsv
-#   tables/network_benchmark_real_pooled_{surrogate,small_cohorts,specificity}.tsv
+#   tables/network_benchmark_real_pooled_{surrogate,small_cohorts,all_cohorts,specificity}.tsv
 #   tables/network_benchmark_synthetic_{average_precision,nonmonotonic,truth_regulon_nonmonotone}.tsv
 #   tables/network_benchmark_key_numbers.tsv   (cada cifra citada en el texto)
 #   tables/network_benchmark_collectri_{edges,provenance}.tsv (copia archivada de la referencia usada)
@@ -359,6 +359,7 @@ stopifnot("Falta pooled.rds (13_pooled_networks.R + 13b_evaluate_pooled.R)" = fi
   sur <- pe$surrogate
   write_tsv(sur, "real_pooled_surrogate"); write_tsv(pe$production, "real_pooled_small_cohorts")
   write_tsv(pe$specificity, "real_pooled_specificity")
+  if (!is.null(pe$all_cohorts)) write_tsv(pe$all_cohorts, "real_pooled_all_cohorts")
   # Media por cohorte sobre réplicas; la unidad de las pruebas pareadas es la cohorte
   w <- aggregate(cbind(top20, swap_top20_mean) ~ analysis_id + network, sur, mean)
   po <- w[w$network == "pooled", ]; ow <- w[w$network == "own", ]
@@ -408,6 +409,8 @@ if (length(syn_files)) {
   syn <- lapply(syn_files, readRDS)
   se <- do.call(rbind, lapply(syn, `[[`, "edges"))
   sm <- do.call(rbind, lapply(syn, `[[`, "master_regulators"))
+  # FSR con DPI por triángulos (paso 14) se resume aparte, en 14b
+  se <- se[!grepl("^A_tri_", se$regulon), ]; sm <- sm[!grepl("^A_tri_", sm$regulon), ]
   sap <- do.call(rbind, lapply(syn, `[[`, "average_precision"))
   summarise <- function(d, vars, by) {
     g <- interaction(d[by], drop = TRUE, sep = "|")

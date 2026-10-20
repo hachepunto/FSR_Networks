@@ -3,7 +3,7 @@
 set -euo pipefail
 
 # ============================================================
-# Orquestador del módulo network_benchmark: corre los pasos 01–09, 12/12b y 13/13b
+# Orquestador del módulo network_benchmark: corre los pasos 01–09, 12/12b, 13/13b y 14/14b
 # en orden, con el paralelismo indicado. Los pasos de inferencia (01, 02, 03,
 # 06, 12, 13) saltan lo que ya existe; las evaluaciones (04, 04b, 07, 12b, 13b) y el
 # resumen (08, 09) se recalculan siempre (son baratos). Se puede relanzar
@@ -85,11 +85,23 @@ Rscript -e 'source("scripts/network_benchmark/lib_benchmark.R"); ss <- bench_con
     'Rscript scripts/network_benchmark/12_subsample_real.R $0 $1 $2 > "'"$LOGS"'/12_sub_$0_n$1_rep$2.log" 2>&1 || { echo "ERROR en 12 $0 $1 $2"; exit 255; }'
 Rscript scripts/network_benchmark/12b_evaluate_subsample.R > "$LOGS/12b_subsample.log" 2>&1
 
-step "13 red del cáncer completo para cohortes chicas ($CORTO_JOBS en paralelo)"
-Rscript -e 'source("scripts/network_benchmark/lib_benchmark.R"); cfg <- bench_config(); pp <- cfg$network_benchmark$pooled; for (c in unique(analysis_table(cfg)$cancer[analysis_table(cfg)$n_red < network_min_n(cfg)])) cat("full", c, "\n"); for (r in seq_len(pp$replicates)) for (id in unlist(pp$cohorts)) cat("surrogate", id, r, "\n")' \
+step "13 redes del cáncer completo (los 10 cánceres + sustituto de cohortes chicas) ($CORTO_JOBS en paralelo)"
+Rscript -e 'source("scripts/network_benchmark/lib_benchmark.R"); cfg <- bench_config(); pp <- cfg$network_benchmark$pooled; for (c in unique(analysis_table(cfg)$cancer)) cat("full", c, "\n"); for (r in seq_len(pp$replicates)) for (id in unlist(pp$cohorts)) cat("surrogate", id, r, "\n")' \
     | xargs -P "$CORTO_JOBS" -L 1 sh -c \
     'Rscript scripts/network_benchmark/13_pooled_networks.R $0 $1 $2 > "'"$LOGS"'/13_$0_$1_$2.log" 2>&1 || { echo "ERROR en 13 $0 $1 $2"; exit 255; }'
 Rscript scripts/network_benchmark/13b_evaluate_pooled.R > "$LOGS/13b_pooled.log" 2>&1
+
+# 14 necesita el corto del fork (dpi_edges); se salta si network_benchmark.dpi_triangle.corto_lib no lo tiene
+if Rscript -e 'source("scripts/network_benchmark/lib_benchmark.R"); l <- bench_config()$network_benchmark$dpi_triangle$corto_lib; if (!is.null(l)) .libPaths(c(l, .libPaths())); quit(status = !("dpi" %in% names(formals(corto::corto))))' 2>/dev/null; then
+  step "14 FSR con DPI por triángulos (sintéticos, luego reales)"
+  ls -d "$OUT_DIR"/synthetic/*_n*_rep* | xargs -P "$CORTO_JOBS" -I{} sh -c \
+    'Rscript scripts/network_benchmark/14_dpi_triangle.R synthetic {} > /dev/null 2>&1 && Rscript scripts/network_benchmark/07_evaluate_synthetic.R {} > /dev/null 2>&1 || { echo "ERROR en 14 {}"; exit 255; }'
+  Rscript -e 'source("scripts/network_benchmark/lib_benchmark.R"); cat(unlist(bench_config()$network_benchmark$dpi_triangle$cohorts), sep = "\n")' \
+    | xargs -P "$CORTO_JOBS" -I{} sh -c 'Rscript scripts/network_benchmark/14_dpi_triangle.R real {} > "'"$LOGS"'/14_{}.log" 2>&1 || { echo "ERROR en 14 {}"; exit 255; }'
+  Rscript scripts/network_benchmark/14b_evaluate_dpi_triangle.R > "$LOGS/14b_dpi_triangle.log" 2>&1
+else
+  echo "Se omite el paso 14: no hay un corto con dpi= (network_benchmark.dpi_triangle.corto_lib)"
+fi
 
 step "05 datos sintéticos"
 Rscript scripts/network_benchmark/05_simulate_synthetic.R > "$LOGS/05_simulate.log" 2>&1

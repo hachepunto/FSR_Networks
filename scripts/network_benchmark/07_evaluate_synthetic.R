@@ -1,7 +1,7 @@
 # Evaluación de un dataset sintético contra la red verdadera.
 #
 # Regulones: current, A_k<k> (corto laxo, top-k), A_r<r> (cada umbral de
-# r_min_grid, top-k_main), aracne3_full,
+# r_min_grid, top-k_main), A_tri_k<main> (DPI por triángulos, paso 14, si existe), aracne3_full,
 # aracne3_c<m>, B_k<main> (ARACNe3 top-k) y truth (la red verdadera, techo
 # de referencia para la recuperación de reguladores maestros).
 #
@@ -53,6 +53,9 @@ net <- read.delim(file.path(ds, "aracne3", paste0("consolidated-net_", name, ".t
 regs <- list(current = readRDS(file.path(ds, "corto_current.rds")))
 for (k in unlist(nb$top_k)) regs[[paste0("A_k", k)]] <- topk_regulon(lenient, k)
 for (r in unlist(nb$corto$r_min_grid)) regs[[sprintf("A_r%.1f", r)]] <- topk_regulon(lenients[[lenient_name(r)]], k_main)
+# FSR con DPI por triángulos (paso 14), si existe
+tri_file <- file.path(ds, paste0("corto_", lenient_name(nb$corto$r_min), "_triangle.rds"))
+if (file.exists(tri_file)) regs[[paste0("A_tri_k", k_main)]] <- topk_regulon(readRDS(tri_file), k_main)
 regs$aracne3_full <- aracne3_to_regulon(net, n_subnets)
 regs[[paste0("aracne3_c", min_count)]] <- aracne3_to_regulon(net, n_subnets, min_count)
 regs[[paste0("B_k", k_main)]] <- topk_regulon(regs$aracne3_full, k_main)

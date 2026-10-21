@@ -5,7 +5,7 @@
 # (solo letras): dígitos a palabras, el resto se elimina.
 #
 # Uso: Rscript scripts/network_benchmark/11_appendix_numbers_tex.R <appendix_dir>
-# Salida: <appendix_dir>/numbers.tex y figures/figA5–figA7 (copias de las figuras S7–S9)
+# Salida: <appendix_dir>/numbers.tex y figures/figA5–figA6 (copias de las figuras S7–S8)
 
 source("scripts/network_benchmark/lib_benchmark.R")
 args <- commandArgs(trailingOnly = TRUE)
@@ -38,8 +38,7 @@ message(length(names_tex), " macros escritas en ", file.path(out, "numbers.tex")
 
 # Figuras del suplementario que el apéndice reproduce (n mínimo, red del cáncer completo)
 fig_dir <- file.path(out, "figures"); dir.create(fig_dir, showWarnings = FALSE)
-copies <- c(figA5_subsampling_real = "fig7_subsampling_real", figA6_cancer_wide_network = "fig8_cancer_wide_network",
-            figA7_k_sweep = "fig9_k_sweep")
+copies <- c(figA5_subsampling_real = "fig7_subsampling_real", figA6_cancer_wide_network = "fig8_cancer_wide_network")
 for (dst in names(copies))
   stopifnot(file.copy(file.path(dirs$figures, paste0("network_benchmark_", copies[[dst]], ".pdf")),
                       file.path(fig_dir, paste0(dst, ".pdf")), overwrite = TRUE))

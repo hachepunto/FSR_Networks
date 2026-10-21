@@ -45,7 +45,13 @@ write_tsv <- function(df, name) {
   write.table(df, file.path(dirs$tables, paste0("network_benchmark_", name, ".tsv")),
               sep = "\t", quote = FALSE, row.names = FALSE, na = "NA")
 }
-save_fig <- function(p, name, w, h) ggsave(file.path(dirs$figures, paste0("network_benchmark_", name, ".pdf")), p, width = w, height = h)
+# Con FIG_PREVIEW_DIR definida se guarda además un PNG de cada figura (para
+# revisarlas en el servidor, donde no hay visor de PDF).
+save_fig <- function(p, name, w, h) {
+  ggsave(file.path(dirs$figures, paste0("network_benchmark_", name, ".pdf")), p, width = w, height = h)
+  prev <- Sys.getenv("FIG_PREVIEW_DIR")
+  if (nzchar(prev)) ggsave(file.path(prev, paste0(name, ".png")), p, width = w, height = h, dpi = 90, type = "cairo")
+}
 theme_set(theme_bw(base_size = 10) + theme(panel.grid.minor = element_blank(), legend.position = "bottom"))
 
 key <- list()
@@ -407,16 +413,30 @@ stopifnot("Falta pooled.rds (13_pooled_networks.R + 13b_evaluate_pooled.R)" = fi
   add_key("pooled_LUSC_between_own_max", max(sp$top20_own_networks), "LUSC subtype pairs: top-20 overlap with own networks, max")
   add_key("pooled_LUSC_between_pooled_min", min(sp$top20_pooled_network), "LUSC subtype pairs: top-20 overlap with cancer-wide network, min")
   add_key("pooled_LUSC_between_pooled_max", max(sp$top20_pooled_network), "LUSC subtype pairs: top-20 overlap with cancer-wide network, max")
-  d8 <- rbind(data.frame(analysis_id = ow$analysis_id, network = paste0("Own network, ", nb$pooled$small_n, " tumours"), top20 = ow$top20),
-              data.frame(analysis_id = po$analysis_id, network = paste0("Cancer-wide network (other subtypes + ", nb$pooled$small_n, ")"), top20 = po$top20),
-              data.frame(analysis_id = po$analysis_id, network = "Network of another subtype", top20 = po$swap_top20_mean))
-  d8$network <- factor(d8$network, unique(d8$network))
-  d8$analysis_id <- factor(d8$analysis_id, po$analysis_id[order(po$top20)])
-  f8 <- ggplot(d8, aes(top20, analysis_id, colour = network)) + geom_line(aes(group = analysis_id), colour = "grey80") +
-    geom_point(size = 2.5) + scale_x_continuous(labels = scales::percent) +
-    labs(x = "Top-20 MR overlap with the full-cohort network (mean over replicates)", y = NULL, colour = NULL) +
-    theme(legend.position = "bottom") + guides(colour = guide_legend(nrow = 3))
-  save_fig(f8, "fig8_cancer_wide_network", 8, 6)
+  # Violines: por cohorte y red, distribución del solapamiento sobre todos los
+  # k del barrido (y las réplicas); el punto es k = 20, el valor que cita el texto.
+  kc <- paste0("top", K_SWEEP)
+  labs8 <- c(own = paste0("Own network, ", nb$pooled$small_n, " tumours"),
+             pooled = paste0("Cancer-wide network (other subtypes + ", nb$pooled$small_n, ")"),
+             swap = "Network of another subtype")
+  long8 <- function(d, net, cols) do.call(rbind, lapply(seq_along(K_SWEEP), function(i)
+    data.frame(analysis_id = d$analysis_id, network = labs8[[net]], k = K_SWEEP[i], overlap = d[[cols[i]]])))
+  sw <- sur[!duplicated(sur$analysis_id), ]
+  v8 <- rbind(long8(sur[sur$network == "own", ], "own", kc), long8(sur[sur$network == "pooled", ], "pooled", kc),
+              long8(sw, "swap", paste0("swap_", kc, "_mean")))
+  d8 <- rbind(data.frame(analysis_id = ow$analysis_id, network = labs8[["own"]], overlap = ow$top20),
+              data.frame(analysis_id = po$analysis_id, network = labs8[["pooled"]], overlap = po$top20),
+              data.frame(analysis_id = po$analysis_id, network = labs8[["swap"]], overlap = po$swap_top20_mean))
+  ord8 <- names(sort(tapply(v8$overlap[v8$network == labs8[["pooled"]]], v8$analysis_id[v8$network == labs8[["pooled"]]], median)))
+  for (nm in c("v8", "d8")) { x <- get(nm); x$network <- factor(x$network, unname(labs8)); x$analysis_id <- factor(x$analysis_id, ord8); assign(nm, x) }
+  dodge8 <- position_dodge(width = 0.8)
+  f8 <- ggplot(v8, aes(analysis_id, overlap, fill = network)) +
+    geom_violin(position = dodge8, scale = "width", width = 0.75, alpha = 0.45, colour = NA) +
+    geom_point(data = d8, aes(colour = network), position = dodge8, size = 1.8, show.legend = FALSE) +
+    coord_flip() + scale_y_continuous(labels = scales::percent, limits = c(0, 1)) +
+    labs(x = NULL, y = "Top-k MR overlap with the full-cohort network", fill = NULL, colour = NULL) +
+    theme(legend.position = "bottom") + guides(fill = guide_legend(nrow = 3, reverse = TRUE), colour = "none")
+  save_fig(f8, "fig8_cancer_wide_network", 8, 9)
 }
 
 # ============================================================

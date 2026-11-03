@@ -82,29 +82,15 @@ git cat-file -e "${ARACNE3_COMMIT}^{commit}" 2>/dev/null || {
     exit 1
 }
 
-# ── 2. Cambios locales ──
-# Un archivo modificado cuyo contenido ya es idéntico al del commit
-# destino (p.ej. el parche manual de <cstdint>, incluido upstream en
-# d80cdd7) se descarta sin pérdida. Cualquier otro cambio aborta.
+# ── 2. Clon limpio ──
 # Se ignora el contenido sucio dentro de submódulos (no afecta el
 # checkout); un submódulo en otro commit sí se reporta.
 
-mapfile -t MODIFIED < <(git diff --name-only --ignore-submodules=dirty HEAD)
-
-# Se valida todo antes de descartar nada, para no dejar el clon a medias.
-for file in "${MODIFIED[@]}"; do
-    target_blob="$(git rev-parse -q --verify "${ARACNE3_COMMIT}:${file}" || true)"
-    if ! [[ -f "$file" && -n "$target_blob" && "$(git hash-object "$file")" == "$target_blob" ]]; then
-        echo "ERROR: $file tiene cambios locales que no están en $ARACNE3_COMMIT."
-        echo "Revísalos y descártalos o respáldalos antes de volver a correr este script."
-        exit 1
-    fi
-done
-
-for file in "${MODIFIED[@]}"; do
-    echo ">> $file: cambio local idéntico al commit destino, se descarta"
-    git checkout -- "$file"
-done
+if [[ -n "$(git status --porcelain --untracked-files=no --ignore-submodules=dirty)" ]]; then
+    echo "ERROR: $ARACNE3_DIR tiene cambios locales; respáldalos o descártalos antes de volver a correr este script."
+    git status --short --untracked-files=no --ignore-submodules=dirty
+    exit 1
+fi
 
 # ── 3. Checkout y submódulos ──
 

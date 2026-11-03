@@ -7,8 +7,8 @@ set -euo pipefail
 #
 # Construye y consolida una red regulatoria a partir de una
 # matriz de expresión y una lista de reguladores (factores de
-# transcripción), usando el fork corregido de ARACNe3:
-#   https://github.com/hachepunto/ARACNe3
+# transcripción), usando ARACNe3:
+#   https://github.com/califano-lab/ARACNe3
 #
 # A diferencia de ARACNe-AP, ARACNe3 no tiene un paso separado
 # de cálculo de umbral de información mutua: una sola invocación

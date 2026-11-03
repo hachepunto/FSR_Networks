@@ -1,0 +1,19 @@
+# Compilación LaTeX
+*.aux
+*.log
+*.out
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.bbl
+*.blg
+*.toc
+manuscript/*.pdf
+# R / sistema
+.Rhistory
+.RData
+.DS_Store
+
+# Datos y software generados (ver README)
+/data/
+/software/

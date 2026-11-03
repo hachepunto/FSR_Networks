@@ -1,0 +1,331 @@
+# Configuración del benchmark de métodos de red (FSR vs ARACNe3).
+# Copia de config/config.yaml de mra_multicancer_pipeline sin la sección
+# master_regulators, que el benchmark no usa. Rutas relativas a la raíz del
+# repositorio: data/ la llenan los pasos 1–5 (descarga de TCGA hasta DESeq2) y
+# software/ARACNe3 lo crea scripts/setup_aracne3.sh; ambas fuera de git.
+#
+# Configuración del pipeline MRA multicáncer.
+#
+# Los datos descargados y los archivos intermedios NO se guardan en el
+# repositorio de Git; se almacenan en las rutas del servidor definidas aquí.
+
+paths:
+  data_root: data/tcga
+  work_root: data/work
+  results_dir: results
+
+# ============================================================
+# INFERENCIA DE REDES — corto para TODOS los analysis_id (FSR)
+#
+# Decidido en octubre de 2026 tras el benchmark de scripts/network_benchmark/
+# (docs/supplementary_network_method.md): un solo método para las 34
+# cohortes evita que el método confunda las comparaciones entre subtipos.
+# ARACNe3 se conserva (scripts/run_aracne3.sh) solo como comparación; la
+# regla anterior "ARACNe3 si n_red >= 95" ya no decide nada. Los valores
+# network_method de subtypes.*.labels.* son todos corto.
+# ============================================================
+network_inference:
+  # Cohortes con n_red < min_n: red propia, pero resultados exploratorios
+  # (tabla analysis_tier.tsv). Base: submuestreo de cohortes reales
+  # (suplementario §3.6); la red del cáncer completo no las rescata (paso 13).
+  min_n: 60
+  # Red FSR de todos los tumores de cada cáncer (<CANCER>_pooled), como análisis de
+  # sensibilidad: el MRA de cada cohorte se corre con su red propia (principal) y con
+  # la de su cáncer; los TMRs que salen con ambas son el núcleo robusto (suplementario §3.8).
+  cancer_wide_network: true
+  aracne3:
+    dir: software/ARACNe3
+    repo: https://github.com/hachepunto/ARACNe3
+    # b93095d: corrige data races en calcAPMI() y en el bootstrap del
+    # modelo nulo (corrompían MI y nulos con OpenMP); d80cdd7 incluye el
+    # <cstdint> que antes se parchaba a mano. Compilar con
+    # scripts/setup_aracne3.sh; run_aracne3.sh verifica este commit.
+    commit: b93095dd5e8a117917eb91321c584c293b687a04
+    subnets: 100
+    seed: 42
+    alpha: 0.05
+    threads: 50
+  # FSR (octubre 2026; docs/supplementary_network_method.md): corto
+  # sobre expresión en rangos (= Spearman), umbral de efecto |r| >= r_min
+  # igual para toda n (p se deriva de r_min y n), y top_k targets por
+  # regulador. Reemplaza al p fijo 1e-8, cuyo |r| efectivo dependía de n.
+  corto:
+    nbootstraps: 100
+    rank_transform: true
+    r_min: 0.2
+    top_k: 100
+    seed: 42
+    threads: 8
+  tfs:
+    source: "Lambert et al. 2018, https://humantfs.ccbr.utoronto.ca/"
+    file: TFs_Lambert2018.txt
+    n_tfs: 1639
+
+# Expresión diferencial tumor-vs-control por analysis_id (scripts/run_deseq2.R),
+# reemplaza el t-test de msVIPER como firma de entrada para el análisis de
+# reguladores maestros: se usa la columna `stat` (estadístico de Wald,
+# combina log2FC y significancia) del resultado de DESeq2, no un subconjunto
+# filtrado. Los umbrales de abajo solo afectan la tabla/figura de genes
+# diferencialmente expresados (reporte, no la firma que se usa después).
+differential_expression:
+  deseq2:
+    min_count: 10
+    min_samples: 3
+    log2fc_threshold: 1
+    padj_threshold: 0.05
+
+# Módulo de justificación del método de red (scripts/network_benchmark/,
+# material suplementario). No forma parte de la corrida regular: compara,
+# sobre los 34 analysis_id y sobre datos sintéticos con red conocida,
+# el esquema propuesto (A: corto para todos, Pearson sobre rangos,
+# top-k por regulador) contra ARACNe3 y contra la regla anterior de corto.
+# Entorno: config/env_network_benchmark.yaml.
+network_benchmark:
+  out_dir: null               # intermedios del módulo; null = <paths.work_root>/network_benchmark
+  threads: 8                  # hilos por corrida de corto
+  # La regla ANTERIOR del pipeline, que el benchmark compara contra el
+  # FSR. Vive aquí (y no en network_inference) para que el módulo sea
+  # autocontenido y siga corriendo aunque el pipeline ya use solo corto.
+  previous_rule:
+    fixed_p: 1.0e-8           # corto con p fijo (lo que usaba el pipeline con n < aracne3_min_n)
+    aracne3_min_n: 95         # ARACNe3 para las cohortes con n_red >= este valor
+  corto:
+    nbootstraps: 100
+    r_min: 0.2                # umbral laxo de |r| (sobre rangos) antes del DPI; el de FSR (elegido por el barrido)
+    r_min_grid: [0.0, 0.1, 0.2, 0.3, 0.4]  # sensibilidad: A con cada umbral (top_k_main targets)
+  top_k: [50, 100, 150]       # targets por regulador; 100 es el propuesto
+  top_k_main: 100
+  narnea:
+    min_targets: 30
+    seed: 1
+  null_networks_per_cohort: 3  # 04b: redes de otro cáncer por cohorte para la línea nula
+  aracne3_count_filter: 10    # filtro de soporte (subredes) para la referencia ARACNe3 filtrada
+  collectri_url: "https://omnipathdb.org/interactions?datasets=collectri&genesymbols=yes&fields=is_stimulation,is_inhibition&license=academic"
+  synthetic:
+    n_tfs: 200
+    n_targets: 5000           # regulones verdaderos ~50 targets en promedio
+    n_tf_modules: 20          # bloques de TFs correlacionados (pone a prueba el DPI)
+    tf_module_cor: 0.5
+    regulators_per_target: [1, 3]
+    edge_types: {linear: 0.5, monotone_nonlinear: 0.3, non_monotone: 0.2}
+    n_network: [30, 60, 100, 200, 400]
+    n_reference: 50
+    n_master_regulators: 10   # elegidos entre TFs con >= narnea.min_targets targets verdaderos
+    mr_shift_sd: 1.0
+    # DE del ruido del target latente. |Spearman| mediana de las aristas
+    # lineales verdaderas (n=400): weak ~0.35, strong ~0.46 (techo práctico
+    # por dilución entre reguladores y ruido NegBin). Referencia real: las
+    # aristas con soporte >= 10/100 de ARACNe3 en COAD_cms2 tienen mediana
+    # 0.55, sesgada hacia arriba por selección; de ahí dos regímenes.
+    noise_sd: {weak: 1.0, strong: 0.25}
+    replicates: 5
+    seed: 20261016
+    # Mínimos de targets para NaRnEA en los sintéticos: 30 es el del pipeline;
+    # 10 es sensibilidad, porque las redes sintéticas (sobre todo ARACNe3) son
+    # mucho más escasas que las reales y 30 dejaría sin reguladores evaluables.
+    narnea_min_targets: [30, 10]
+  # 12: submuestreo de cohortes grandes reales. Red (FSR) sobre n
+  # muestras al azar, firma fija (DESeq2 con todas), NaRnEA, comparado contra
+  # la red con todas las muestras. Mide a partir de qué n el resultado
+  # reproduce al de la cohorte completa, en datos reales.
+  subsample:
+    cohorts: [BRCA_luma, THCA_braf_like, STAD_cin, BRCA_lumb, BRCA_basal]
+    n_grid: [20, 27, 40, 60, 80, 100, 150]
+    replicates: 5
+    seed: 20261018
+  # Paso 13: ¿la red del cáncer completo (pooled) sirve a una cohorte chica?
+  # Sustituto: cohorte grande X reducida a small_n tumores al azar; red pooled
+  # = otros subtipos + esos small_n, contra la red propia de esos small_n.
+  # Verdad = red de X con todas sus muestras.
+  pooled:
+    small_n: 30
+    replicates: 3
+    seed: 20261019
+    cohorts: [STAD_cin, STAD_gs, STAD_msi, LIHC_s2, LIHC_s3, LUSC_classical,
+              BRCA_basal, BRCA_luma, THCA_braf_like, COAD_cms2, KIRC_cluster1]
+    write_matrices: false     # true: preprocess_expression.R escribe <CANCER>_pooled (solo para este paso)
+    expr_root: null           # matrices <CANCER>_pooled_tumor_expr.rds; null = <work_root>/preprocessed
+  # Paso 14: DPI por triángulos (regla de ARACNe) en FSR, frente a la regla por
+  # blanco de corto. Requiere el fork de corto con dpi_edges() (rama
+  # feature/dpi-triangle de github.com/hachepunto/corto) instalado en corto_lib.
+  dpi_triangle:
+    corto_lib: null           # librería de R con el corto del fork; null = el instalado
+    cohorts: [COAD_cms2, BRCA_luma, STAD_cin, KIRC_cluster1, LUAD_tru]
+
+# Los proyectos TCGA con los que se trabaja en esta fase del pipeline.
+# Cada uno tiene tumor Primary Tumor, control Solid Tissue Normal y expresión
+# STAR - Counts en GDC (ver auditoría en results/tcga_project_counts.tsv).
+# Lista fijada por el usuario, ampliada cáncer por cáncer bajo pedido
+# explícito (no "todos los TCGA con control") — ver memoria del proyecto.
+projects:
+  - TCGA-BRCA
+  - TCGA-LUAD
+  - TCGA-LUSC
+  - TCGA-THCA
+  - TCGA-PRAD
+  - TCGA-COAD
+  - TCGA-KIRC
+  - TCGA-STAD
+  - TCGA-UCEC
+  - TCGA-LIHC
+
+# ============================================================
+# CLASIFICACIÓN DE SUBTIPOS — decisiones aprobadas y congeladas
+#
+# Fuentes completas, referencias y justificación de cada decisión:
+#   results/final/tables/subtype_classification_methods.tsv  (método por cáncer)
+#   results/final/tables/subtype_label_mapping.tsv            (etiqueta por valor)
+#   results/subtype_n_real.tsv                   (N real por subtipo)
+#   results/control_n_real.tsv                   (N de control por cáncer)
+#
+# Los scripts posteriores (preprocess_expression.R, run_mra.R, etc.)
+# deben LEER estas decisiones, no volver a elegir columnas, recalcular
+# clasificadores ni reinterpretar etiquetas.
+#
+# classification_method:
+#   tcga_annotated    -> se reutiliza subtype_column de TCGAquery_subtype()
+#   cmscaller         -> se recalcula con CMScaller (paquete de GitHub)
+#   gcclassifier      -> se recalcula con GCclassifier (paquete de GitHub)
+#
+# n_red es el resultado de la auditoría de N real (muestras Primary Tumor,
+# una por paciente, con subtipo válido); preprocess_expression.R lo
+# recalcula y avisa si difiere. network_method es corto para todos desde
+# octubre de 2026 (antes dependía de n_red); se conserva la columna por
+# compatibilidad con los scripts que la leen.
+#
+# network_method: corto para todos (FSR); la regla por n_red ya no aplica
+# ============================================================
+subtypes:
+  BRCA:
+    classification_method: tcga_annotated
+    package_or_source: "TCGAquery_subtype() (TCGAbiolinks)"
+    package_version: "TCGAbiolinks 2.38.0"
+    subtype_column: BRCA_Subtype_PAM50
+    excluded_values: [Normal]
+    n_control_real: 113
+    labels:
+      Basal: {standardized_label: basal, n_red: 190, network_method: corto}
+      Her2:  {standardized_label: her2,  n_red: 82,  network_method: corto}
+      LumA:  {standardized_label: luma,  n_red: 562, network_method: corto}
+      LumB:  {standardized_label: lumb,  n_red: 209, network_method: corto}
+
+  LUAD:
+    classification_method: tcga_annotated
+    package_or_source: "TCGAquery_subtype() (TCGAbiolinks)"
+    package_version: "TCGAbiolinks 2.38.0"
+    subtype_column: expression_subtype
+    excluded_values: []
+    n_control_real: 59
+    labels:
+      "prox.-inflam":  {standardized_label: prox_inflam, n_red: 78, network_method: corto}
+      "prox.-prolif.": {standardized_label: prox_prolif, n_red: 63, network_method: corto}
+      TRU:             {standardized_label: tru,         n_red: 89, network_method: corto}
+
+  LUSC:
+    classification_method: tcga_annotated
+    package_or_source: "TCGAquery_subtype() (TCGAbiolinks)"
+    package_version: "TCGAbiolinks 2.38.0"
+    subtype_column: Expression.Subtype
+    excluded_values: []
+    n_control_real: 51
+    labels:
+      basal:     {standardized_label: basal,     n_red: 43, network_method: corto}
+      classical: {standardized_label: classical, n_red: 65, network_method: corto}
+      primitive: {standardized_label: primitive, n_red: 27, network_method: corto}
+      secretory: {standardized_label: secretory, n_red: 43, network_method: corto}
+
+  THCA:
+    classification_method: thca_brs_recomputed
+    package_or_source: >-
+      Recalculado por nosotros (scripts/lib_common.R::compute_thca_brs,
+      usado por scripts/classify_subtypes.R) siguiendo la fórmula del
+      BRAF-RAS Score (BRS) de Agrawal et al. 2014, Cell — Extended
+      Experimental Procedures sección 14.1. NO usa un paquete externo.
+      Corregido tras auditoría externa (ver caveats): distancia
+      euclidiana real (no al cuadrado) y grupos de referencia por
+      genotipo BRAFV600E_RAS (no BRAF_RAF_class, que es circular).
+    package_version: "N/A (implementación propia, ver script)"
+    subtype_column: brs_class_recomputed
+    excluded_values: []
+    n_control_real: 59
+    labels:
+      "Braf-like": {standardized_label: braf_like, n_red: 358, network_method: corto}
+      "Ras-like":  {standardized_label: ras_like,  n_red: 147, network_method: corto}
+
+  PRAD:
+    classification_method: tcga_annotated
+    package_or_source: "TCGAquery_subtype() (TCGAbiolinks)"
+    package_version: "TCGAbiolinks 2.38.0"
+    subtype_column: mRNA_cluster
+    excluded_values: []
+    n_control_real: 52
+    labels:
+      "1": {standardized_label: cluster1, n_red: 112, network_method: corto}
+      "2": {standardized_label: cluster2, n_red: 105, network_method: corto}
+      "3": {standardized_label: cluster3, n_red: 116, network_method: corto}
+
+  COAD:
+    classification_method: cmscaller
+    package_or_source: "CMScaller (GitHub: Lothelab/CMScaller)"
+    package_version: "CMScaller 2.0.1"
+    package_commit: f1541730b56c2f37c123037476eed0e6de0ee6f0
+    subtype_column: cmscaller_prediction
+    excluded_values: []
+    n_control_real: 41
+    labels:
+      CMS1: {standardized_label: cms1, n_red: 79,  network_method: corto}
+      CMS2: {standardized_label: cms2, n_red: 128, network_method: corto}
+      CMS3: {standardized_label: cms3, n_red: 70,  network_method: corto}
+      CMS4: {standardized_label: cms4, n_red: 137, network_method: corto}
+
+  KIRC:
+    classification_method: tcga_annotated
+    package_or_source: "TCGAquery_subtype() (TCGAbiolinks)"
+    package_version: "TCGAbiolinks 2.38.0"
+    subtype_column: mRNA_cluster
+    excluded_values: []
+    n_control_real: 72
+    labels:
+      "1": {standardized_label: cluster1, n_red: 147, network_method: corto}
+      "2": {standardized_label: cluster2, n_red: 90,  network_method: corto}
+      "3": {standardized_label: cluster3, n_red: 94,  network_method: corto}
+      "4": {standardized_label: cluster4, n_red: 86,  network_method: corto}
+
+  STAD:
+    classification_method: gcclassifier
+    package_or_source: 'GCclassifier (GitHub: Ronlee12355/GCclassifier), classifyGC(method="TCGA")'
+    package_version: "GCclassifier 0.1.1"
+    package_commit: 20e52c97ef6cebe379cd2db63fb65dc09c06cc10
+    gcclassifier_scheme: TCGA
+    subtype_column: gcclassifier_prediction
+    excluded_values: []
+    n_control_real: 36
+    labels:
+      CIN: {standardized_label: cin, n_red: 222, network_method: corto}
+      EBV: {standardized_label: ebv, n_red: 27,  network_method: corto}
+      GS:  {standardized_label: gs,  n_red: 66,  network_method: corto}
+      MSI: {standardized_label: msi, n_red: 64,  network_method: corto}
+
+  UCEC:
+    classification_method: tcga_annotated
+    package_or_source: "TCGAquery_subtype() (TCGAbiolinks)"
+    package_version: "TCGAbiolinks 2.38.0"
+    subtype_column: mrna_expression_cluster
+    excluded_values: []
+    n_control_real: 35
+    labels:
+      "1": {standardized_label: cluster1, n_red: 126, network_method: corto}
+      "2": {standardized_label: cluster2, n_red: 111, network_method: corto}
+      "3": {standardized_label: cluster3, n_red: 96,  network_method: corto}
+
+  LIHC:
+    classification_method: tcga_annotated
+    package_or_source: "TCGAquery_subtype() (TCGAbiolinks)"
+    package_version: "TCGAbiolinks 2.38.0"
+    subtype_column: Hoshida
+    excluded_values: []
+    n_control_real: 50
+    labels:
+      "1": {standardized_label: s1, n_red: 28, network_method: corto}
+      "2": {standardized_label: s2, n_red: 86, network_method: corto}
+      "3": {standardized_label: s3, n_red: 79, network_method: corto}

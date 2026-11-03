@@ -91,6 +91,14 @@ Rscript -e 'source("scripts/network_benchmark/lib_benchmark.R"); cfg <- bench_co
     'Rscript scripts/network_benchmark/13_pooled_networks.R $0 $1 $2 > "'"$LOGS"'/13_$0_$1_$2.log" 2>&1 || { echo "ERROR en 13 $0 $1 $2"; exit 255; }'
 Rscript scripts/network_benchmark/13b_evaluate_pooled.R > "$LOGS/13b_pooled.log" 2>&1
 
+step "05 datos sintéticos"
+Rscript scripts/network_benchmark/05_simulate_synthetic.R > "$LOGS/05_simulate.log" 2>&1
+
+step "06-07 redes y evaluación sintéticas"
+ls -d "$OUT_DIR"/synthetic/*_n*_rep* | xargs -P "$ARACNE3_JOBS" -I{} sh -c \
+    'n=$(basename {}); bash scripts/network_benchmark/06_run_networks_synthetic.sh {} '"$ARACNE3_THREADS"' > "'"$LOGS"'/06_net_$n.log" 2>&1 && Rscript scripts/network_benchmark/07_evaluate_synthetic.R {} > "'"$LOGS"'/07_eval_$n.log" 2>&1 || { echo "ERROR en 06/07 $n"; exit 255; }'
+
+# 14 va después de 06-07: re-evalúa los sintéticos (07), que necesitan sus redes ARACNe3.
 # 14 necesita el corto del fork (dpi_edges); se salta si network_benchmark.dpi_triangle.corto_lib no lo tiene
 if Rscript -e 'source("scripts/network_benchmark/lib_benchmark.R"); l <- bench_config()$network_benchmark$dpi_triangle$corto_lib; if (!is.null(l)) .libPaths(c(l, .libPaths())); quit(status = !("dpi" %in% names(formals(corto::corto))))' 2>/dev/null; then
   step "14 FSR con DPI por triángulos (sintéticos, luego reales)"
@@ -102,13 +110,6 @@ if Rscript -e 'source("scripts/network_benchmark/lib_benchmark.R"); l <- bench_c
 else
   echo "Se omite el paso 14: no hay un corto con dpi= (network_benchmark.dpi_triangle.corto_lib)"
 fi
-
-step "05 datos sintéticos"
-Rscript scripts/network_benchmark/05_simulate_synthetic.R > "$LOGS/05_simulate.log" 2>&1
-
-step "06-07 redes y evaluación sintéticas"
-ls -d "$OUT_DIR"/synthetic/*_n*_rep* | xargs -P "$ARACNE3_JOBS" -I{} sh -c \
-    'n=$(basename {}); bash scripts/network_benchmark/06_run_networks_synthetic.sh {} '"$ARACNE3_THREADS"' > "'"$LOGS"'/06_net_$n.log" 2>&1 && Rscript scripts/network_benchmark/07_evaluate_synthetic.R {} > "'"$LOGS"'/07_eval_$n.log" 2>&1 || { echo "ERROR en 06/07 $n"; exit 255; }'
 
 step "08 tablas y figuras"
 Rscript scripts/network_benchmark/08_summarize.R > "$LOGS/08_summarize.log" 2>&1

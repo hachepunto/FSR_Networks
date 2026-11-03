@@ -1,6 +1,6 @@
 # FSR_Networks
 
-Código y manuscrito de *Homogeneous network inference for pan-cancer master regulator analysis* (Tovar, Barrios, Pérez-Calixto, Hernández-Lemus). El artículo compara un solo método de red para todas las cohortes, fixed-size Spearman regulons (FSR, con `corto`), contra información mutua (ARACNe3) en análisis de reguladores maestros transcripcionales con NaRnEA sobre cohortes de TCGA estratificadas por cáncer y subtipo.
+Código y manuscrito de *Homogeneous network inference for subtype-stratified master regulator analysis in cancer* (Tovar, Barrios, Pérez-Calixto, Hernández-Lemus). El artículo compara un solo método de red para todas las cohortes, fixed-size Spearman regulons (FSR, con `corto`), contra información mutua (ARACNe3) en análisis de reguladores maestros transcripcionales con NaRnEA sobre cohortes de TCGA estratificadas por cáncer y subtipo.
 
 ## Contenido
 

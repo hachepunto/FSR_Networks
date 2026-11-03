@@ -80,13 +80,13 @@ echo "$IDS" | awk '{print $1}' | xargs -P "$CORTO_JOBS" -I{} sh -c \
 Rscript scripts/network_benchmark/04b_cross_cohort_real.R > "$LOGS/04b_cross_cohort.log" 2>&1
 
 step "12 submuestreo de cohortes grandes ($CORTO_JOBS en paralelo)"
-Rscript -e 'source("scripts/network_benchmark/lib_benchmark.R"); ss <- bench_config()$network_benchmark$subsample; for (id in unlist(ss$cohorts)) for (n in unlist(ss$n_grid)) for (r in seq_len(ss$replicates)) cat(id, n, r, "\n")' \
+Rscript -e 'source("scripts/network_benchmark/lib_benchmark.R"); ss <- bench_config()$network_benchmark$subsample; for (id in unlist(ss$cohorts)) for (n in unlist(ss$n_grid)) for (r in seq_len(ss$replicates)) cat(paste(id, n, r), "\n", sep = "")' \
     | xargs -P "$CORTO_JOBS" -L 1 sh -c \
     'Rscript scripts/network_benchmark/12_subsample_real.R $0 $1 $2 > "'"$LOGS"'/12_sub_$0_n$1_rep$2.log" 2>&1 || { echo "ERROR en 12 $0 $1 $2"; exit 255; }'
 Rscript scripts/network_benchmark/12b_evaluate_subsample.R > "$LOGS/12b_subsample.log" 2>&1
 
 step "13 redes del cáncer completo (los 10 cánceres + sustituto de cohortes chicas) ($CORTO_JOBS en paralelo)"
-Rscript -e 'source("scripts/network_benchmark/lib_benchmark.R"); cfg <- bench_config(); pp <- cfg$network_benchmark$pooled; for (c in unique(analysis_table(cfg)$cancer)) cat("full", c, "\n"); for (r in seq_len(pp$replicates)) for (id in unlist(pp$cohorts)) cat("surrogate", id, r, "\n")' \
+Rscript -e 'source("scripts/network_benchmark/lib_benchmark.R"); cfg <- bench_config(); pp <- cfg$network_benchmark$pooled; for (c in unique(analysis_table(cfg)$cancer)) cat(paste("full", c), "\n", sep = ""); for (r in seq_len(pp$replicates)) for (id in unlist(pp$cohorts)) cat(paste("surrogate", id, r), "\n", sep = "")' \
     | xargs -P "$CORTO_JOBS" -L 1 sh -c \
     'Rscript scripts/network_benchmark/13_pooled_networks.R $0 $1 $2 > "'"$LOGS"'/13_$0_$1_$2.log" 2>&1 || { echo "ERROR en 13 $0 $1 $2"; exit 255; }'
 Rscript scripts/network_benchmark/13b_evaluate_pooled.R > "$LOGS/13b_pooled.log" 2>&1

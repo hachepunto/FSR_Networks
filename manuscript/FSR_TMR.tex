@@ -108,7 +108,8 @@ We compare two procedures for building $R_t$:
   across subnetworks; $m_{tg}$ is the Spearman correlation.
   \item \textbf{\texttt{corto}} (Mercatelli et al.~\cite{mercatelli2020}): Pearson correlation $\rhoP(t,g)$,
   here computed on ranks and therefore equal to $\rhoS$; a threshold $|\rho|\ge r_{\min}$; and
-  DPI pruning in a per-target form: for each target $g$ and each bootstrap, among the
+  DPI pruning in a per-target form (\texttt{corto}~1.3.1, whose DPI is identical to \texttt{dpi = "target"} in
+  \texttt{corto}~$\ge$~1.4.0): for each target $g$ and each bootstrap, among the
   regulators that pass the threshold only $\arg\max_t |\rho(t,g)|$ is retained
   (Section~\ref{sec:dpi} relates this rule to the triangle DPI). $w_{tg}$ is the fraction of
   bootstraps, including the unresampled data, in which $(t,g)$ is retained; $m_{tg}=\rho$.
@@ -267,8 +268,8 @@ a change to an unsigned enrichment method would require revisiting the choice.
 
 For a Markov chain $X\to Y\to Z$, $\MI(X;Z)\le\min\{\MI(X;Y),\MI(Y;Z)\}$ (Cover and Thomas~\cite{cover2006}). ARACNe
 uses this inequality to remove, in every triangle of edges that pass the threshold, the edge with the smallest MI.
-\texttt{corto} also applies DPI pruning, in a simplified per-target form. In \texttt{corto}~1.3.1 (function
-\texttt{dpiwin}) every target $c$ keeps, in each bootstrap, only the regulator with the largest $|\rho(\cdot,c)|$ among
+\texttt{corto} also applies DPI pruning, in a simplified per-target form. With this rule (function
+\texttt{dpiwin}; \texttt{dpi = "target"} in \texttt{corto}~$\ge$~1.4.0) every target $c$ keeps, in each bootstrap, only the regulator with the largest $|\rho(\cdot,c)|$ among
 those that pass the threshold. For two candidate regulators $a$ and $b$ of $c$, this is the
 triangle DPI under the assumption that the regulator--regulator edge $a$--$b$ is never the
 weakest of the triangle: \texttt{corto} never computes $\rho(a,b)$. Two consequences follow.
@@ -333,6 +334,20 @@ edge partly reflects selection, since ARACNe3 retained $a\to c$ precisely when $
 triplets are not pure chains either: common confounders such as tumour purity or proliferation
 create $\rho_{ac}$ without a chain, and the MI-based DPI is equally blind to them.
 \end{remark}
+
+\paragraph{The triangle rule.} \texttt{corto}~$\ge$~1.4.0 also offers the triangle form of the DPI
+(\texttt{dpi = "triangle"}), closer to ARACNe: the edge $a$--$c$ is removed only if another regulator $b$ has both
+$|\rho(b,c)|$ and $|\rho(a,b)|$ larger than $|\rho(a,c)|$. We evaluated it as an alternative to the per-target rule
+(Supplementary Note, Section 3.9). It retains \Ktrirealedgesratiomin--\Ktrirealedgesratiomax{} times as many edges before truncation and
+leaves fewer indirect edges in small samples (\KtriindirectdiffnSixZero{} and \KtriindirectdiffnOneZeroZero{} indirect false positives per 100 edges at
+$n=60$ and $n=100$), but it did not meet the criterion fixed in advance, an increase of 0.05 in the fraction of true master regulators in the top 10
+(mean difference \Ktrimrdiffmean{}, range \Ktrimrdiffmin{} to \Ktrimrdiffmax{} across regimes and sample sizes), it lost edge precision at $n=400$
+(\KtriprecisiondiffnFourZeroZerostrong{} with strong and \KtriprecisiondiffnFourZeroZeroweak{} with weak signal), and it took
+\Ktrirealminutesmin--\Ktrirealminutesmax{} min per network against \Ktrirealtargetminutesmin--\Ktrirealtargetminutesmax{} min for the per-target rule.
+In \Ktrirealncohorts{} real cohorts the two rules share \KtrirealtopTwoZeromin--\KtrirealtopTwoZeromax{} of the top-20 master regulators;
+the triangle rule agrees somewhat more with ARACNe3-top100 (\KtrirealvsBtrianglemin--\KtrirealvsBtrianglemax{} against
+\KtrirealvsBtargetmin--\KtrirealvsBtargetmax{}), which is consistency with another method, not evidence of correctness.
+We therefore keep the per-target rule.
 \begin{figure}[htbp]\centering
   \includegraphics[width=0.7\textwidth]{figA2_dpi_real_triplets}
   \caption{TF$\to$TF$\to$target triplets in the ARACNe3 network of COAD CMS2. Points above the diagonal violate $|\rho_{ac}|\le\min(|\rho_{ab}|,|\rho_{bc}|)$. Colour: whether ARACNe3 also infers the direct edge $a\to c$.}
@@ -578,7 +593,8 @@ No evidence that a cancer-wide network rescues a small subtype & Empirical (\Kpo
   \item The per-target DPI of \texttt{corto} has no theoretical support beyond the linear case.
   In real chains without a direct edge it retains the indirect regulator in a fraction
   \ATworealfracabeatsbnodirect{} of cases, and by
-  construction it discards independent co-regulators of the same target, which limits recall.
+  construction it discards independent co-regulators of the same target, which limits recall. The triangle rule of
+  \texttt{corto}~$\ge$~1.4.0 keeps them, but did not recover more master regulators in our simulations (Section~\ref{sec:dpi}).
   \item Non-monotone dependencies exist that correlation does not detect, and their prevalence
   in these cohorts is unknown. Their small effect on the ranking depends on the current scoring
   method; it has been quantified and is not zero.
@@ -595,7 +611,7 @@ No evidence that a cancer-wide network rescues a small subtype & Empirical (\Kpo
 \section*{Reproducibility}
 Figures and numbers in this work are produced by
 \path{scripts/network_benchmark/10_appendix_statistics.R} and
-\path{11_appendix_numbers_tex.R} in the \path{mra_multicancer_pipeline} repository; those
+\path{11_appendix_numbers_tex.R} in the \path{FSR_Networks} repository; those
 quoted from the Supplementary Note (Sections~\ref{sec:oneprocedure} and \ref{sec:empirical}) come
 from \path{network_benchmark_key_numbers.tsv}. Every number in the text is a macro in
 \path{numbers.tex}, generated by these scripts, except the closed-form null quantities of Section~\ref{sec:minn}, defined at the top of this file.

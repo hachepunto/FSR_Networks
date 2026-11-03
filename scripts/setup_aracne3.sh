@@ -41,7 +41,7 @@ aracne3_cfg() {
         "$CONFIG" "$1"
 }
 
-ARACNE3_DIR="$(aracne3_cfg dir)"
+ARACNE3_DIR="$(realpath -m "$(aracne3_cfg dir)")"   # absoluta: más abajo se hace cd a este directorio
 ARACNE3_REPO="$(aracne3_cfg repo)"
 ARACNE3_COMMIT="$(aracne3_cfg commit)"
 

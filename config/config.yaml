@@ -35,12 +35,12 @@ network_inference:
   cancer_wide_network: true
   aracne3:
     dir: software/ARACNe3
-    repo: https://github.com/hachepunto/ARACNe3
-    # b93095d: corrige data races en calcAPMI() y en el bootstrap del
-    # modelo nulo (corrompían MI y nulos con OpenMP); d80cdd7 incluye el
-    # <cstdint> que antes se parchaba a mano. Compilar con
-    # scripts/setup_aracne3.sh; run_aracne3.sh verifica este commit.
-    commit: b93095dd5e8a117917eb91321c584c293b687a04
+    repo: https://github.com/califano-lab/ARACNe3
+    # f0fa4fb: merge del PR #3 (califano-lab, 2026-10-25), que corrige data
+    # races en calcAPMI() y en el bootstrap del modelo nulo bajo OpenMP y hace
+    # reproducible el modelo nulo. Antes se usaba b93095d del fork hachepunto.
+    # Compilar con scripts/setup_aracne3.sh; run_aracne3.sh verifica este commit.
+    commit: f0fa4fb8f66264f9512db82a3015f92fd3252f5f
     subnets: 100
     seed: 42
     alpha: 0.05

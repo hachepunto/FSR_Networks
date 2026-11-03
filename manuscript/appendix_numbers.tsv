@@ -1,0 +1,327 @@
+id	value	description
+A1_real_kurtosis_q10	-0.4798	A1: per-gene excess kurtosis of log2TPM, COAD CMS2, quantile
+A1_real_kurtosis_q25	-0.178	A1: per-gene excess kurtosis of log2TPM, COAD CMS2, quantile
+A1_real_kurtosis_q50	0.2813	A1: per-gene excess kurtosis of log2TPM, COAD CMS2, quantile
+A1_real_kurtosis_q75	0.9972	A1: per-gene excess kurtosis of log2TPM, COAD CMS2, quantile
+A1_real_kurtosis_q90	1.976	A1: per-gene excess kurtosis of log2TPM, COAD CMS2, quantile
+A1_real_kurtosis_q99	5.618	A1: per-gene excess kurtosis of log2TPM, COAD CMS2, quantile
+A1_real_kurtosis_frac_gt3	0.03959	A1: fraction of genes with excess kurtosis > 3
+A1_gaussian_n27_pearson_sd	0.1644	A1 s.d.
+A1_gaussian_n27_pearson_power	0.68	A1 power
+A1_gaussian_n27_pearson_bias	-0.01265	A1 bias vs own population value
+A1_gaussian_n27_spearman_sd	0.1744	A1 s.d.
+A1_gaussian_n27_spearman_power	0.56	A1 power
+A1_gaussian_n27_spearman_bias	-0.01888	A1 bias vs own population value
+A1_gaussian_n27_mibins_sd	0.08686	A1 s.d.
+A1_gaussian_n27_mibins_power	0.09	A1 power
+A1_gaussian_n27_mimm_sd	0.06006	A1 s.d.
+A1_gaussian_n27_mimm_power	0.125	A1 power
+A1_gaussian_n27_miksg_sd	0.1556	A1 s.d.
+A1_gaussian_n27_miksg_power	0.12	A1 power
+A1_gaussian_n50_pearson_sd	0.1175	A1 s.d.
+A1_gaussian_n50_pearson_power	0.945	A1 power
+A1_gaussian_n50_pearson_bias	0.0001462	A1 bias vs own population value
+A1_gaussian_n50_spearman_sd	0.1192	A1 s.d.
+A1_gaussian_n50_spearman_power	0.885	A1 power
+A1_gaussian_n50_spearman_bias	-0.007076	A1 bias vs own population value
+A1_gaussian_n50_mibins_sd	0.06973	A1 s.d.
+A1_gaussian_n50_mibins_power	0.12	A1 power
+A1_gaussian_n50_mimm_sd	0.0532	A1 s.d.
+A1_gaussian_n50_mimm_power	0.3	A1 power
+A1_gaussian_n50_miksg_sd	0.1187	A1 s.d.
+A1_gaussian_n50_miksg_power	0.155	A1 power
+A1_gaussian_n100_pearson_sd	0.08787	A1 s.d.
+A1_gaussian_n100_pearson_power	1	A1 power
+A1_gaussian_n100_pearson_bias	0.000552	A1 bias vs own population value
+A1_gaussian_n100_spearman_sd	0.08931	A1 s.d.
+A1_gaussian_n100_spearman_power	0.995	A1 power
+A1_gaussian_n100_spearman_bias	-0.001156	A1 bias vs own population value
+A1_gaussian_n100_mibins_sd	0.05737	A1 s.d.
+A1_gaussian_n100_mibins_power	0.335	A1 power
+A1_gaussian_n100_mimm_sd	0.04121	A1 s.d.
+A1_gaussian_n100_mimm_power	0.58	A1 power
+A1_gaussian_n100_miksg_sd	0.08349	A1 s.d.
+A1_gaussian_n100_miksg_power	0.36	A1 power
+A1_gaussian_n200_pearson_sd	0.05665	A1 s.d.
+A1_gaussian_n200_pearson_power	1	A1 power
+A1_gaussian_n200_pearson_bias	-0.002472	A1 bias vs own population value
+A1_gaussian_n200_spearman_sd	0.05818	A1 s.d.
+A1_gaussian_n200_spearman_power	1	A1 power
+A1_gaussian_n200_spearman_bias	-0.001815	A1 bias vs own population value
+A1_gaussian_n200_mibins_sd	0.03616	A1 s.d.
+A1_gaussian_n200_mibins_power	0.755	A1 power
+A1_gaussian_n200_mimm_sd	0.03388	A1 s.d.
+A1_gaussian_n200_mimm_power	0.92	A1 power
+A1_gaussian_n200_miksg_sd	0.05983	A1 s.d.
+A1_gaussian_n200_miksg_power	0.575	A1 power
+A1_gaussian_n400_pearson_sd	0.04389	A1 s.d.
+A1_gaussian_n400_pearson_power	1	A1 power
+A1_gaussian_n400_pearson_bias	-0.001572	A1 bias vs own population value
+A1_gaussian_n400_spearman_sd	0.0464	A1 s.d.
+A1_gaussian_n400_spearman_power	1	A1 power
+A1_gaussian_n400_spearman_bias	-0.001182	A1 bias vs own population value
+A1_gaussian_n400_mibins_sd	0.02394	A1 s.d.
+A1_gaussian_n400_mibins_power	1	A1 power
+A1_gaussian_n400_mimm_sd	0.02666	A1 s.d.
+A1_gaussian_n400_mimm_power	0.98	A1 power
+A1_gaussian_n400_miksg_sd	0.04386	A1 s.d.
+A1_gaussian_n400_miksg_power	0.81	A1 power
+A1_t5_n27_pearson_sd	0.2058	A1 s.d.
+A1_t5_n27_pearson_power	0.425	A1 power
+A1_t5_n27_pearson_bias	-0.01094	A1 bias vs own population value
+A1_t5_n27_spearman_sd	0.1754	A1 s.d.
+A1_t5_n27_spearman_power	0.545	A1 power
+A1_t5_n27_spearman_bias	-0.02196	A1 bias vs own population value
+A1_t5_n27_mibins_sd	0.08391	A1 s.d.
+A1_t5_n27_mibins_power	0.075	A1 power
+A1_t5_n27_mimm_sd	0.06007	A1 s.d.
+A1_t5_n27_mimm_power	0.33	A1 power
+A1_t5_n27_miksg_sd	0.1614	A1 s.d.
+A1_t5_n27_miksg_power	0.16	A1 power
+A1_t5_n50_pearson_sd	0.1538	A1 s.d.
+A1_t5_n50_pearson_power	0.685	A1 power
+A1_t5_n50_pearson_bias	-0.003954	A1 bias vs own population value
+A1_t5_n50_spearman_sd	0.1329	A1 s.d.
+A1_t5_n50_spearman_power	0.72	A1 power
+A1_t5_n50_spearman_bias	-0.01555	A1 bias vs own population value
+A1_t5_n50_mibins_sd	0.08216	A1 s.d.
+A1_t5_n50_mibins_power	0.17	A1 power
+A1_t5_n50_mimm_sd	0.05734	A1 s.d.
+A1_t5_n50_mimm_power	0.345	A1 power
+A1_t5_n50_miksg_sd	0.1268	A1 s.d.
+A1_t5_n50_miksg_power	0.28	A1 power
+A1_t5_n100_pearson_sd	0.1179	A1 s.d.
+A1_t5_n100_pearson_power	0.905	A1 power
+A1_t5_n100_pearson_bias	0.008495	A1 bias vs own population value
+A1_t5_n100_spearman_sd	0.09629	A1 s.d.
+A1_t5_n100_spearman_power	0.98	A1 power
+A1_t5_n100_spearman_bias	-0.004791	A1 bias vs own population value
+A1_t5_n100_mibins_sd	0.06476	A1 s.d.
+A1_t5_n100_mibins_power	0.355	A1 power
+A1_t5_n100_mimm_sd	0.0488	A1 s.d.
+A1_t5_n100_mimm_power	0.63	A1 power
+A1_t5_n100_miksg_sd	0.09733	A1 s.d.
+A1_t5_n100_miksg_power	0.42	A1 power
+A1_t5_n200_pearson_sd	0.08603	A1 s.d.
+A1_t5_n200_pearson_power	0.995	A1 power
+A1_t5_n200_pearson_bias	-0.01131	A1 bias vs own population value
+A1_t5_n200_spearman_sd	0.06985	A1 s.d.
+A1_t5_n200_spearman_power	1	A1 power
+A1_t5_n200_spearman_bias	-0.01776	A1 bias vs own population value
+A1_t5_n200_mibins_sd	0.04279	A1 s.d.
+A1_t5_n200_mibins_power	0.735	A1 power
+A1_t5_n200_mimm_sd	0.03491	A1 s.d.
+A1_t5_n200_mimm_power	0.805	A1 power
+A1_t5_n200_miksg_sd	0.05969	A1 s.d.
+A1_t5_n200_miksg_power	0.55	A1 power
+A1_t5_n400_pearson_sd	0.06326	A1 s.d.
+A1_t5_n400_pearson_power	1	A1 power
+A1_t5_n400_pearson_bias	-0.005487	A1 bias vs own population value
+A1_t5_n400_spearman_sd	0.04625	A1 s.d.
+A1_t5_n400_spearman_power	1	A1 power
+A1_t5_n400_spearman_bias	-0.009767	A1 bias vs own population value
+A1_t5_n400_mibins_sd	0.02437	A1 s.d.
+A1_t5_n400_mibins_power	1	A1 power
+A1_t5_n400_mimm_sd	0.02925	A1 s.d.
+A1_t5_n400_mimm_power	0.985	A1 power
+A1_t5_n400_miksg_sd	0.04527	A1 s.d.
+A1_t5_n400_miksg_power	0.795	A1 power
+A1_outliers_n27_pearson_sd	0.4209	A1 s.d.
+A1_outliers_n27_pearson_power	0.17	A1 power
+A1_outliers_n27_pearson_bias	-0.1179	A1 bias vs own population value
+A1_outliers_n27_spearman_sd	0.1805	A1 s.d.
+A1_outliers_n27_spearman_power	0.56	A1 power
+A1_outliers_n27_spearman_bias	-0.02562	A1 bias vs own population value
+A1_outliers_n27_mibins_sd	0.08301	A1 s.d.
+A1_outliers_n27_mibins_power	0.125	A1 power
+A1_outliers_n27_mimm_sd	0.05308	A1 s.d.
+A1_outliers_n27_mimm_power	0.35	A1 power
+A1_outliers_n27_miksg_sd	0.1384	A1 s.d.
+A1_outliers_n27_miksg_power	0.125	A1 power
+A1_outliers_n50_pearson_sd	0.3755	A1 s.d.
+A1_outliers_n50_pearson_power	0.185	A1 power
+A1_outliers_n50_pearson_bias	-0.2028	A1 bias vs own population value
+A1_outliers_n50_spearman_sd	0.1378	A1 s.d.
+A1_outliers_n50_spearman_power	0.75	A1 power
+A1_outliers_n50_spearman_bias	-0.05997	A1 bias vs own population value
+A1_outliers_n50_mibins_sd	0.07803	A1 s.d.
+A1_outliers_n50_mibins_power	0.16	A1 power
+A1_outliers_n50_mimm_sd	0.05283	A1 s.d.
+A1_outliers_n50_mimm_power	0.37	A1 power
+A1_outliers_n50_miksg_sd	0.1212	A1 s.d.
+A1_outliers_n50_miksg_power	0.275	A1 power
+A1_outliers_n100_pearson_sd	0.2541	A1 s.d.
+A1_outliers_n100_pearson_power	0.175	A1 power
+A1_outliers_n100_pearson_bias	-0.1855	A1 bias vs own population value
+A1_outliers_n100_spearman_sd	0.084	A1 s.d.
+A1_outliers_n100_spearman_power	0.985	A1 power
+A1_outliers_n100_spearman_bias	-0.03722	A1 bias vs own population value
+A1_outliers_n100_mibins_sd	0.05829	A1 s.d.
+A1_outliers_n100_mibins_power	0.34	A1 power
+A1_outliers_n100_mimm_sd	0.03937	A1 s.d.
+A1_outliers_n100_mimm_power	0.58	A1 power
+A1_outliers_n100_miksg_sd	0.08312	A1 s.d.
+A1_outliers_n100_miksg_power	0.275	A1 power
+A1_outliers_n200_pearson_sd	0.1977	A1 s.d.
+A1_outliers_n200_pearson_power	0.27	A1 power
+A1_outliers_n200_pearson_bias	-0.1866	A1 bias vs own population value
+A1_outliers_n200_spearman_sd	0.06552	A1 s.d.
+A1_outliers_n200_spearman_power	1	A1 power
+A1_outliers_n200_spearman_bias	-0.034	A1 bias vs own population value
+A1_outliers_n200_mibins_sd	0.03578	A1 s.d.
+A1_outliers_n200_mibins_power	0.8	A1 power
+A1_outliers_n200_mimm_sd	0.03348	A1 s.d.
+A1_outliers_n200_mimm_power	0.785	A1 power
+A1_outliers_n200_miksg_sd	0.05945	A1 s.d.
+A1_outliers_n200_miksg_power	0.52	A1 power
+A1_outliers_n400_pearson_sd	0.1565	A1 s.d.
+A1_outliers_n400_pearson_power	0.4	A1 power
+A1_outliers_n400_pearson_bias	-0.1944	A1 bias vs own population value
+A1_outliers_n400_spearman_sd	0.04478	A1 s.d.
+A1_outliers_n400_spearman_power	1	A1 power
+A1_outliers_n400_spearman_bias	-0.0275	A1 bias vs own population value
+A1_outliers_n400_mibins_sd	0.02275	A1 s.d.
+A1_outliers_n400_mibins_power	0.995	A1 power
+A1_outliers_n400_mimm_sd	0.02498	A1 s.d.
+A1_outliers_n400_mimm_power	0.99	A1 power
+A1_outliers_n400_miksg_sd	0.04666	A1 s.d.
+A1_outliers_n400_miksg_power	0.655	A1 power
+A1_gaussian_var_ratio_pearson_over_spearman_mean	0.9344	A1: Var(r_P)/Var(r_S) under Gaussianity at rho = 0.4, mean over n (not the Pitman ARE at rho = 0)
+A1_pitman_ARE_spearman_vs_pearson	0.9119	A1: Pitman asymptotic relative efficiency of Spearman vs Pearson for testing rho = 0 under normality, (3/pi)^2
+A2_sim_linear_linear_viol	0	A2: fraction of chains violating |rho_XZ| <= min(|rho_XY|,|rho_YZ|)
+A2_sim_linear_sigmoid_viol	0	A2: fraction of chains violating |rho_XZ| <= min(|rho_XY|,|rho_YZ|)
+A2_sim_linear_square_viol	0.405	A2: fraction of chains violating |rho_XZ| <= min(|rho_XY|,|rho_YZ|)
+A2_sim_linear_abs_viol	0.445	A2: fraction of chains violating |rho_XZ| <= min(|rho_XY|,|rho_YZ|)
+A2_sim_sigmoid_linear_viol	0	A2: fraction of chains violating |rho_XZ| <= min(|rho_XY|,|rho_YZ|)
+A2_sim_sigmoid_sigmoid_viol	0	A2: fraction of chains violating |rho_XZ| <= min(|rho_XY|,|rho_YZ|)
+A2_sim_sigmoid_square_viol	0	A2: fraction of chains violating |rho_XZ| <= min(|rho_XY|,|rho_YZ|)
+A2_sim_sigmoid_abs_viol	0	A2: fraction of chains violating |rho_XZ| <= min(|rho_XY|,|rho_YZ|)
+A2_sim_square_linear_viol	0.425	A2: fraction of chains violating |rho_XZ| <= min(|rho_XY|,|rho_YZ|)
+A2_sim_square_sigmoid_viol	0.45	A2: fraction of chains violating |rho_XZ| <= min(|rho_XY|,|rho_YZ|)
+A2_sim_square_square_viol	0.465	A2: fraction of chains violating |rho_XZ| <= min(|rho_XY|,|rho_YZ|)
+A2_sim_square_abs_viol	0.53	A2: fraction of chains violating |rho_XZ| <= min(|rho_XY|,|rho_YZ|)
+A2_sim_abs_linear_viol	0.465	A2: fraction of chains violating |rho_XZ| <= min(|rho_XY|,|rho_YZ|)
+A2_sim_abs_sigmoid_viol	0.43	A2: fraction of chains violating |rho_XZ| <= min(|rho_XY|,|rho_YZ|)
+A2_sim_abs_square_viol	0.47	A2: fraction of chains violating |rho_XZ| <= min(|rho_XY|,|rho_YZ|)
+A2_sim_abs_abs_viol	0.425	A2: fraction of chains violating |rho_XZ| <= min(|rho_XY|,|rho_YZ|)
+A2_real_n_triplets	4286	A2: TF->TF->target triplets sampled from COAD_cms2 ARACNe3 (support>=10)
+A2_real_n_tf_pairs	858	A2: distinct TF-TF pairs (a,b) behind the triplets
+A2_real_n_tfs_in_matrix	1204	A2: regulators present in the COAD_cms2 matrix
+A2_real_frac_a_beats_b_all	0.1972	A2: fraction of triplets with |rho_ac| > |rho_bc| (a would win c over b under corto's rule), all
+A2_real_frac_a_beats_b_no_direct	0.1758	A2: same, triplets with no direct a->c edge in ARACNe3
+A2_real_frac_a_beats_b_direct	0.531	A2: same, triplets where ARACNe3 also has a->c
+A2_real_frac_violations_all	0.2545	A2: fraction violating the correlation DPI, all triplets
+A2_real_frac_violations_no_direct	0.2306	A2: fraction violating, triplets with no direct a->c edge in ARACNe3
+A2_real_frac_violations_direct	0.6279	A2: fraction violating, triplets where ARACNe3 also has a->c
+A3_n400_corto_ranks_r_0_2_top_100_scheme_A__precision	0.9272	A3 precision
+A3_n400_corto_ranks_r_0_2_top_100_scheme_A__recall	0.6688	A3 recall
+A3_n400_corto_ranks_r_0_2_top_100_scheme_A__indirect100	7.285	A3 indirect FP per 100 edges
+A3_n400_ARACNe3_top_100_scheme_B__precision	0.339	A3 precision
+A3_n400_ARACNe3_top_100_scheme_B__recall	0.7643	A3 recall
+A3_n400_ARACNe3_top_100_scheme_B__indirect100	65.68	A3 indirect FP per 100 edges
+A3_n400_ARACNe3_by_support_top_453_B_matched__precision	0.8962	A3 precision
+A3_n400_ARACNe3_by_support_top_453_B_matched__recall	0.6465	A3 recall
+A3_n400_ARACNe3_by_support_top_453_B_matched__indirect100	10.38	A3 indirect FP per 100 edges
+A3_n400_marginal_rho_top_453_precision	0.6534	A3 precision
+A3_n400_marginal_rho_top_453_recall	0.4713	A3 recall
+A3_n400_marginal_rho_top_453_indirect100	34.66	A3 indirect FP per 100 edges
+A3_n400_glasso_partial_corr_lambda_0_05_top_453_precision	0.5872	A3 precision
+A3_n400_glasso_partial_corr_lambda_0_05_top_453_recall	0.4236	A3 recall
+A3_n400_glasso_partial_corr_lambda_0_05_top_453_indirect100	24.72	A3 indirect FP per 100 edges
+A3_n400_glasso_partial_corr_lambda_0_1_top_453_precision	0.6976	A3 precision
+A3_n400_glasso_partial_corr_lambda_0_1_top_453_recall	0.5032	A3 recall
+A3_n400_glasso_partial_corr_lambda_0_1_top_453_indirect100	23.18	A3 indirect FP per 100 edges
+A3_n400_glasso_partial_corr_lambda_0_2_top_453_precision	0.7461	A3 precision
+A3_n400_glasso_partial_corr_lambda_0_2_top_453_recall	0.5382	A3 recall
+A3_n400_glasso_partial_corr_lambda_0_2_top_453_indirect100	25.39	A3 indirect FP per 100 edges
+A3_n100_corto_ranks_r_0_2_top_100_scheme_A__precision	0.5478	A3 precision
+A3_n100_corto_ranks_r_0_2_top_100_scheme_A__recall	0.6271	A3 recall
+A3_n100_corto_ranks_r_0_2_top_100_scheme_A__indirect100	41.45	A3 indirect FP per 100 edges
+A3_n100_ARACNe3_top_100_scheme_B__precision	0.8384	A3 precision
+A3_n100_ARACNe3_top_100_scheme_B__recall	0.2558	A3 recall
+A3_n100_ARACNe3_top_100_scheme_B__indirect100	13.13	A3 indirect FP per 100 edges
+A3_n100_ARACNe3_by_support_top_743_B_matched__precision	0.8384	A3 precision
+A3_n100_ARACNe3_by_support_top_743_B_matched__recall	0.2558	A3 recall
+A3_n100_ARACNe3_by_support_top_743_B_matched__indirect100	13.13	A3 indirect FP per 100 edges
+A3_n100_marginal_rho_top_743_precision	0.3876	A3 precision
+A3_n100_marginal_rho_top_743_recall	0.4438	A3 recall
+A3_n100_marginal_rho_top_743_indirect100	60.97	A3 indirect FP per 100 edges
+A3_n100_glasso_partial_corr_lambda_0_05_top_743_precision	0.284	A3 precision
+A3_n100_glasso_partial_corr_lambda_0_05_top_743_recall	0.3251	A3 recall
+A3_n100_glasso_partial_corr_lambda_0_05_top_743_indirect100	37.95	A3 indirect FP per 100 edges
+A3_n100_glasso_partial_corr_lambda_0_1_top_743_precision	0.3472	A3 precision
+A3_n100_glasso_partial_corr_lambda_0_1_top_743_recall	0.3975	A3 recall
+A3_n100_glasso_partial_corr_lambda_0_1_top_743_indirect100	35.13	A3 indirect FP per 100 edges
+A3_n100_glasso_partial_corr_lambda_0_2_top_743_precision	0.5482	A3 precision
+A3_n100_glasso_partial_corr_lambda_0_2_top_743_recall	0.473	A3 recall
+A3_n100_glasso_partial_corr_lambda_0_2_top_743_indirect100	33.39	A3 indirect FP per 100 edges
+A4_strong_n30_truth_no_nonmono_rho_vs_truth_full	0.951	A4: truth regulon variant, mean over replicates
+A4_strong_n30_truth_no_nonmono_top20_vs_truth_full	0.82	A4: truth regulon variant, mean over replicates
+A4_strong_n30_truth_no_nonmono_precision_top10	0.76	A4: truth regulon variant, mean over replicates
+A4_weak_n30_truth_no_nonmono_rho_vs_truth_full	0.9392	A4: truth regulon variant, mean over replicates
+A4_weak_n30_truth_no_nonmono_top20_vs_truth_full	0.76	A4: truth regulon variant, mean over replicates
+A4_weak_n30_truth_no_nonmono_precision_top10	0.8	A4: truth regulon variant, mean over replicates
+A4_strong_n60_truth_no_nonmono_rho_vs_truth_full	0.9414	A4: truth regulon variant, mean over replicates
+A4_strong_n60_truth_no_nonmono_top20_vs_truth_full	0.82	A4: truth regulon variant, mean over replicates
+A4_strong_n60_truth_no_nonmono_precision_top10	0.8	A4: truth regulon variant, mean over replicates
+A4_weak_n60_truth_no_nonmono_rho_vs_truth_full	0.9266	A4: truth regulon variant, mean over replicates
+A4_weak_n60_truth_no_nonmono_top20_vs_truth_full	0.8	A4: truth regulon variant, mean over replicates
+A4_weak_n60_truth_no_nonmono_precision_top10	0.8	A4: truth regulon variant, mean over replicates
+A4_strong_n100_truth_no_nonmono_rho_vs_truth_full	0.9355	A4: truth regulon variant, mean over replicates
+A4_strong_n100_truth_no_nonmono_top20_vs_truth_full	0.85	A4: truth regulon variant, mean over replicates
+A4_strong_n100_truth_no_nonmono_precision_top10	0.82	A4: truth regulon variant, mean over replicates
+A4_weak_n100_truth_no_nonmono_rho_vs_truth_full	0.9079	A4: truth regulon variant, mean over replicates
+A4_weak_n100_truth_no_nonmono_top20_vs_truth_full	0.79	A4: truth regulon variant, mean over replicates
+A4_weak_n100_truth_no_nonmono_precision_top10	0.82	A4: truth regulon variant, mean over replicates
+A4_strong_n200_truth_no_nonmono_rho_vs_truth_full	0.9409	A4: truth regulon variant, mean over replicates
+A4_strong_n200_truth_no_nonmono_top20_vs_truth_full	0.84	A4: truth regulon variant, mean over replicates
+A4_strong_n200_truth_no_nonmono_precision_top10	0.82	A4: truth regulon variant, mean over replicates
+A4_weak_n200_truth_no_nonmono_rho_vs_truth_full	0.9363	A4: truth regulon variant, mean over replicates
+A4_weak_n200_truth_no_nonmono_top20_vs_truth_full	0.79	A4: truth regulon variant, mean over replicates
+A4_weak_n200_truth_no_nonmono_precision_top10	0.8	A4: truth regulon variant, mean over replicates
+A4_strong_n400_truth_no_nonmono_rho_vs_truth_full	0.9501	A4: truth regulon variant, mean over replicates
+A4_strong_n400_truth_no_nonmono_top20_vs_truth_full	0.85	A4: truth regulon variant, mean over replicates
+A4_strong_n400_truth_no_nonmono_precision_top10	0.78	A4: truth regulon variant, mean over replicates
+A4_weak_n400_truth_no_nonmono_rho_vs_truth_full	0.9273	A4: truth regulon variant, mean over replicates
+A4_weak_n400_truth_no_nonmono_top20_vs_truth_full	0.79	A4: truth regulon variant, mean over replicates
+A4_weak_n400_truth_no_nonmono_precision_top10	0.8	A4: truth regulon variant, mean over replicates
+A4_strong_n30_truth_nonmono_signed_rho_vs_truth_full	0.9124	A4: truth regulon variant, mean over replicates
+A4_strong_n30_truth_nonmono_signed_top20_vs_truth_full	0.86	A4: truth regulon variant, mean over replicates
+A4_strong_n30_truth_nonmono_signed_precision_top10	0.82	A4: truth regulon variant, mean over replicates
+A4_weak_n30_truth_nonmono_signed_rho_vs_truth_full	0.9064	A4: truth regulon variant, mean over replicates
+A4_weak_n30_truth_nonmono_signed_top20_vs_truth_full	0.82	A4: truth regulon variant, mean over replicates
+A4_weak_n30_truth_nonmono_signed_precision_top10	0.82	A4: truth regulon variant, mean over replicates
+A4_strong_n60_truth_nonmono_signed_rho_vs_truth_full	0.9117	A4: truth regulon variant, mean over replicates
+A4_strong_n60_truth_nonmono_signed_top20_vs_truth_full	0.85	A4: truth regulon variant, mean over replicates
+A4_strong_n60_truth_nonmono_signed_precision_top10	0.82	A4: truth regulon variant, mean over replicates
+A4_weak_n60_truth_nonmono_signed_rho_vs_truth_full	0.8985	A4: truth regulon variant, mean over replicates
+A4_weak_n60_truth_nonmono_signed_top20_vs_truth_full	0.86	A4: truth regulon variant, mean over replicates
+A4_weak_n60_truth_nonmono_signed_precision_top10	0.88	A4: truth regulon variant, mean over replicates
+A4_strong_n100_truth_nonmono_signed_rho_vs_truth_full	0.9106	A4: truth regulon variant, mean over replicates
+A4_strong_n100_truth_nonmono_signed_top20_vs_truth_full	0.87	A4: truth regulon variant, mean over replicates
+A4_strong_n100_truth_nonmono_signed_precision_top10	0.94	A4: truth regulon variant, mean over replicates
+A4_weak_n100_truth_nonmono_signed_rho_vs_truth_full	0.8792	A4: truth regulon variant, mean over replicates
+A4_weak_n100_truth_nonmono_signed_top20_vs_truth_full	0.83	A4: truth regulon variant, mean over replicates
+A4_weak_n100_truth_nonmono_signed_precision_top10	0.94	A4: truth regulon variant, mean over replicates
+A4_strong_n200_truth_nonmono_signed_rho_vs_truth_full	0.9031	A4: truth regulon variant, mean over replicates
+A4_strong_n200_truth_nonmono_signed_top20_vs_truth_full	0.88	A4: truth regulon variant, mean over replicates
+A4_strong_n200_truth_nonmono_signed_precision_top10	0.94	A4: truth regulon variant, mean over replicates
+A4_weak_n200_truth_nonmono_signed_rho_vs_truth_full	0.8785	A4: truth regulon variant, mean over replicates
+A4_weak_n200_truth_nonmono_signed_top20_vs_truth_full	0.83	A4: truth regulon variant, mean over replicates
+A4_weak_n200_truth_nonmono_signed_precision_top10	0.98	A4: truth regulon variant, mean over replicates
+A4_strong_n400_truth_nonmono_signed_rho_vs_truth_full	0.9105	A4: truth regulon variant, mean over replicates
+A4_strong_n400_truth_nonmono_signed_top20_vs_truth_full	0.89	A4: truth regulon variant, mean over replicates
+A4_strong_n400_truth_nonmono_signed_precision_top10	0.92	A4: truth regulon variant, mean over replicates
+A4_weak_n400_truth_nonmono_signed_rho_vs_truth_full	0.8891	A4: truth regulon variant, mean over replicates
+A4_weak_n400_truth_nonmono_signed_top20_vs_truth_full	0.87	A4: truth regulon variant, mean over replicates
+A4_weak_n400_truth_nonmono_signed_precision_top10	0.96	A4: truth regulon variant, mean over replicates
+A4_strong_n30_truth_full_precision_top10	0.8	A4: truth regulon, full, mean fraction of true MRs in top-10
+A4_weak_n30_truth_full_precision_top10	0.86	A4: truth regulon, full, mean fraction of true MRs in top-10
+A4_strong_n60_truth_full_precision_top10	0.84	A4: truth regulon, full, mean fraction of true MRs in top-10
+A4_weak_n60_truth_full_precision_top10	0.86	A4: truth regulon, full, mean fraction of true MRs in top-10
+A4_strong_n100_truth_full_precision_top10	0.9	A4: truth regulon, full, mean fraction of true MRs in top-10
+A4_weak_n100_truth_full_precision_top10	0.92	A4: truth regulon, full, mean fraction of true MRs in top-10
+A4_strong_n200_truth_full_precision_top10	0.9	A4: truth regulon, full, mean fraction of true MRs in top-10
+A4_weak_n200_truth_full_precision_top10	0.92	A4: truth regulon, full, mean fraction of true MRs in top-10
+A4_strong_n400_truth_full_precision_top10	0.86	A4: truth regulon, full, mean fraction of true MRs in top-10
+A4_weak_n400_truth_full_precision_top10	0.86	A4: truth regulon, full, mean fraction of true MRs in top-10

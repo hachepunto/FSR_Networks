@@ -204,21 +204,21 @@ A2_sim_abs_linear_viol	0.465	A2: fraction of chains violating |rho_XZ| <= min(|r
 A2_sim_abs_sigmoid_viol	0.43	A2: fraction of chains violating |rho_XZ| <= min(|rho_XY|,|rho_YZ|)
 A2_sim_abs_square_viol	0.47	A2: fraction of chains violating |rho_XZ| <= min(|rho_XY|,|rho_YZ|)
 A2_sim_abs_abs_viol	0.425	A2: fraction of chains violating |rho_XZ| <= min(|rho_XY|,|rho_YZ|)
-A2_real_n_triplets	4286	A2: TF->TF->target triplets sampled from COAD_cms2 ARACNe3 (support>=10)
-A2_real_n_tf_pairs	858	A2: distinct TF-TF pairs (a,b) behind the triplets
+A2_real_n_triplets	4186	A2: TF->TF->target triplets sampled from COAD_cms2 ARACNe3 (support>=10)
+A2_real_n_tf_pairs	838	A2: distinct TF-TF pairs (a,b) behind the triplets
 A2_real_n_tfs_in_matrix	1204	A2: regulators present in the COAD_cms2 matrix
-A2_real_frac_a_beats_b_all	0.1972	A2: fraction of triplets with |rho_ac| > |rho_bc| (a would win c over b under corto's rule), all
-A2_real_frac_a_beats_b_no_direct	0.1758	A2: same, triplets with no direct a->c edge in ARACNe3
-A2_real_frac_a_beats_b_direct	0.531	A2: same, triplets where ARACNe3 also has a->c
-A2_real_frac_violations_all	0.2545	A2: fraction violating the correlation DPI, all triplets
-A2_real_frac_violations_no_direct	0.2306	A2: fraction violating, triplets with no direct a->c edge in ARACNe3
-A2_real_frac_violations_direct	0.6279	A2: fraction violating, triplets where ARACNe3 also has a->c
+A2_real_frac_a_beats_b_all	0.1988	A2: fraction of triplets with |rho_ac| > |rho_bc| (a would win c over b under corto's rule), all
+A2_real_frac_a_beats_b_no_direct	0.182	A2: same, triplets with no direct a->c edge in ARACNe3
+A2_real_frac_a_beats_b_direct	0.4711	A2: same, triplets where ARACNe3 also has a->c
+A2_real_frac_violations_all	0.2547	A2: fraction violating the correlation DPI, all triplets
+A2_real_frac_violations_no_direct	0.2361	A2: fraction violating, triplets with no direct a->c edge in ARACNe3
+A2_real_frac_violations_direct	0.5579	A2: fraction violating, triplets where ARACNe3 also has a->c
 A3_n400_corto_ranks_r_0_2_top_100_scheme_A__precision	0.9272	A3 precision
 A3_n400_corto_ranks_r_0_2_top_100_scheme_A__recall	0.6688	A3 recall
 A3_n400_corto_ranks_r_0_2_top_100_scheme_A__indirect100	7.285	A3 indirect FP per 100 edges
-A3_n400_ARACNe3_top_100_scheme_B__precision	0.339	A3 precision
-A3_n400_ARACNe3_top_100_scheme_B__recall	0.7643	A3 recall
-A3_n400_ARACNe3_top_100_scheme_B__indirect100	65.68	A3 indirect FP per 100 edges
+A3_n400_ARACNe3_top_100_scheme_B__precision	0.3402	A3 precision
+A3_n400_ARACNe3_top_100_scheme_B__recall	0.7659	A3 recall
+A3_n400_ARACNe3_top_100_scheme_B__indirect100	65.49	A3 indirect FP per 100 edges
 A3_n400_ARACNe3_by_support_top_453_B_matched__precision	0.8962	A3 precision
 A3_n400_ARACNe3_by_support_top_453_B_matched__recall	0.6465	A3 recall
 A3_n400_ARACNe3_by_support_top_453_B_matched__indirect100	10.38	A3 indirect FP per 100 edges
@@ -237,12 +237,12 @@ A3_n400_glasso_partial_corr_lambda_0_2_top_453_indirect100	25.39	A3 indirect FP 
 A3_n100_corto_ranks_r_0_2_top_100_scheme_A__precision	0.5478	A3 precision
 A3_n100_corto_ranks_r_0_2_top_100_scheme_A__recall	0.6271	A3 recall
 A3_n100_corto_ranks_r_0_2_top_100_scheme_A__indirect100	41.45	A3 indirect FP per 100 edges
-A3_n100_ARACNe3_top_100_scheme_B__precision	0.8384	A3 precision
-A3_n100_ARACNe3_top_100_scheme_B__recall	0.2558	A3 recall
-A3_n100_ARACNe3_top_100_scheme_B__indirect100	13.13	A3 indirect FP per 100 edges
-A3_n100_ARACNe3_by_support_top_743_B_matched__precision	0.8384	A3 precision
-A3_n100_ARACNe3_by_support_top_743_B_matched__recall	0.2558	A3 recall
-A3_n100_ARACNe3_by_support_top_743_B_matched__indirect100	13.13	A3 indirect FP per 100 edges
+A3_n100_ARACNe3_top_100_scheme_B__precision	0.8113	A3 precision
+A3_n100_ARACNe3_top_100_scheme_B__recall	0.265	A3 recall
+A3_n100_ARACNe3_top_100_scheme_B__indirect100	16.04	A3 indirect FP per 100 edges
+A3_n100_ARACNe3_by_support_top_743_B_matched__precision	0.8113	A3 precision
+A3_n100_ARACNe3_by_support_top_743_B_matched__recall	0.265	A3 recall
+A3_n100_ARACNe3_by_support_top_743_B_matched__indirect100	16.04	A3 indirect FP per 100 edges
 A3_n100_marginal_rho_top_743_precision	0.3876	A3 precision
 A3_n100_marginal_rho_top_743_recall	0.4438	A3 recall
 A3_n100_marginal_rho_top_743_indirect100	60.97	A3 indirect FP per 100 edges

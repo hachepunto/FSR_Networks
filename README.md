@@ -23,7 +23,7 @@ Rscript scripts/classify_subtypes.R      # subtipo por muestra y n por cáncer �
 Rscript scripts/preprocess_expression.R  # matrices log2(TPM+1) por analysis_id y por cáncer completo
 for id in <analysis_id>...; do Rscript scripts/run_deseq2.R $id; done   # firma tumor vs. normal (34 analysis_id)
 
-# ARACNe3 (fork hachepunto/ARACNe3 en el commit de config.yaml)
+# ARACNe3 (califano-lab/ARACNe3 en el commit de config.yaml)
 bash scripts/setup_aracne3.sh
 
 # Benchmark

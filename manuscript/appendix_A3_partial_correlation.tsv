@@ -1,14 +1,14 @@
 dataset	n	method	key	n_selected	precision	recall	indirect_per_100
 strong_n400_rep1	400	FSR (corto, ranks, |r|>=0.2, top-100)	corto, ranks, |r|>=0.2, top-100 (scheme A)	453	0.927152317880795	0.668789808917197	7.28476821192053
-strong_n400_rep1	400	ARACNe3-top100	ARACNe3 top-100 (scheme B)	1416	0.338983050847458	0.764331210191083	65.6779661016949
+strong_n400_rep1	400	ARACNe3-top100	ARACNe3 top-100 (scheme B)	1414	0.34016973125884	0.765923566878981	65.4879773691655
 strong_n400_rep1	400	ARACNe3 by support, top-453 (same edge count as FSR)	ARACNe3 by support, top-453 (B matched)	453	0.896247240618102	0.646496815286624	10.3752759381898
 strong_n400_rep1	400	marginal |rho|, top-453	marginal |rho|, top-453	453	0.653421633554084	0.471337579617834	34.6578366445916
 strong_n400_rep1	400	glasso partial corr. (lambda 0.05), top-453	glasso partial corr. (lambda 0.05), top-453	453	0.58719646799117	0.423566878980892	24.7240618101545
 strong_n400_rep1	400	glasso partial corr. (lambda 0.1), top-453	glasso partial corr. (lambda 0.1), top-453	453	0.69757174392936	0.503184713375796	23.1788079470199
 strong_n400_rep1	400	glasso partial corr. (lambda 0.2), top-453	glasso partial corr. (lambda 0.2), top-453	453	0.746136865342163	0.538216560509554	25.3863134657837
 strong_n100_rep1	100	FSR (corto, ranks, |r|>=0.2, top-100)	corto, ranks, |r|>=0.2, top-100 (scheme A)	743	0.547779273216689	0.627118644067797	41.4535666218035
-strong_n100_rep1	100	ARACNe3-top100	ARACNe3 top-100 (scheme B)	198	0.838383838383838	0.2557781201849	13.1313131313131
-strong_n100_rep1	100	ARACNe3 by support, top-743 (same edge count as FSR)	ARACNe3 by support, top-743 (B matched)	198	0.838383838383838	0.2557781201849	13.1313131313131
+strong_n100_rep1	100	ARACNe3-top100	ARACNe3 top-100 (scheme B)	212	0.811320754716981	0.26502311248074	16.0377358490566
+strong_n100_rep1	100	ARACNe3 by support, top-743 (same edge count as FSR)	ARACNe3 by support, top-743 (B matched)	212	0.811320754716981	0.26502311248074	16.0377358490566
 strong_n100_rep1	100	marginal |rho|, top-743	marginal |rho|, top-743	743	0.387617765814266	0.443759630200308	60.9690444145357
 strong_n100_rep1	100	glasso partial corr. (lambda 0.05), top-743	glasso partial corr. (lambda 0.05), top-743	743	0.283983849259758	0.325115562403698	37.9542395693136
 strong_n100_rep1	100	glasso partial corr. (lambda 0.1), top-743	glasso partial corr. (lambda 0.1), top-743	743	0.347240915208614	0.397534668721109	35.1278600269179

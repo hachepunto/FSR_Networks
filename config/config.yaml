@@ -145,11 +145,9 @@ network_benchmark:
               BRCA_basal, BRCA_luma, THCA_braf_like, COAD_cms2, KIRC_cluster1]
     write_matrices: false     # true: preprocess_expression.R escribe <CANCER>_pooled (solo para este paso)
     expr_root: null           # matrices <CANCER>_pooled_tumor_expr.rds; null = <work_root>/preprocessed
-  # Paso 14: DPI por triángulos (regla de ARACNe) en FSR, frente a la regla por
-  # blanco de corto. Requiere el fork de corto con dpi_edges() (rama
-  # feature/dpi-triangle de github.com/hachepunto/corto) instalado en corto_lib.
+  # Paso 14: DPI por triángulos (regla de ARACNe; corto >= 1.4.0, dpi = "triangle")
+  # en FSR, frente a la regla por blanco (dpi = "target", la de FSR).
   dpi_triangle:
-    corto_lib: null           # librería de R con el corto del fork; null = el instalado
     cohorts: [COAD_cms2, BRCA_luma, STAD_cin, KIRC_cluster1, LUAD_tru]
 
 # Los proyectos TCGA con los que se trabaja en esta fase del pipeline.

@@ -1,14 +1,15 @@
 # Instala en el entorno activo (config/env_network_benchmark.yaml) los dos
 # paquetes que no están en conda, a versiones fijas. Idempotente.
 #
-#   corto 1.3.1   — CRAN (misma versión que usa el pipeline, tcga_env).
+#   corto 1.4.0   — CRAN; primera versión con dpi = "target" | "triangle"
+#                   ("target" es idéntico a la DPI de 1.3.1).
 #   NaRnEA 0.2.0  — GitHub califano-lab/NaRnEA, commit fijado abajo.
 #                   install_github() falla: el campo License del
 #                   DESCRIPTION es un placeholder de usethis sin editar que
 #                   rompe el parser DCF. Se baja el tarball, se reemplaza
 #                   ese campo por "GPL-3" y se instala desde la fuente.
 
-CORTO_VERSION <- "1.3.1"
+CORTO_VERSION <- "1.4.0"
 NARNEA_COMMIT <- "36b8fdbc5312bc709a9af90abbe8c6f3f44b1575"
 
 if (!requireNamespace("corto", quietly = TRUE) ||

@@ -10,10 +10,7 @@
 source("scripts/network_benchmark/lib_benchmark.R")
 config <- bench_config()
 nb <- config$network_benchmark
-lib <- nb$dpi_triangle$corto_lib
-if (!is.null(lib)) .libPaths(c(lib, .libPaths()))
 suppressMessages(library(corto))
-if (!"dpi" %in% names(formals(corto))) stop("Este corto (", packageVersion("corto"), ") no tiene el argumento dpi; ver network_benchmark.dpi_triangle.corto_lib")
 
 args <- commandArgs(trailingOnly = TRUE)
 if (length(args) != 2 || !(args[1] %in% c("synthetic", "real")))

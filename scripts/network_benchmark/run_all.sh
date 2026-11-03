@@ -63,6 +63,9 @@ done
 
 step() { echo ">> $(date '+%F %T') $*"; }
 
+# corto >= 1.4.0: FSR usa dpi = "target" y el paso 14 dpi = "triangle"
+Rscript -e 'if (packageVersion("corto") < "1.4.0") stop("corto ", packageVersion("corto"), " < 1.4.0: corre scripts/network_benchmark/00_install_r_packages.R")'
+
 step "01 CollecTRI"
 Rscript scripts/network_benchmark/01_download_collectri.R > "$LOGS/01_collectri.log" 2>&1
 
@@ -99,17 +102,12 @@ ls -d "$OUT_DIR"/synthetic/*_n*_rep* | xargs -P "$ARACNE3_JOBS" -I{} sh -c \
     'n=$(basename {}); bash scripts/network_benchmark/06_run_networks_synthetic.sh {} '"$ARACNE3_THREADS"' > "'"$LOGS"'/06_net_$n.log" 2>&1 && Rscript scripts/network_benchmark/07_evaluate_synthetic.R {} > "'"$LOGS"'/07_eval_$n.log" 2>&1 || { echo "ERROR en 06/07 $n"; exit 255; }'
 
 # 14 va después de 06-07: re-evalúa los sintéticos (07), que necesitan sus redes ARACNe3.
-# 14 necesita el corto del fork (dpi_edges); se salta si network_benchmark.dpi_triangle.corto_lib no lo tiene
-if Rscript -e 'source("scripts/network_benchmark/lib_benchmark.R"); l <- bench_config()$network_benchmark$dpi_triangle$corto_lib; if (!is.null(l)) .libPaths(c(l, .libPaths())); quit(status = !("dpi" %in% names(formals(corto::corto))))' 2>/dev/null; then
-  step "14 FSR con DPI por triángulos (sintéticos, luego reales)"
-  ls -d "$OUT_DIR"/synthetic/*_n*_rep* | xargs -P "$CORTO_JOBS" -I{} sh -c \
-    'Rscript scripts/network_benchmark/14_dpi_triangle.R synthetic {} > /dev/null 2>&1 && Rscript scripts/network_benchmark/07_evaluate_synthetic.R {} > /dev/null 2>&1 || { echo "ERROR en 14 {}"; exit 255; }'
-  Rscript -e 'source("scripts/network_benchmark/lib_benchmark.R"); cat(unlist(bench_config()$network_benchmark$dpi_triangle$cohorts), sep = "\n")' \
-    | xargs -P "$CORTO_JOBS" -I{} sh -c 'Rscript scripts/network_benchmark/14_dpi_triangle.R real {} > "'"$LOGS"'/14_{}.log" 2>&1 || { echo "ERROR en 14 {}"; exit 255; }'
-  Rscript scripts/network_benchmark/14b_evaluate_dpi_triangle.R > "$LOGS/14b_dpi_triangle.log" 2>&1
-else
-  echo "Se omite el paso 14: no hay un corto con dpi= (network_benchmark.dpi_triangle.corto_lib)"
-fi
+step "14 FSR con DPI por triángulos (sintéticos, luego reales)"
+ls -d "$OUT_DIR"/synthetic/*_n*_rep* | xargs -P "$CORTO_JOBS" -I{} sh -c \
+  'n=$(basename {}); Rscript scripts/network_benchmark/14_dpi_triangle.R synthetic {} > "'"$LOGS"'/14_tri_$n.log" 2>&1 && Rscript scripts/network_benchmark/07_evaluate_synthetic.R {} > "'"$LOGS"'/14_07_eval_$n.log" 2>&1 || { echo "ERROR en 14 $n"; exit 255; }'
+Rscript -e 'source("scripts/network_benchmark/lib_benchmark.R"); cat(unlist(bench_config()$network_benchmark$dpi_triangle$cohorts), sep = "\n")' \
+  | xargs -P "$CORTO_JOBS" -I{} sh -c 'Rscript scripts/network_benchmark/14_dpi_triangle.R real {} > "'"$LOGS"'/14_{}.log" 2>&1 || { echo "ERROR en 14 {}"; exit 255; }'
+Rscript scripts/network_benchmark/14b_evaluate_dpi_triangle.R > "$LOGS/14b_dpi_triangle.log" 2>&1
 
 step "08 tablas y figuras"
 Rscript scripts/network_benchmark/08_summarize.R > "$LOGS/08_summarize.log" 2>&1

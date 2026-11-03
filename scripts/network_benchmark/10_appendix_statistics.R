@@ -178,7 +178,7 @@ pc_eval <- function(ds_name) {
   indirect_of <- function(tf, tg) { tr_ <- te$tf[te$target == tg]; length(tr_) > 0 && any(module[tr_] == module[tf]) && !(paste(tf, tg) %in% truth_key) }
   cand$indirect <- mapply(indirect_of, cand$tf, cand$target)
   # (i) correlación marginal |rho|; (ii) glasso en dos lambdas; (iii) corto A_k100; (iv) ARACNe3 B_k100
-  cand$rho <- S[cbind(match(cand$tf, genes), match(cand$target, genes))]
+  cand$rho <- abs(S[cbind(match(cand$tf, genes), match(cand$target, genes))])
   res <- list()
   for (lam in c(0.05, 0.1, 0.2)) {
     g <- glasso(S, rho = lam, penalize.diagonal = FALSE); P <- -cov2cor(g$wi)

@@ -77,7 +77,7 @@ read_deseq2_stat <- function(config, analysis_id) {
 run_corto_or_empty <- function(mat, tfs, nbootstraps, p, nthreads) {
   tryCatch(
     corto::corto(inmat = mat, centroids = tfs, nbootstraps = nbootstraps, p = p,
-                 nthreads = nthreads, verbose = FALSE),
+                 nthreads = nthreads, verbose = FALSE, dpi = "target"),
     error = function(e) {
       if (!grepl("No edges passed", conditionMessage(e))) stop(e)
       message("corto: ninguna arista pasa p = ", signif(p, 3), "; regulón vacío")

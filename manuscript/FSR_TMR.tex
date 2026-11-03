@@ -14,8 +14,9 @@
 \usepackage{hyperref}
 \usepackage{xcolor}
 \hypersetup{colorlinks=true,linkcolor=blue!60!black,citecolor=blue!60!black,urlcolor=blue!60!black}
-\graphicspath{{figures/}}
-\input{numbers.tex}
+% Rutas válidas compilando desde manuscript/ o desde la raíz del repo (Overleaf)
+\graphicspath{{figures/}{manuscript/figures/}}
+\InputIfFileExists{numbers.tex}{}{\input{manuscript/numbers.tex}}
 
 % Closed-form null calculation (Section 7): Gaussian approximation to the null of r_S, independent genes,
 % p = 14000 candidate targets, top 100 per regulator. TODO: generate these from the pipeline.

@@ -508,9 +508,10 @@ add_key("ksweep_n_k", length(K_SWEEP), "k sweep: number of k values")
 add_key("ksweep_k_min", min(K_SWEEP), "k sweep: smallest k"); add_key("ksweep_k_max", max(K_SWEEP), "k sweep: largest k")
 ord_ok <- m_meth$median > m_sub$median & m_sub$median > m_null$median
 ci_ok <- m_meth$lo > m_sub$hi
-# El texto dice que el orden solo falla en los k más chicos: se verifica aquí
+# El texto dice que el orden de medianas solo falla en los k más chicos: se verifica aquí.
+# Para los IC el texto solo da el conteo (ci_ok), que no tiene por qué ser monótono en k.
 stopifnot("El orden métodos > subtipos > nulo falla en un k que no es de los más chicos; reescribir §3.11" =
-            all(cummax(ord_ok) == ord_ok), all(cummax(ci_ok) == ci_ok))
+            all(cummax(ord_ok) == ord_ok))
 add_key("ksweep_order_median_n", sum(ord_ok), "k values where median overlap orders methods > subtypes > null")
 add_key("ksweep_order_fail_kmax", if (any(!ord_ok)) max(K_SWEEP[!ord_ok]) else 0, "largest k where the ordering methods > subtypes > null fails (0 = none)")
 add_key("ksweep_methods_ci_above_subtypes_n", sum(m_meth$lo > m_sub$hi), "k values where the 95 % CI of method agreement lies above that of between-subtype agreement")

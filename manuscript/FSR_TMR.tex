@@ -109,8 +109,7 @@ We compare two procedures for building $R_t$:
   across subnetworks; $m_{tg}$ is the Spearman correlation.
   \item \textbf{\texttt{corto}} (Mercatelli et al.~\cite{mercatelli2020}): Pearson correlation $\rhoP(t,g)$,
   here computed on ranks and therefore equal to $\rhoS$; a threshold $|\rho|\ge r_{\min}$; and
-  DPI pruning in a per-target form (\texttt{corto}~1.3.1, whose DPI is identical to \texttt{dpi = "target"} in
-  \texttt{corto}~$\ge$~1.4.0): for each target $g$ and each bootstrap, among the
+  DPI pruning in a per-target form (\texttt{corto}~1.4.0, \texttt{dpi = "target"}): for each target $g$ and each bootstrap, among the
   regulators that pass the threshold only $\arg\max_t |\rho(t,g)|$ is retained
   (Section~\ref{sec:dpi} relates this rule to the triangle DPI). $w_{tg}$ is the fraction of
   bootstraps, including the unresampled data, in which $(t,g)$ is retained; $m_{tg}=\rho$.
@@ -139,7 +138,8 @@ effect of the biology the analysis is designed to detect. Three yardsticks, all 
   \KwithinsigmediantopTwoZero{} when only the signature changes, and \KwithincancermediantopTwoZero{} when both change. The turnover caused by changing
   the network between subtypes is \KnetworkeffectbetweensubtypestopTwoZeroturnover.
   \item \emph{Method effect.} With the same signature and the same cohort, \FSR{} and ARACNe3-top100 differ by a turnover of
-  \KmethodeffecttopTwoZeroturnover, about two thirds of the subtype effect. The rank correlation of the full NES vector is \KAvsBmedianrho{}
+  \KmethodeffecttopTwoZeroturnover, about two thirds of the turnover caused by changing the network between subtypes and about half of the total
+  subtype effect (\KsubtypeeffecttopTwoZeroturnover). The rank correlation of the full NES vector is \KAvsBmedianrho{}
   between methods and \KBvsCmedianrho{} between two filterings of the same ARACNe3 network.
 \end{itemize}
 The method effect is smaller than the subtype effect but of the same order and not negligible. Mixing methods across subtypes
@@ -269,8 +269,8 @@ a change to an unsigned enrichment method would require revisiting the choice.
 
 For a Markov chain $X\to Y\to Z$, $\MI(X;Z)\le\min\{\MI(X;Y),\MI(Y;Z)\}$ (Cover and Thomas~\cite{cover2006}). ARACNe
 uses this inequality to remove, in every triangle of edges that pass the threshold, the edge with the smallest MI.
-\texttt{corto} also applies DPI pruning, in a simplified per-target form. With this rule (function
-\texttt{dpiwin}; \texttt{dpi = "target"} in \texttt{corto}~$\ge$~1.4.0) every target $c$ keeps, in each bootstrap, only the regulator with the largest $|\rho(\cdot,c)|$ among
+\texttt{corto} also applies DPI pruning, in a simplified per-target form. With this rule
+(\texttt{dpi = "target"}, the default in \texttt{corto}~1.4.0) every target $c$ keeps, in each bootstrap, only the regulator with the largest $|\rho(\cdot,c)|$ among
 those that pass the threshold. For two candidate regulators $a$ and $b$ of $c$, this is the
 triangle DPI under the assumption that the regulator--regulator edge $a$--$b$ is never the
 weakest of the triangle: \texttt{corto} never computes $\rho(a,b)$. Two consequences follow.
@@ -409,8 +409,14 @@ Four observations:
   has more indirect edges than the graphical lasso row (\AThreenOneZeroZeroglassopartialcorrlambdaZeroOnetopSevenFourThreeindirectOneZeroZero{}), although with higher precision and recall.
   This is the usual precision--recall trade-off. For NaRnEA, which aggregates 100 weighted targets, recall matters more than precision
   (Supplementary Note, Section 3.4).
-  \item \emph{Against marginal correlation and the graphical lasso.} \FSR{} has higher precision and fewer indirect edges than marginal correlation at both $n$, and higher precision than
-  the graphical lasso at both $n$ (fewer indirect edges only at $n=400$). The graphical lasso is at a stated disadvantage here: $p=640>n$,
+  \item \emph{Against marginal correlation and the graphical lasso.} \FSR{} has higher precision and fewer indirect edges than marginal correlation $|\rho|$ at both $n$:
+  by a wide margin at $n=400$ (precision \AThreenFourZeroZerocortoranksrZeroTwotopOneZeroZeroschemeAprecision{} vs.\ \AThreenFourZeroZeromarginalrhotopFourFiveThreeprecision{};
+  \AThreenFourZeroZerocortoranksrZeroTwotopOneZeroZeroschemeAindirectOneZeroZero{} vs.\ \AThreenFourZeroZeromarginalrhotopFourFiveThreeindirectOneZeroZero{} indirect per 100), and by a small one at $n=100$
+  (\AThreenOneZeroZerocortoranksrZeroTwotopOneZeroZeroschemeAprecision{} vs.\ \AThreenOneZeroZeromarginalrhotopSevenFourThreeprecision{};
+  \AThreenOneZeroZerocortoranksrZeroTwotopOneZeroZeroschemeAindirectOneZeroZero{} vs.\ \AThreenOneZeroZeromarginalrhotopSevenFourThreeindirectOneZeroZero{}).
+  \FSR{} has higher precision than the graphical lasso for every $\lambda$ at $n=400$ and for $\lambda\le0.1$ at $n=100$; with $\lambda=0.2$ at $n=100$ the
+  precision is the same (\AThreenOneZeroZeroglassopartialcorrlambdaZeroTwotopSevenFourThreeprecision{}), with fewer edges selected and lower recall.
+  \FSR{} has fewer indirect edges than the graphical lasso only at $n=400$. The graphical lasso is at a stated disadvantage here: $p=640>n$,
   $\lambda$ is fixed rather than selected (by StARS~\cite{liu2010stars} or EBIC~\cite{foygel2010ebic}), and the targets in the block have
   regulators outside it that the method does not observe. It is the version of the conditional
   approach that fits the $p\gg n$ regime without further assumptions, not its best version. With
@@ -422,7 +428,7 @@ Four observations:
 \end{enumerate}
 \begin{figure}[htbp]\centering
   \includegraphics[width=0.95\textwidth]{figA3_indirect_edges_partial_correlation}
-  \caption{Indirect edges in a synthetic block of correlated TFs. (A) Precision--recall; (B) indirect false positives per 100 selected edges. Except for ARACNe3-top100 with all its edges, every method selects as many edges as \FSR{} (where ARACNe3 can reach that count).}
+  \caption{Indirect edges in a synthetic block of correlated TFs. (A) Precision--recall; (B) indirect false positives per 100 selected edges. Except for ARACNe3-top100 with all its edges, every method selects as many edges as \FSR{} where it can reach that count (ARACNe3 at $n=100$ and the graphical lasso with $\lambda=0.2$ at $n=100$ select fewer).}
   \label{fig:A3}
 \end{figure}
 
@@ -444,9 +450,11 @@ in the Supplementary Note):
   \KsynstrongmtThreeZeroBkOneZeroZeronOneZeroZeroprecOneZero; at $n=400$,
   \KsynstrongmtThreeZeroAkOneZeroZeronFourZeroZeroprecOneZero{} and
   \KsynstrongmtThreeZeroBkOneZeroZeronFourZeroZeroprecOneZero{} (ceiling with the true network,
-  \KsynstrongmtThreeZerotruthnFourZeroZeroprecOneZero). ARACNe3 produces no network at
-  $n\le60$, as its authors anticipate (their documentation recommends $n\ge100$~\cite{aracne3}; see also Margolin et al.~\cite{margolin2006}
-  and Lachmann et al.~\cite{lachmann2016} for the algorithm).
+  \KsynstrongmtThreeZerotruthnFourZeroZeroprecOneZero). ARACNe3 produces no edges at
+  $n=30$ and, on average, \KsynstrongaracneThreefullnSixZeronedges{} edges at $n=60$ with strong signal (none with weak signal), too few to
+  evaluate. This agrees with the recommendation of at least 100 expression profiles for ARACNe, an empirical lower bound below which
+  its accuracy drops rapidly (Margolin et al.~\cite{margolin2006protocols}; see also~\cite{margolin2006,ding2018}). Implementation~\cite{aracne3}; algorithm in Margolin et al.~\cite{margolin2006},
+  Lachmann et al.~\cite{lachmann2016} and Griffin et al.~\cite{griffin2023}.
 \end{itemize}
 \paragraph{Synthetic and real results at $n\approx100$.} The two measurements look discordant at $n\approx100$: in synthetic data
 ARACNe3-top100 recovers few master regulators (\KsynstrongmtThreeZeroBkOneZeroZeronOneZeroZeroprecOneZero), while in real cohorts with $n\ge95$ it
@@ -531,7 +539,7 @@ test over cohorts, $p<0.05$) and the network of another subtype. Median top-20 o
 \KpooledtopTwoZeromedianswap{} (another subtype). The cancer-wide network outperformed the own
 network in \Kpoolednbetterthanown{} of \Kpooledncohorts{} cohorts ($p=\Kpooledwilcoxonpvsown$)
 and another subtype's network in \Kpoolednbetterthanswap{} ($p=\Kpooledwilcoxonpvsswap$), so it
-does not meet the criterion. With \Kpooledncohorts{} cohorts the test has little power, so the result is the absence of evidence
+does not meet the criterion, although narrowly. With \Kpooledncohorts{} cohorts the test has little power, so the result is the absence of evidence
 of a rescue, not evidence of its absence. The own network, in turn, outperforms the network of another subtype (\KpooledtopTwoZeromedianown{} vs.\ \KpooledtopTwoZeromedianswap{}), so at $n\approx30$ it still
 carries subtype-specific information, even though its reliability is low. The cancer-wide network also homogenises subtypes: in lung squamous carcinoma, where
 three of four subtypes fall below the bound, the top-20 overlap between subtypes rises from
@@ -621,8 +629,10 @@ from \path{network_benchmark_key_numbers.tsv}. Every number in the text is a mac
 Claude Opus 5.5 (Anthropic) was used as a coding assistant and OpenAI Codex was also used for language editing. The authors are responsible for the scientific content and its verification.
 
 \begin{thebibliography}{99}\small
-\bibitem{aracne3} ARACNe3: reference to be completed by the authors (software documentation and publication recommending $n\ge100$).
+\bibitem{aracne3} ARACNe3 (software), Califano Lab, Columbia University. \url{https://github.com/califano-lab/ARACNe3}, commit \texttt{f0fa4fb} (2026).
+  ARACNe3 has no dedicated publication; its algorithm is described in Griffin et al.~\cite{griffin2023}, Section~2.2.
 \bibitem{cover2006} Cover TM, Thomas JA (2006). \emph{Elements of Information Theory}, 2nd ed. Wiley.
+\bibitem{ding2018} Ding H, Douglass EF, Sonabend AM, Mela A, Bose S, Gonzalez C, Canoll PD, Sims PA, Alvarez MJ, Califano A (2018). Quantitative assessment of protein activity in orphan tissues and single cells using the metaVIPER algorithm. \emph{Nature Communications} 9:1471.
 \bibitem{foygel2010ebic} Foygel R, Drton M (2010). Extended Bayesian information criteria for Gaussian graphical models. \emph{Advances in Neural Information Processing Systems} 23.
 \bibitem{friedman2008} Friedman J, Hastie T, Tibshirani R (2008). Sparse inverse covariance estimation with the graphical lasso. \emph{Biostatistics} 9:432--441.
 \bibitem{griffin2023} Griffin AT, Vlahos LJ, Chiuzan C, Califano A (2023). NaRnEA: an information theoretic framework for gene set analysis. \emph{Entropy} 25:542.
@@ -633,6 +643,7 @@ Claude Opus 5.5 (Anthropic) was used as a coding assistant and OpenAI Codex was 
 \bibitem{liu2010stars} Liu H, Roeder K, Wasserman L (2010). Stability approach to regularization selection (StARS) for high dimensional graphical models. \emph{Advances in Neural Information Processing Systems} 23.
 \bibitem{love2014} Love MI, Huber W, Anders S (2014). Moderated estimation of fold change and dispersion for RNA-seq data with DESeq2. \emph{Genome Biology} 15:550.
 \bibitem{margolin2006} Margolin AA et al.\ (2006). ARACNE: an algorithm for the reconstruction of gene regulatory networks in a mammalian cellular context. \emph{BMC Bioinformatics} 7(Suppl 1):S7.
+\bibitem{margolin2006protocols} Margolin AA, Wang K, Lim WK, Kustagi M, Nemenman I, Califano A (2006). Reverse engineering cellular networks. \emph{Nature Protocols} 1:662--671.
 \bibitem{meinshausen2006} Meinshausen N, B\"uhlmann P (2006). High-dimensional graphs and variable selection with the lasso. \emph{Annals of Statistics} 34:1436--1462.
 \bibitem{mercatelli2020} Mercatelli D, Lopez-Garcia G, Giorgi FM (2020). corto: a lightweight R package for gene network inference and master regulator analysis. \emph{Bioinformatics} 36:3916--3917.
 \bibitem{miller1955} Miller G (1955). Note on the bias of information estimates. In: Quastler H (ed.), \emph{Information Theory in Psychology}, pp.\ 95--100. Free Press.

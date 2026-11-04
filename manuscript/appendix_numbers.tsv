@@ -222,9 +222,9 @@ A3_n400_ARACNe3_top_100_scheme_B__indirect100	65.49	A3 indirect FP per 100 edges
 A3_n400_ARACNe3_by_support_top_453_B_matched__precision	0.8962	A3 precision
 A3_n400_ARACNe3_by_support_top_453_B_matched__recall	0.6465	A3 recall
 A3_n400_ARACNe3_by_support_top_453_B_matched__indirect100	10.38	A3 indirect FP per 100 edges
-A3_n400_marginal_rho_top_453_precision	0.6534	A3 precision
-A3_n400_marginal_rho_top_453_recall	0.4713	A3 recall
-A3_n400_marginal_rho_top_453_indirect100	34.66	A3 indirect FP per 100 edges
+A3_n400_marginal_rho_top_453_precision	0.8256	A3 precision
+A3_n400_marginal_rho_top_453_recall	0.5955	A3 recall
+A3_n400_marginal_rho_top_453_indirect100	17.44	A3 indirect FP per 100 edges
 A3_n400_glasso_partial_corr_lambda_0_05_top_453_precision	0.5872	A3 precision
 A3_n400_glasso_partial_corr_lambda_0_05_top_453_recall	0.4236	A3 recall
 A3_n400_glasso_partial_corr_lambda_0_05_top_453_indirect100	24.72	A3 indirect FP per 100 edges
@@ -243,9 +243,9 @@ A3_n100_ARACNe3_top_100_scheme_B__indirect100	16.04	A3 indirect FP per 100 edges
 A3_n100_ARACNe3_by_support_top_743_B_matched__precision	0.8113	A3 precision
 A3_n100_ARACNe3_by_support_top_743_B_matched__recall	0.265	A3 recall
 A3_n100_ARACNe3_by_support_top_743_B_matched__indirect100	16.04	A3 indirect FP per 100 edges
-A3_n100_marginal_rho_top_743_precision	0.3876	A3 precision
-A3_n100_marginal_rho_top_743_recall	0.4438	A3 recall
-A3_n100_marginal_rho_top_743_indirect100	60.97	A3 indirect FP per 100 edges
+A3_n100_marginal_rho_top_743_precision	0.5195	A3 precision
+A3_n100_marginal_rho_top_743_recall	0.5948	A3 recall
+A3_n100_marginal_rho_top_743_indirect100	48.05	A3 indirect FP per 100 edges
 A3_n100_glasso_partial_corr_lambda_0_05_top_743_precision	0.284	A3 precision
 A3_n100_glasso_partial_corr_lambda_0_05_top_743_recall	0.3251	A3 recall
 A3_n100_glasso_partial_corr_lambda_0_05_top_743_indirect100	37.95	A3 indirect FP per 100 edges

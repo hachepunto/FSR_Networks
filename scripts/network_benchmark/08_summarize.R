@@ -402,6 +402,9 @@ stopifnot("Falta pooled.rds (13_pooled_networks.R + 13b_evaluate_pooled.R)" = fi
   add_key("pooled_n_better_than_own", sum(po$top20 > ow$top20), "pooled test: cohorts where cancer-wide beats own small network")
   add_key("pooled_median_diff_vs_own", median(po$top20 - ow$top20), "pooled test: median per-cohort difference, cancer-wide minus own")
   add_key("pooled_wilcoxon_p_vs_own", pw(po$top20, ow$top20), "pooled test: paired Wilcoxon p, cancer-wide vs own")
+  # El texto (§3.7 y apéndice) dice que no cumple el criterio (p < 0.05), y por poco.
+  stopifnot("La red de cáncer completo ya cumple o queda lejos del criterio; reescribir §3.7 y el apéndice" =
+              pw(po$top20, ow$top20) >= 0.05 && pw(po$top20, ow$top20) < 0.1)
   add_key("pooled_n_better_than_swap", sum(po$top20 > po$swap_top20_mean), "pooled test: cohorts where cancer-wide beats another subtype's network")
   add_key("pooled_wilcoxon_p_vs_swap", pw(po$top20, po$swap_top20_mean), "pooled test: paired Wilcoxon p, cancer-wide vs another subtype")
   add_key("pooled_wilcoxon_p_own_vs_swap", pw(ow$top20, ow$swap_top20_mean), "pooled test: paired Wilcoxon p, own small vs another subtype")

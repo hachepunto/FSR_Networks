@@ -1,17 +1,17 @@
 comparison	k	median	lo	hi	n_units
 FSR vs ARACNe3-top100 (same cohort)	5	0.6	0.4	0.8	15
 FSR vs ARACNe3-top100 (same cohort)	10	0.7	0.6	0.8	15
-FSR vs ARACNe3-top100 (same cohort)	15	0.666666666666667	0.533333333333333	0.666666666666667	15
+FSR vs ARACNe3-top100 (same cohort)	15	0.666666666666667	0.6	0.666666666666667	15
 FSR vs ARACNe3-top100 (same cohort)	20	0.7	0.65	0.7	15
 FSR vs ARACNe3-top100 (same cohort)	30	0.7	0.666666666666667	0.733333333333333	15
 FSR vs ARACNe3-top100 (same cohort)	40	0.7	0.65	0.75	15
-FSR vs ARACNe3-top100 (same cohort)	50	0.7	0.66	0.74	15
+FSR vs ARACNe3-top100 (same cohort)	50	0.7	0.64	0.74	15
 ARACNe3-top100 vs ARACNe3 support >= 10	5	0.4	0.4	0.604999999999973	15
 ARACNe3-top100 vs ARACNe3 support >= 10	10	0.7	0.6	0.7	15
 ARACNe3-top100 vs ARACNe3 support >= 10	15	0.666666666666667	0.6	0.666666666666667	15
 ARACNe3-top100 vs ARACNe3 support >= 10	20	0.7	0.65	0.8	15
 ARACNe3-top100 vs ARACNe3 support >= 10	30	0.733333333333333	0.666666666666667	0.8	15
-ARACNe3-top100 vs ARACNe3 support >= 10	40	0.725	0.675	0.775	15
+ARACNe3-top100 vs ARACNe3 support >= 10	40	0.7	0.675	0.775	15
 ARACNe3-top100 vs ARACNe3 support >= 10	50	0.72	0.68	0.76	15
 Own vs cancer-wide network (n >= 60)	5	0.6	0.4	0.6	29
 Own vs cancer-wide network (n >= 60)	10	0.6	0.6	0.7	29
@@ -38,6 +38,6 @@ Null (network from another cancer)	5	0.2	0.2	0.4	34
 Null (network from another cancer)	10	0.3	0.3	0.4	34
 Null (network from another cancer)	15	0.333333333333333	0.266666666666667	0.4	34
 Null (network from another cancer)	20	0.35	0.3	0.35	34
-Null (network from another cancer)	30	0.333333333333333	0.3	0.4	34
+Null (network from another cancer)	30	0.333333333333333	0.3	0.383333333333333	34
 Null (network from another cancer)	40	0.35	0.325	0.375	34
 Null (network from another cancer)	50	0.35	0.32	0.38	34

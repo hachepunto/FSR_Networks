@@ -247,8 +247,8 @@ subtypes:
     excluded_values: []
     n_control_real: 59
     labels:
-      "Braf-like": {standardized_label: braf_like, n_red: 358, network_method: corto}
-      "Ras-like":  {standardized_label: ras_like,  n_red: 147, network_method: corto}
+      "Braf-like": {standardized_label: braf_like, n_red: 357, network_method: corto}
+      "Ras-like":  {standardized_label: ras_like,  n_red: 148, network_method: corto}
 
   PRAD:
     classification_method: tcga_annotated

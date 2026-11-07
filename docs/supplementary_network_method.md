@@ -60,7 +60,7 @@ Edge-level metrics: precision, recall by edge type, false positives that are *in
 
 Restricting to the 19 cohorts with n < 95, where this rule was in use: the median regulon size ranges from 2 to 102 targets and correlates with n (Spearman ρ = 0.779); a median of 518 regulators reach 30 targets; and in 17 of these cohorts fewer than 1 % of edges have negative mode (median 0.28 %), because only very strong, almost always positive, correlations pass the threshold.
 
-Under FSR, 32 of 34 cohorts reach the 100-target cap, the minimum median is 52 targets (THCA BRAF-like, n = 358, and BRCA LumA, n = 562, where the DPI prunes more edges), and a median of 1,270 regulators can be evaluated in the small cohorts. Uniform size is, however, a property of the cap, not of the data: under FSR the CollecTRI enrichment still increases with n (Spearman ρ = 0.77), from 1.62–1.82 in the three cohorts with n < 30 to a median of 2.52 in the cohorts with n ≥ 95. Comparable size does not mean comparable quality.
+Under FSR, 32 of 34 cohorts reach the 100-target cap, the minimum median is 52 targets (THCA BRAF-like, n = 357, and BRCA LumA, n = 562, where the DPI prunes more edges), and a median of 1,270 regulators can be evaluated in the small cohorts. Uniform size is, however, a property of the cap, not of the data: under FSR the CollecTRI enrichment still increases with n (Spearman ρ = 0.77), from 1.62–1.82 in the three cohorts with n < 30 to a median of 2.52 in the cohorts with n ≥ 95. Comparable size does not mean comparable quality.
 
 **CollecTRI enrichment over the same 15 cohorts (n ≥ 95), at k = 100 where applicable:**
 

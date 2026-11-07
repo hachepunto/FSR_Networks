@@ -266,8 +266,15 @@ assign_ensembl_rownames <- function(mat, gene_ids) {
 # La lista de 71 genes se transcribió manualmente de la Figura S7A
 # (papers/NIHMS633017-supplement-7.pdf, panel A). 3 símbolos
 # desactualizados resueltos por alias (org.Hs.eg.db) a su nombre
-# HGNC actual; FLJ23867 no se encontró bajo ningún alias y se
-# excluyó (70/71 genes finales, cobertura 100% en nuestra matriz).
+# HGNC actual. FLJ23867 es un nombre de clon de cDNA, no un símbolo
+# ni un alias, así que org.Hs.eg.db nunca lo devolvió y antes se
+# excluía (70/71 genes); su registro de NCBI Gene (200058) se retiró
+# en 2018 y se fusionó con 5768, QSOX1, que lo lista entre sus
+# nombres de clon. Ahora se usa QSOX1 y la firma tiene los 71 genes,
+# igual que thyroidBRS 0.99.9 (commit f897ffb). QSOX1 es el gen
+# actual más cercano, no necesariamente la misma sonda de 2014.
+# ARNTL no necesita alias aquí: GENCODE v36 (la anotación de GDC)
+# todavía lo llama así.
 # Ver results/final/tables/subtype_classification_methods.tsv para
 # la referencia completa y la verificación de cobertura.
 THCA_BRS_GENES_ORIGINAL <- c(
@@ -281,16 +288,13 @@ THCA_BRS_GENES_ORIGINAL <- c(
   "TM7SF4", "TMEM43"
 )
 
-THCA_BRS_ALIAS_TO_CURRENT <- c(FAM176A = "EVA1A", PVRL4 = "NECTIN4", TM7SF4 = "DCSTAMP")
+THCA_BRS_ALIAS_TO_CURRENT <- c(FAM176A = "EVA1A", PVRL4 = "NECTIN4", TM7SF4 = "DCSTAMP", FLJ23867 = "QSOX1")
 
-THCA_BRS_GENES <- setdiff(
-  unname(ifelse(
-    THCA_BRS_GENES_ORIGINAL %in% names(THCA_BRS_ALIAS_TO_CURRENT),
-    THCA_BRS_ALIAS_TO_CURRENT[THCA_BRS_GENES_ORIGINAL],
-    THCA_BRS_GENES_ORIGINAL
-  )),
-  "FLJ23867"
-)
+THCA_BRS_GENES <- unname(ifelse(
+  THCA_BRS_GENES_ORIGINAL %in% names(THCA_BRS_ALIAS_TO_CURRENT),
+  THCA_BRS_ALIAS_TO_CURRENT[THCA_BRS_GENES_ORIGINAL],
+  THCA_BRS_GENES_ORIGINAL
+))
 
 # tumor_se: SummarizedExperiment ya deduplicado a Primary Tumor, una
 # muestra por paciente (ver dedup_one_per_patient). subtype_table: la

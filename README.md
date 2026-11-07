@@ -4,6 +4,10 @@ Code, results and manuscript for **"Homogeneous network inference for subtype-st
 
 This repository contains everything needed to regenerate the manuscript from public data. It downloads TCGA, classifies tumours into molecular subtypes, infers the regulatory networks, runs the benchmark, and writes every number and figure that the manuscript cites.
 
+## Status
+
+The results, tables, figures and manuscript in `main` are frozen at the tag `congelado-2026-11-05-pam50-tcga`; this is the version submitted for publication. They use the subtype rules of `config/config.yaml` in `main`. For BRCA this is the PAM50 column of `TCGAquery_subtype()` (Basal 190, Her2 82, LumA 562, LumB 209). On 2026-11-04 the MRA pipeline (commit `d054286`) replaced that column with PAM50 recomputed with genefu and ER-balanced centring (192 / 91 / 543 / 239; 44 tumours change subtype). That change is not incorporated here. The branch `brca-pam50-genefu` carries the synchronised classification code for a future re-run of the benchmark; none of its results have been recomputed.
+
 ## The question
 
 Transcriptional master regulator (TMR) analysis with NaRnEA needs one gene regulatory network per cohort. When TCGA cancers are stratified by molecular subtype, cohort sizes range from 27 to 562 tumours. Mutual-information networks inferred with ARACNe3 are the usual choice, but they cannot be inferred for the smallest cohorts. Filling the gap with a correlation network would mix two inference methods inside the very comparison between subtypes that the analysis is meant to make.
